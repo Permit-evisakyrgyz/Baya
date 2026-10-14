@@ -7,9 +7,9 @@
 
 <style>
 :root {
-  --bg: #07111f;
   --gold: #ffd778;
-  --text: #ffffff;
+  --blue: #168cff;
+  --text: #fff;
   --muted: #c0cce0;
   --border: rgba(255,255,255,.17);
 }
@@ -51,6 +51,8 @@ button:focus-visible {
   outline-offset: 3px;
 }
 
+/* HEADER */
+
 header {
   position: relative;
   padding: 22px;
@@ -59,17 +61,54 @@ header {
   align-items: center;
   gap: 15px;
   flex-wrap: wrap;
-  background: linear-gradient(110deg, #101c31, #142d4b);
+  background: linear-gradient(120deg, #101c31, #173b65, #101c31);
+  background-size: 200% 200%;
   border-bottom: 1px solid var(--border);
   box-shadow: 0 8px 25px #0003;
+  animation: headerBackground 12s ease infinite;
 }
 
-.logo {
-  color: #ffbf51;
+@keyframes headerBackground {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-symbol {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  color: #ffd778;
+  font-size: 31px;
+  transform-style: preserve-3d;
+  animation: logoRotate 4s linear infinite;
+  filter: drop-shadow(0 0 10px #ffbf5166);
+}
+
+@keyframes logoRotate {
+  from { transform: rotateY(0deg) rotateZ(0deg); }
+  to { transform: rotateY(360deg) rotateZ(360deg); }
+}
+
+.logo-text {
   font-size: 29px;
   font-weight: 900;
-  letter-spacing: .5px;
-  text-shadow: 0 3px 15px #ffad3033;
+  letter-spacing: 1px;
+  color: #ffbf51;
+  text-shadow: 0 0 12px #ffbf5144;
+  animation: logoGlow 3s ease-in-out infinite;
+}
+
+@keyframes logoGlow {
+  0%,100% { text-shadow: 0 0 8px #ffbf5133; }
+  50% { text-shadow: 0 0 22px #ffd778bb; }
 }
 
 .subtitle {
@@ -77,6 +116,44 @@ header {
   font-size: 13px;
   margin-top: 5px;
 }
+
+/* HEADER DASHBOARD BUTTON */
+
+.header-dashboard {
+  position: relative;
+  overflow: hidden;
+  padding: 14px 24px;
+  border-radius: 15px;
+  color: #172238;
+  background: linear-gradient(135deg, #fff0b8, #f5c451, #d99a29);
+  border: 1px solid #ffe7a6cc;
+  box-shadow: 0 7px 20px #f5c45140, inset 0 1px 0 #ffffffaa;
+  font-weight: 800;
+}
+
+.header-dashboard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, #ffffffaa, transparent);
+  transform: skewX(-20deg);
+  animation: dashboardShine 4s ease-in-out infinite;
+}
+
+@keyframes dashboardShine {
+  0%,60% { left: -120%; }
+  100% { left: 160%; }
+}
+
+.header-dashboard:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 13px 28px #f5c45166;
+}
+
+/* MAIN CONTAINER */
 
 .container {
   width: min(1280px, 100%);
@@ -120,7 +197,7 @@ header {
 .nav button:hover {
   background: linear-gradient(135deg, #168cff, #3159bc);
   border-color: #83c5ff;
-  box-shadow: 0 10px 22px #168cff33;
+  box-shadow: 0 10px 22px #168cff44;
   transform: translateY(-4px);
 }
 
@@ -131,7 +208,7 @@ header {
   box-shadow: 0 7px 20px #ffc85b4d;
 }
 
-/* PAGE LAYOUT */
+/* PAGES */
 
 .page {
   display: none;
@@ -172,9 +249,7 @@ h2 {
   margin: 0 0 15px;
 }
 
-h3 {
-  margin: 12px 0;
-}
+h3 { margin: 12px 0; }
 
 .muted {
   color: var(--muted);
@@ -229,9 +304,7 @@ h3 {
   text-shadow: 0 2px 10px #0003;
 }
 
-.welcome-card .muted {
-  color: #e4f2ff;
-}
+.welcome-card .muted { color: #e4f2ff; }
 
 .balance {
   display: inline-block;
@@ -280,13 +353,8 @@ h3 {
   box-shadow: 0 25px 45px #0006;
 }
 
-.overview-card p {
-  line-height: 1.8;
-}
-
-.overview-card strong {
-  color: #ffe49a;
-}
+.overview-card p { line-height: 1.8; }
+.overview-card strong { color: #ffe49a; }
 
 /* SUMMARY CARDS */
 
@@ -354,23 +422,12 @@ h3 {
   overflow-wrap: anywhere;
 }
 
-.deposit-card {
-  background: linear-gradient(135deg, #087f8c, #20c9b5);
-}
+.deposit-card { background: linear-gradient(135deg, #087f8c, #20c9b5); }
+.withdraw-card { background: linear-gradient(135deg, #2455a4, #438df5); }
+.referral-card { background: linear-gradient(135deg, #7638b8, #bd68f5); }
+.profit-card { background: linear-gradient(135deg, #b77812, #f5c451); }
 
-.withdraw-card {
-  background: linear-gradient(135deg, #2455a4, #438df5);
-}
-
-.referral-card {
-  background: linear-gradient(135deg, #7638b8, #bd68f5);
-}
-
-.profit-card {
-  background: linear-gradient(135deg, #b77812, #f5c451);
-}
-
-/* PLAN CARDS */
+/* INVESTMENT PLAN CARDS */
 
 .plan-grid {
   display: grid;
@@ -432,10 +489,7 @@ h3 {
   box-shadow: 0 5px 14px #0003;
 }
 
-.plan h3 {
-  font-size: 18px;
-  position: relative;
-}
+.plan h3 { font-size: 18px; position: relative; }
 
 .plan .price {
   color: #ffe49a;
@@ -461,37 +515,14 @@ h3 {
   position: relative;
 }
 
-.plan-starter::before {
-  background: linear-gradient(135deg, #35714c, #102c25 85%);
-}
-
-.plan-basic::before {
-  background: linear-gradient(135deg, #2877bd, #102746 85%);
-}
-
-.plan-silver::before {
-  background: linear-gradient(135deg, #8296a9, #29394c 85%);
-}
-
-.plan-gold::before {
-  background: linear-gradient(135deg, #b68a32, #473016 85%);
-}
-
-.plan-platinum::before {
-  background: linear-gradient(135deg, #657dc0, #24294b 85%);
-}
-
-.plan-bright::before {
-  background: linear-gradient(135deg, #9b60c1, #34204d 85%);
-}
-
-.plan-shining::before {
-  background: linear-gradient(135deg, #c6a52c, #4a3713 85%);
-}
-
-.plan-sun-rising::before {
-  background: linear-gradient(135deg, #ed7a39, #632b19 85%);
-}
+.plan-starter::before { background: linear-gradient(135deg, #35714c, #102c25 85%); }
+.plan-basic::before { background: linear-gradient(135deg, #2877bd, #102746 85%); }
+.plan-silver::before { background: linear-gradient(135deg, #8296a9, #29394c 85%); }
+.plan-gold::before { background: linear-gradient(135deg, #b68a32, #473016 85%); }
+.plan-platinum::before { background: linear-gradient(135deg, #657dc0, #24294b 85%); }
+.plan-bright::before { background: linear-gradient(135deg, #9b60c1, #34204d 85%); }
+.plan-shining::before { background: linear-gradient(135deg, #c6a52c, #4a3713 85%); }
+.plan-sun-rising::before { background: linear-gradient(135deg, #ed7a39, #632b19 85%); }
 
 /* FORMS */
 
@@ -518,35 +549,25 @@ input:focus, select:focus {
   outline-offset: 1px;
 }
 
-.full {
-  width: 100%;
-  margin-top: 14px;
-}
+.full { width: 100%; margin-top: 14px; }
 
 .copyrow {
   display: flex;
   gap: 8px;
 }
 
-.copyrow input {
-  flex: 1;
-  min-width: 0;
-}
+.copyrow input { flex: 1; min-width: 0; }
 
 .copyrow button {
   background: var(--gold);
   color: #172238;
 }
 
-.address {
-  overflow-wrap: anywhere;
-}
+.address { overflow-wrap: anywhere; }
 
 /* TABLES */
 
-.table-wrap {
-  overflow-x: auto;
-}
+.table-wrap { overflow-x: auto; }
 
 table {
   width: 100%;
@@ -561,9 +582,7 @@ th, td {
   font-size: 13px;
 }
 
-th {
-  color: var(--gold);
-}
+th { color: var(--gold); }
 
 footer {
   text-align: center;
@@ -588,46 +607,22 @@ footer {
   box-shadow: 0 8px 25px #0005;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation: none !important;
-    transition: none !important;
-  }
-
-  .plan:hover,
-  .summary-card:hover,
-  .welcome-card:hover,
-  .overview-card:hover {
-    transform: none;
-  }
-}
+/* RESPONSIVE DESIGN */
 
 @media(max-width: 950px) {
-  .stats {
+  .stats, .plan-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .plan-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .s8, .s6, .s4 {
-    grid-column: span 6;
-  }
+  .s8, .s6, .s4 { grid-column: span 6; }
 }
 
 @media(max-width: 600px) {
-  .container {
-    padding: 11px;
-  }
-
-  header {
-    padding: 15px;
-  }
-
-  .logo {
-    font-size: 25px;
-  }
+  .container { padding: 11px; }
+  header { padding: 15px; }
+  .logo-text { font-size: 24px; }
+  .logo-symbol { font-size: 26px; width: 34px; height: 34px; }
+  .header-dashboard { padding: 11px 17px; }
 
   .nav {
     padding: 9px;
@@ -641,9 +636,7 @@ footer {
     font-size: 12px;
   }
 
-  .s8, .s6, .s4 {
-    grid-column: span 12;
-  }
+  .s8, .s6, .s4 { grid-column: span 12; }
 
   .welcome-card, .overview-card {
     min-height: auto;
@@ -651,17 +644,9 @@ footer {
     border-radius: 21px;
   }
 
-  .welcome-card h2 {
-    font-size: 21px;
-  }
-
-  .balance {
-    font-size: 35px;
-  }
-
-  .stats {
-    gap: 10px;
-  }
+  .welcome-card h2 { font-size: 21px; }
+  .balance { font-size: 35px; }
+  .stats, .plan-grid { gap: 10px; }
 
   .summary-card {
     padding: 13px;
@@ -669,17 +654,8 @@ footer {
     border-radius: 16px;
   }
 
-  .summary-card strong {
-    font-size: 21px;
-  }
-
-  .summary-card span {
-    font-size: 12px;
-  }
-
-  .plan-grid {
-    gap: 10px;
-  }
+  .summary-card strong { font-size: 21px; }
+  .summary-card span { font-size: 12px; }
 
   .plan {
     padding: 12px;
@@ -687,20 +663,24 @@ footer {
     border-radius: 17px;
   }
 
-  .plan .price {
-    font-size: 23px;
+  .plan .price { font-size: 23px; }
+  .plan h3 { font-size: 16px; }
+
+  .copyrow { flex-wrap: wrap; }
+  .copyrow button { width: 100%; }
+}
+
+@media(prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
   }
 
-  .plan h3 {
-    font-size: 16px;
-  }
-
-  .copyrow {
-    flex-wrap: wrap;
-  }
-
-  .copyrow button {
-    width: 100%;
+  .plan:hover,
+  .summary-card:hover,
+  .welcome-card:hover,
+  .overview-card:hover {
+    transform: none;
   }
 }
 </style>
@@ -710,10 +690,16 @@ footer {
 
 <header>
   <div>
-    <div class="logo">✦ BAYA.COM</div>
+    <div class="brand">
+      <span class="logo-symbol" aria-hidden="true">✦</span>
+      <span class="logo-text">BAYA.COM</span>
+    </div>
     <div class="subtitle">Account Dashboard</div>
   </div>
-  <button class="secondary" onclick="openPage('dashboard')">Dashboard</button>
+
+  <button class="header-dashboard" onclick="openPage('dashboard')">
+    Dashboard
+  </button>
 </header>
 
 <div class="container">
@@ -802,20 +788,21 @@ footer {
 <!-- DEPOSIT -->
 <section id="deposit" class="page">
 <div class="grid">
+
   <div class="card s6">
     <h2>Deposit Request</h2>
 
-    <label>Amount (USD)</label>
+    <label for="depositAmount">Amount (USD)</label>
     <input id="depositAmount" type="number" min="1" step="0.01" placeholder="Enter amount">
 
-    <label>Payment Method</label>
+    <label for="depositMethod">Payment Method</label>
     <select id="depositMethod">
       <option>USDT (TRC20)</option>
       <option>Bank Transfer</option>
       <option>Mobile Wallet</option>
     </select>
 
-    <label>Transaction ID (TXID)</label>
+    <label for="depositTxid">Transaction ID (TXID)</label>
     <input id="depositTxid" placeholder="Enter transaction reference">
 
     <button class="primary full" onclick="submitDeposit()">Submit Deposit Request</button>
@@ -835,19 +822,21 @@ footer {
       A transaction reference alone does not prove receipt.
     </p>
   </div>
+
 </div>
 </section>
 
 <!-- WITHDRAWAL -->
 <section id="withdraw" class="page">
 <div class="grid">
+
   <div class="card s6">
     <h2>Withdrawal Request</h2>
 
-    <label>Amount (USD)</label>
+    <label for="withdrawAmount">Amount (USD)</label>
     <input id="withdrawAmount" type="number" min="1" step="0.01" placeholder="Enter amount">
 
-    <label>Destination Address / Account</label>
+    <label for="withdrawDestination">Destination Address / Account</label>
     <input id="withdrawDestination" placeholder="Enter destination">
 
     <button class="primary full" onclick="submitWithdrawal()">Submit Withdrawal Request</button>
@@ -860,6 +849,7 @@ footer {
       applicable fees and server-side approval.
     </p>
   </div>
+
 </div>
 </section>
 
@@ -877,14 +867,15 @@ footer {
 <!-- REFERRAL -->
 <section id="referral" class="page">
 <div class="grid">
+
   <div class="card s6">
     <h2>Referral Bonus</h2>
     <p class="muted">One-time referral bonus calculation at 8%.</p>
 
-    <label>Qualifying Amount (USD)</label>
+    <label for="referralAmount">Qualifying Amount (USD)</label>
     <input id="referralAmount" type="number" min="0" step="0.01" placeholder="Enter amount">
 
-    <label>Referral Code</label>
+    <label for="referralCode">Referral Code</label>
     <div class="copyrow">
       <input id="referralCode" value="BAYA-REF-001" readonly>
       <button onclick="copyReferral()">Copy</button>
@@ -904,6 +895,7 @@ footer {
     <p>Frequency: <strong>One time</strong></p>
     <p class="muted">Eligibility and actual crediting must be verified by the server.</p>
   </div>
+
 </div>
 </section>
 
@@ -933,13 +925,14 @@ footer {
 <!-- PROFILE -->
 <section id="profile" class="page">
 <div class="grid">
+
   <div class="card s6">
     <h2>Profile Settings</h2>
 
-    <label>Full Name</label>
+    <label for="profileName">Full Name</label>
     <input id="profileName" placeholder="Enter name">
 
-    <label>Email</label>
+    <label for="profileEmail">Email</label>
     <input id="profileEmail" type="email" placeholder="Enter email">
 
     <button class="primary full" onclick="saveProfile()">Save Profile</button>
@@ -953,12 +946,14 @@ footer {
     </p>
     <button class="secondary" onclick="openPage('dashboard')">Back to Dashboard</button>
   </div>
+
 </div>
 </section>
 
 <!-- ADMIN INTERFACE -->
 <section id="admin" class="page">
 <div class="grid">
+
   <div class="card s6">
     <h2>Admin Overview</h2>
     <p class="muted">
@@ -973,14 +968,12 @@ footer {
   <div class="card s6">
     <h2>Display Settings</h2>
 
-    <label>Daily Profit (%)</label>
+    <label for="dailyRate">Daily Profit (%)</label>
     <input id="dailyRate" type="number" min="0" max="100" step="0.1" value="1">
 
     <button class="primary full" onclick="updateRate()">Update Display Rate</button>
 
-    <p class="muted">
-      This setting changes the displayed calculation only.
-    </p>
+    <p class="muted">This setting changes the displayed calculation only.</p>
   </div>
 
   <div class="card s12">
@@ -1002,6 +995,7 @@ footer {
       </table>
     </div>
   </div>
+
 </div>
 </section>
 
@@ -1051,7 +1045,6 @@ function toast(message) {
   element.style.display = "block";
 
   clearTimeout(window.toastTimer);
-
   window.toastTimer = setTimeout(() => {
     element.style.display = "none";
   }, 2600);
@@ -1212,7 +1205,6 @@ function copyReferral() {
 
 function saveProfile() {
   const name = document.getElementById("profileName").value.trim();
-  const email = document.getElementById("profileEmail").value.trim();
 
   if (!name) {
     toast("Please enter your name");
