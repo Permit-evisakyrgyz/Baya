@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BAYA.COM</title>
+<title>BAYA.COM | Account Dashboard</title>
 
 <style>
 :root {
   --bg: #07111f;
-  --gold: #f4c96b;
-  --text: #fff;
+  --gold: #ffd778;
+  --text: #ffffff;
   --muted: #c0cce0;
-  --border: #344c68;
+  --border: rgba(255,255,255,.17);
 }
 
 * {
@@ -20,87 +20,118 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: radial-gradient(circle at top right, #1b3b61, #07111f 65%);
+  font-family: Arial, Helvetica, sans-serif;
   color: var(--text);
+  background:
+    radial-gradient(circle at 10% 5%, #173d69, transparent 35%),
+    radial-gradient(circle at 90% 20%, #202c65, transparent 35%),
+    #07111f;
+}
+
+button, input, select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform .22s ease, box-shadow .22s ease, filter .22s ease;
+}
+
+button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
 }
 
 header {
-  padding: 18px;
+  position: relative;
+  padding: 22px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  gap: 15px;
   flex-wrap: wrap;
-  gap: 12px;
-  background: #101e31;
+  background: linear-gradient(110deg, #101c31, #142d4b);
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 8px 25px #0003;
 }
 
 .logo {
-  font-size: 27px;
+  color: #ffbf51;
+  font-size: 29px;
   font-weight: 900;
-  color: var(--gold);
+  letter-spacing: .5px;
+  text-shadow: 0 3px 15px #ffad3033;
 }
 
 .subtitle {
-  color: var(--muted);
+  color: #c9d8ed;
   font-size: 13px;
   margin-top: 5px;
 }
 
 .container {
-  max-width: 1250px;
+  width: min(1280px, 100%);
   margin: auto;
-  padding: 18px;
+  padding: 20px;
 }
 
 .notice {
-  background: #302817;
-  border: 1px solid #806c3c;
-  color: #ffe9b2;
-  padding: 13px;
-  border-radius: 12px;
-  margin-bottom: 18px;
-  line-height: 1.6;
+  margin-bottom: 20px;
+  padding: 15px 18px;
+  border-radius: 15px;
+  background: linear-gradient(110deg, #382b18, #202a42);
+  border: 1px solid #8c7545;
+  color: #ffe7ae;
+  font-size: 13px;
+  line-height: 1.7;
+  box-shadow: 0 8px 20px #0002;
 }
+
+/* NAVIGATION */
 
 .nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 18px;
+  gap: 10px;
+  padding: 12px;
+  margin-bottom: 22px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #142d4b, #091527);
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 28px #0004;
 }
 
-button {
-  border: 0;
-  border-radius: 11px;
-  padding: 12px 15px;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  transition: transform .2s, filter .2s;
-}
-
-button:hover {
-  filter: brightness(1.08);
-}
-
-.primary {
-  background: linear-gradient(135deg, #ffe5a0, #e9b84c);
-  color: #172238;
-}
-
-.secondary,
 .nav button {
-  background: #203750;
-  color: white;
-  border: 1px solid #3b5674;
+  color: #f5f8ff;
+  background: linear-gradient(135deg, #234c7a, #142b49);
+  border: 1px solid #42638a;
+  box-shadow: 0 5px 12px #0003;
+}
+
+.nav button:hover {
+  background: linear-gradient(135deg, #168cff, #3159bc);
+  border-color: #83c5ff;
+  box-shadow: 0 10px 22px #168cff33;
+  transform: translateY(-4px);
 }
 
 .nav button.active {
-  background: var(--gold);
   color: #172238;
+  background: linear-gradient(135deg, #ffe8a6, #e8ad3e);
+  border-color: #fff0bd;
+  box-shadow: 0 7px 20px #ffc85b4d;
 }
+
+/* PAGE LAYOUT */
 
 .page {
   display: none;
@@ -108,21 +139,18 @@ button:hover {
 
 .page.active {
   display: block;
+  animation: pageIn .25s ease;
+}
+
+@keyframes pageIn {
+  from { opacity: .6; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 15px;
-}
-
-.card {
-  min-width: 0;
-  padding: 19px;
-  border: 1px solid var(--border);
-  border-radius: 19px;
-  background: linear-gradient(145deg, #1b304a, #0e1d30);
-  box-shadow: 0 10px 25px #0003;
+  gap: 18px;
 }
 
 .s12 { grid-column: span 12; }
@@ -130,9 +158,18 @@ button:hover {
 .s6 { grid-column: span 6; }
 .s4 { grid-column: span 4; }
 
+.card {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: linear-gradient(145deg, #1b304a, #0e1d30);
+  box-shadow: 0 12px 28px #0004;
+}
+
 h2 {
-  font-size: 19px;
-  margin: 0 0 14px;
+  font-size: 21px;
+  margin: 0 0 15px;
 }
 
 h3 {
@@ -141,17 +178,117 @@ h3 {
 
 .muted {
   color: var(--muted);
-  line-height: 1.6;
+  line-height: 1.7;
+}
+
+.primary {
+  background: linear-gradient(135deg, #ffe5a0, #e9b84c);
+  color: #172238;
+  box-shadow: 0 6px 16px #e9b84c26;
+}
+
+.secondary {
+  color: white;
+  background: linear-gradient(135deg, #24486f, #172c48);
+  border: 1px solid #49678a;
+}
+
+/* WELCOME CARD */
+
+.welcome-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 285px;
+  padding: 28px;
+  border-radius: 25px;
+  border: 1px solid #85c6ff77;
+  background: linear-gradient(125deg, #1168c9, #168fe9 48%, #173d81);
+  box-shadow: 0 18px 38px #0005, inset 0 1px 0 #ffffff38;
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+
+.welcome-card::after {
+  content: "✦";
+  position: absolute;
+  z-index: -1;
+  right: 20px;
+  top: -15px;
+  font-size: 190px;
+  color: #ffffff18;
+  pointer-events: none;
+}
+
+.welcome-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 45px #0006;
+}
+
+.welcome-card h2 {
+  font-size: 25px;
+  text-shadow: 0 2px 10px #0003;
+}
+
+.welcome-card .muted {
+  color: #e4f2ff;
 }
 
 .balance {
-  font-size: 35px;
+  display: inline-block;
+  padding: 8px 0;
+  color: #ffe49a;
+  font-size: clamp(35px, 4vw, 48px);
   font-weight: 900;
-  color: var(--gold);
-  margin: 12px 0;
+  text-shadow: 0 4px 15px #0004;
 }
 
-/* FOUR DASHBOARD SUMMARY CARDS */
+.welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 18px;
+}
+
+/* ACCOUNT OVERVIEW */
+
+.overview-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 285px;
+  padding: 25px;
+  border-radius: 25px;
+  border: 1px solid #c1abff66;
+  background: linear-gradient(145deg, #5136a2, #293c83 55%, #172c55);
+  box-shadow: 0 18px 38px #0005, inset 0 1px 0 #ffffff26;
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+
+.overview-card::after {
+  content: "◈";
+  position: absolute;
+  z-index: -1;
+  right: 5px;
+  bottom: -48px;
+  font-size: 170px;
+  color: #ffffff15;
+  pointer-events: none;
+}
+
+.overview-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 45px #0006;
+}
+
+.overview-card p {
+  line-height: 1.8;
+}
+
+.overview-card strong {
+  color: #ffe49a;
+}
+
+/* SUMMARY CARDS */
 
 .stats {
   display: grid;
@@ -159,67 +296,78 @@ h3 {
   gap: 16px;
 }
 
-.stat {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
 .summary-card {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
-  padding: 20px 16px;
-  min-height: 150px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.18);
-  box-shadow: 0 8px 22px rgba(0,0,0,.22);
+  min-width: 0;
+  min-height: 155px;
+  padding: 19px;
+  border-radius: 19px;
+  border: 1px solid #ffffff35;
+  box-shadow: 0 10px 23px #0003;
   transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.summary-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  right: -40px;
+  bottom: -55px;
+  background: #ffffff20;
 }
 
 .summary-card:hover {
   transform: translateY(-7px);
-  box-shadow: 0 16px 30px rgba(0,0,0,.35);
+  box-shadow: 0 17px 30px #0005;
+}
+
+.summary-icon {
+  display: grid;
+  place-items: center;
+  width: 47px;
+  height: 47px;
+  border-radius: 14px;
+  background: #ffffff2b;
+  border: 1px solid #ffffff40;
+  font-size: 26px;
+  box-shadow: 0 5px 13px #0002;
 }
 
 .summary-card span {
   display: block;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  margin-top: 12px;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 13px;
 }
 
 .summary-card strong {
   display: block;
-  color: #fff;
+  color: white;
   font-size: 25px;
-  margin-top: 10px;
-}
-
-.summary-icon {
-  font-size: 27px;
-  width: 46px;
-  height: 46px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 13px;
-  background: rgba(255,255,255,.18);
+  margin-top: 8px;
+  overflow-wrap: anywhere;
 }
 
 .deposit-card {
-  background: linear-gradient(135deg,#087f8c,#20c9b5);
+  background: linear-gradient(135deg, #087f8c, #20c9b5);
 }
 
 .withdraw-card {
-  background: linear-gradient(135deg,#2455a4,#438df5);
+  background: linear-gradient(135deg, #2455a4, #438df5);
 }
 
 .referral-card {
-  background: linear-gradient(135deg,#7638b8,#bd68f5);
+  background: linear-gradient(135deg, #7638b8, #bd68f5);
 }
 
 .profit-card {
-  background: linear-gradient(135deg,#b77812,#f5c451);
+  background: linear-gradient(135deg, #b77812, #f5c451);
 }
 
 /* PLAN CARDS */
@@ -227,7 +375,7 @@ h3 {
 .plan-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 15px;
+  gap: 16px;
 }
 
 .plan {
@@ -237,11 +385,10 @@ h3 {
   min-width: 0;
   min-height: 235px;
   padding: 17px;
-  border-radius: 20px;
-  border: 1px solid #627b98;
+  border-radius: 21px;
+  border: 1px solid #ffffff40;
   background: #172a42;
   box-shadow: 0 10px 22px #0004, inset 0 1px 0 #ffffff22;
-  transform: translateY(0) scale(1);
   transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
 }
 
@@ -250,7 +397,7 @@ h3 {
   position: absolute;
   inset: 0;
   z-index: -2;
-  background: linear-gradient(135deg,#294c71,#102038);
+  background: linear-gradient(135deg, #294c71, #102038);
 }
 
 .plan::after {
@@ -259,7 +406,7 @@ h3 {
   z-index: -1;
   right: -7px;
   bottom: -25px;
-  font-size: clamp(100px,12vw,155px);
+  font-size: clamp(100px, 12vw, 155px);
   line-height: 1;
   opacity: .20;
   filter: drop-shadow(0 8px 12px #0006);
@@ -280,8 +427,8 @@ h3 {
   place-items: center;
   border-radius: 15px;
   font-size: 29px;
-  background: #ffffff1c;
-  border: 1px solid #ffffff35;
+  background: #ffffff25;
+  border: 1px solid #ffffff45;
   box-shadow: 0 5px 14px #0003;
 }
 
@@ -291,7 +438,7 @@ h3 {
 }
 
 .plan .price {
-  color: var(--gold);
+  color: #ffe49a;
   font-size: 28px;
   font-weight: 900;
   margin: 12px 0;
@@ -309,66 +456,66 @@ h3 {
 .plan button {
   width: 100%;
   margin-top: 13px;
-  background: linear-gradient(135deg,#ffe8ae,#edbd57);
+  background: linear-gradient(135deg, #ffe8ae, #edbd57);
   color: #172238;
   position: relative;
 }
 
-.plan button:hover {
-  transform: translateY(-2px);
-}
-
 .plan-starter::before {
-  background: linear-gradient(135deg,#35714c,#102c25 85%);
+  background: linear-gradient(135deg, #35714c, #102c25 85%);
 }
 
 .plan-basic::before {
-  background: linear-gradient(135deg,#2877bd,#102746 85%);
+  background: linear-gradient(135deg, #2877bd, #102746 85%);
 }
 
 .plan-silver::before {
-  background: linear-gradient(135deg,#8296a9,#29394c 85%);
+  background: linear-gradient(135deg, #8296a9, #29394c 85%);
 }
 
 .plan-gold::before {
-  background: linear-gradient(135deg,#b68a32,#473016 85%);
+  background: linear-gradient(135deg, #b68a32, #473016 85%);
 }
 
 .plan-platinum::before {
-  background: linear-gradient(135deg,#657dc0,#24294b 85%);
+  background: linear-gradient(135deg, #657dc0, #24294b 85%);
 }
 
 .plan-bright::before {
-  background: linear-gradient(135deg,#9b60c1,#34204d 85%);
+  background: linear-gradient(135deg, #9b60c1, #34204d 85%);
 }
 
 .plan-shining::before {
-  background: linear-gradient(135deg,#c6a52c,#4a3713 85%);
+  background: linear-gradient(135deg, #c6a52c, #4a3713 85%);
 }
 
 .plan-sun-rising::before {
-  background: linear-gradient(135deg,#ed7a39,#632b19 85%);
+  background: linear-gradient(135deg, #ed7a39, #632b19 85%);
 }
+
+/* FORMS */
 
 label {
   display: block;
   margin: 12px 0 6px;
   color: var(--muted);
+  font-size: 14px;
 }
 
 input, select {
   width: 100%;
+  min-width: 0;
   padding: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
+  border-radius: 11px;
+  border: 1px solid #435b78;
   background: #091727;
   color: white;
   font-size: 15px;
-  min-width: 0;
 }
 
 input:focus, select:focus {
-  outline: 1px solid var(--gold);
+  outline: 2px solid #69b8ff;
+  outline-offset: 1px;
 }
 
 .full {
@@ -395,6 +542,8 @@ input:focus, select:focus {
   overflow-wrap: anywhere;
 }
 
+/* TABLES */
+
 .table-wrap {
   overflow-x: auto;
 }
@@ -407,7 +556,7 @@ table {
 
 th, td {
   text-align: left;
-  padding: 12px 8px;
+  padding: 13px 9px;
   border-bottom: 1px solid var(--border);
   font-size: 13px;
 }
@@ -418,7 +567,7 @@ th {
 
 footer {
   text-align: center;
-  padding: 26px 10px;
+  padding: 28px 10px;
   font-size: 12px;
   color: var(--muted);
 }
@@ -429,64 +578,95 @@ footer {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 12px 18px;
+  padding: 13px 19px;
   background: var(--gold);
   color: #172238;
   border-radius: 12px;
-  font-weight: bold;
+  font-weight: 700;
   z-index: 100;
   max-width: 90%;
+  box-shadow: 0 8px 25px #0005;
 }
 
-@media(prefers-reduced-motion:reduce) {
-  .plan, .plan button, .summary-card, button {
-    transition: none;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
   }
 
-  .plan:hover, .summary-card:hover {
+  .plan:hover,
+  .summary-card:hover,
+  .welcome-card:hover,
+  .overview-card:hover {
     transform: none;
   }
 }
 
-@media(max-width:850px) {
-  .s8, .s6, .s4 {
-    grid-column: span 6;
+@media(max-width: 950px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .plan-grid {
-    grid-template-columns: repeat(2,minmax(0,1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .stats {
-    grid-template-columns: repeat(2,minmax(0,1fr));
+  .s8, .s6, .s4 {
+    grid-column: span 6;
   }
 }
 
-@media(max-width:500px) {
+@media(max-width: 600px) {
   .container {
-    padding: 10px;
+    padding: 11px;
+  }
+
+  header {
+    padding: 15px;
+  }
+
+  .logo {
+    font-size: 25px;
+  }
+
+  .nav {
+    padding: 9px;
+    gap: 8px;
+    border-radius: 15px;
+  }
+
+  .nav button {
+    flex: 1 1 40%;
+    padding: 11px 8px;
+    font-size: 12px;
   }
 
   .s8, .s6, .s4 {
     grid-column: span 12;
   }
 
-  .plan-grid {
-    gap: 9px;
+  .welcome-card, .overview-card {
+    min-height: auto;
+    padding: 21px;
+    border-radius: 21px;
   }
 
-  .plan {
-    padding: 11px;
-    min-height: 220px;
+  .welcome-card h2 {
+    font-size: 21px;
   }
 
-  .plan .price {
-    font-size: 23px;
+  .balance {
+    font-size: 35px;
+  }
+
+  .stats {
+    gap: 10px;
   }
 
   .summary-card {
-    padding: 14px 11px;
-    min-height: 130px;
+    padding: 13px;
+    min-height: 137px;
+    border-radius: 16px;
   }
 
   .summary-card strong {
@@ -497,8 +677,30 @@ footer {
     font-size: 12px;
   }
 
-  header {
-    padding: 13px;
+  .plan-grid {
+    gap: 10px;
+  }
+
+  .plan {
+    padding: 12px;
+    min-height: 220px;
+    border-radius: 17px;
+  }
+
+  .plan .price {
+    font-size: 23px;
+  }
+
+  .plan h3 {
+    font-size: 16px;
+  }
+
+  .copyrow {
+    flex-wrap: wrap;
+  }
+
+  .copyrow button {
+    width: 100%;
   }
 }
 </style>
@@ -511,10 +713,7 @@ footer {
     <div class="logo">✦ BAYA.COM</div>
     <div class="subtitle">Account Dashboard</div>
   </div>
-
-  <button class="secondary" onclick="openPage('dashboard')">
-    Dashboard
-  </button>
+  <button class="secondary" onclick="openPage('dashboard')">Dashboard</button>
 </header>
 
 <div class="container">
@@ -524,7 +723,7 @@ footer {
   before making financial decisions. Returns are not guaranteed.
 </div>
 
-<div class="nav">
+<nav class="nav">
   <button class="active" data-page="dashboard" onclick="openPage('dashboard')">Dashboard</button>
   <button data-page="deposit" onclick="openPage('deposit')">Deposit</button>
   <button data-page="withdraw" onclick="openPage('withdraw')">Withdrawal</button>
@@ -533,24 +732,26 @@ footer {
   <button data-page="history" onclick="openPage('history')">Transactions</button>
   <button data-page="profile" onclick="openPage('profile')">Profile</button>
   <button data-page="admin" onclick="openPage('admin')">Admin Interface</button>
-</div>
+</nav>
 
 <!-- DASHBOARD -->
 <section id="dashboard" class="page active">
 <div class="grid">
 
-  <div class="card s8">
+  <div class="welcome-card s8">
     <h2>Welcome to BAYA.COM</h2>
     <div class="muted">Account Balance</div>
     <div class="balance" id="balance">$1,000.00</div>
     <p class="muted">Account summary and available actions.</p>
 
-    <button class="primary" onclick="openPage('deposit')">Deposit</button>
-    <button class="secondary" onclick="openPage('withdraw')">Withdrawal</button>
-    <button class="secondary" onclick="openPage('plans')">View Plans</button>
+    <div class="welcome-actions">
+      <button class="primary" onclick="openPage('deposit')">Deposit</button>
+      <button class="secondary" onclick="openPage('withdraw')">Withdrawal</button>
+      <button class="secondary" onclick="openPage('plans')">View Plans</button>
+    </div>
   </div>
 
-  <div class="card s4">
+  <div class="overview-card s4">
     <h2>Account Overview</h2>
     <p class="muted">Account interface</p>
     <p>Selected Plan: <strong id="selectedPlan">None</strong></p>
@@ -562,31 +763,29 @@ footer {
     <h2>Quick Summary</h2>
 
     <div class="stats">
-
-      <div class="stat summary-card deposit-card">
+      <div class="summary-card deposit-card">
         <div class="summary-icon">💰</div>
         <span>Deposit Requests</span>
         <strong id="depositTotal">$0.00</strong>
       </div>
 
-      <div class="stat summary-card withdraw-card">
+      <div class="summary-card withdraw-card">
         <div class="summary-icon">💸</div>
         <span>Withdrawal Requests</span>
         <strong id="withdrawTotal">$0.00</strong>
       </div>
 
-      <div class="stat summary-card referral-card">
+      <div class="summary-card referral-card">
         <div class="summary-icon">🎁</div>
         <span>Referral Bonus</span>
         <strong>8%</strong>
       </div>
 
-      <div class="stat summary-card profit-card">
+      <div class="summary-card profit-card">
         <div class="summary-icon">📈</div>
         <span>Daily Profit</span>
         <strong id="rateLabel">1%</strong>
       </div>
-
     </div>
   </div>
 
@@ -603,7 +802,6 @@ footer {
 <!-- DEPOSIT -->
 <section id="deposit" class="page">
 <div class="grid">
-
   <div class="card s6">
     <h2>Deposit Request</h2>
 
@@ -633,18 +831,16 @@ footer {
     </div>
 
     <p class="muted address">
-      Confirm the network and address before sending funds.
+      Verify the network and address before sending funds.
       A transaction reference alone does not prove receipt.
     </p>
   </div>
-
 </div>
 </section>
 
 <!-- WITHDRAWAL -->
 <section id="withdraw" class="page">
 <div class="grid">
-
   <div class="card s6">
     <h2>Withdrawal Request</h2>
 
@@ -660,19 +856,20 @@ footer {
   <div class="card s6">
     <h2>Withdrawal Information</h2>
     <p class="muted">
-      Withdrawal requests must be checked against verified available
-      balances, account requirements, applicable fees and payment rules.
+      Requests require verified balances, account eligibility,
+      applicable fees and server-side approval.
     </p>
   </div>
-
 </div>
 </section>
 
-<!-- PLANS -->
+<!-- INVESTMENT PLANS -->
 <section id="plans" class="page">
 <div class="card">
   <h2>Investment Plans</h2>
-  <p class="muted">The displayed daily percentage is a calculation setting, not a guaranteed return.</p>
+  <p class="muted">
+    The daily percentage is a calculation setting, not a guaranteed return.
+  </p>
   <div class="plan-grid" id="allPlans"></div>
 </div>
 </section>
@@ -680,13 +877,9 @@ footer {
 <!-- REFERRAL -->
 <section id="referral" class="page">
 <div class="grid">
-
   <div class="card s6">
     <h2>Referral Bonus</h2>
-    <p class="muted">
-      One-time referral bonus calculation at 8%.
-      Eligibility and payment depend on verified records and service terms.
-    </p>
+    <p class="muted">One-time referral bonus calculation at 8%.</p>
 
     <label>Qualifying Amount (USD)</label>
     <input id="referralAmount" type="number" min="0" step="0.01" placeholder="Enter amount">
@@ -699,8 +892,8 @@ footer {
 
     <button class="primary full" onclick="calculateReferral()">Calculate 8% Bonus</button>
 
-    <div class="stat" style="margin-top:15px">
-      <span class="muted">Calculated Bonus</span>
+    <div class="summary-card referral-card" style="margin-top:18px">
+      <span>Calculated Bonus</span>
       <strong id="referralResult">$0.00</strong>
     </div>
   </div>
@@ -709,12 +902,8 @@ footer {
     <h2>Referral Details</h2>
     <p>Referral Bonus: <strong>8%</strong></p>
     <p>Frequency: <strong>One time</strong></p>
-    <p class="muted">
-      Referral rewards should be credited only after eligibility and
-      the qualifying transaction have been verified by the server.
-    </p>
+    <p class="muted">Eligibility and actual crediting must be verified by the server.</p>
   </div>
-
 </div>
 </section>
 
@@ -744,9 +933,9 @@ footer {
 <!-- PROFILE -->
 <section id="profile" class="page">
 <div class="grid">
-
   <div class="card s6">
     <h2>Profile Settings</h2>
+
     <label>Full Name</label>
     <input id="profileName" placeholder="Enter name">
 
@@ -760,39 +949,37 @@ footer {
   <div class="card s6">
     <h2>Account Security</h2>
     <p class="muted">
-      Authentication, password management and permissions must be
-      enforced by the connected server.
+      Authentication, password management and permissions must be enforced by the backend.
     </p>
     <button class="secondary" onclick="openPage('dashboard')">Back to Dashboard</button>
   </div>
-
 </div>
 </section>
 
 <!-- ADMIN INTERFACE -->
 <section id="admin" class="page">
 <div class="grid">
-
   <div class="card s6">
     <h2>Admin Overview</h2>
     <p class="muted">
-      Administrative access must be protected by server-side
-      authentication and permissions.
+      Administrative access must be protected by server-side authentication.
     </p>
-    <div class="stat">
-      <span class="muted">Requests in this page</span>
+    <div class="summary-card deposit-card">
+      <span>Requests in this interface</span>
       <strong id="adminCount">0</strong>
     </div>
   </div>
 
   <div class="card s6">
     <h2>Display Settings</h2>
+
     <label>Daily Profit (%)</label>
     <input id="dailyRate" type="number" min="0" max="100" step="0.1" value="1">
+
     <button class="primary full" onclick="updateRate()">Update Display Rate</button>
+
     <p class="muted">
       This setting changes the displayed calculation only.
-      Financial records must be maintained by the backend.
     </p>
   </div>
 
@@ -815,42 +1002,46 @@ footer {
       </table>
     </div>
   </div>
-
 </div>
 </section>
 
 <footer>BAYA.COM · Account Dashboard</footer>
 </div>
 
-<div id="toast"></div>
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script>
 "use strict";
 
+/*
+  Frontend interface only.
+  Connect authenticated backend APIs before using real accounts or money.
+*/
+
 const plans = [
-  {name:"Starter",amount:10,icon:"🌱"},
-  {name:"Basic",amount:30,icon:"🔹"},
-  {name:"Silver",amount:50,icon:"🥈"},
-  {name:"Gold",amount:100,icon:"🥇"},
-  {name:"Platinum",amount:200,icon:"💠"},
-  {name:"Bright",amount:500,icon:"✨"},
-  {name:"Shining",amount:1000,icon:"🌟"},
-  {name:"Sun Rising",amount:2000,icon:"☀️"}
+  {name:"Starter", amount:10, icon:"🌱"},
+  {name:"Basic", amount:30, icon:"🔹"},
+  {name:"Silver", amount:50, icon:"🥈"},
+  {name:"Gold", amount:100, icon:"🥇"},
+  {name:"Platinum", amount:200, icon:"💠"},
+  {name:"Bright", amount:500, icon:"✨"},
+  {name:"Shining", amount:1000, icon:"🌟"},
+  {name:"Sun Rising", amount:2000, icon:"☀️"}
 ];
 
 const state = {
-  balance:1000,
-  depositTotal:0,
-  withdrawTotal:0,
-  rate:1,
-  selectedPlan:null,
-  transactions:[]
+  balance: 1000,
+  depositTotal: 0,
+  withdrawTotal: 0,
+  rate: 1,
+  selectedPlan: null,
+  transactions: []
 };
 
 function money(value) {
   return "$" + Number(value).toLocaleString("en-US", {
-    minimumFractionDigits:2,
-    maximumFractionDigits:2
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   });
 }
 
@@ -863,23 +1054,26 @@ function toast(message) {
 
   window.toastTimer = setTimeout(() => {
     element.style.display = "none";
-  },2500);
+  }, 2600);
 }
 
 function openPage(id) {
-  document.querySelectorAll(".page").forEach(page => {
-    page.classList.toggle("active",page.id === id);
+  const page = document.getElementById(id);
+  if (!page) return;
+
+  document.querySelectorAll(".page").forEach(item => {
+    item.classList.toggle("active", item.id === id);
   });
 
   document.querySelectorAll(".nav button").forEach(button => {
-    button.classList.toggle("active",button.dataset.page === id);
+    button.classList.toggle("active", button.dataset.page === id);
   });
 
-  window.scrollTo({top:0,behavior:"smooth"});
+  window.scrollTo({top: 0, behavior: "smooth"});
 }
 
 function planCard(plan) {
-  const slug = plan.name.toLowerCase().replace(/\s+/g,"-");
+  const slug = plan.name.toLowerCase().replace(/\s+/g, "-");
   const dailyAmount = plan.amount * state.rate / 100;
 
   return `
@@ -887,15 +1081,20 @@ function planCard(plan) {
       <div class="icon">${plan.icon}</div>
       <h3>${plan.name}</h3>
       <div class="price">$${plan.amount.toLocaleString("en-US")}</div>
-      <div class="rate">Daily calculation at ${state.rate}%: ${money(dailyAmount)}</div>
+      <div class="rate">
+        Daily calculation at ${state.rate}%: ${money(dailyAmount)}
+      </div>
       <button onclick="selectPlan('${plan.name}')">Select Plan</button>
     </div>
   `;
 }
 
 function renderPlans() {
-  document.getElementById("allPlans").innerHTML = plans.map(planCard).join("");
-  document.getElementById("featuredPlans").innerHTML = plans.slice(0,4).map(planCard).join("");
+  document.getElementById("allPlans").innerHTML =
+    plans.map(planCard).join("");
+
+  document.getElementById("featuredPlans").innerHTML =
+    plans.slice(0, 4).map(planCard).join("");
 }
 
 function selectPlan(name) {
@@ -903,6 +1102,7 @@ function selectPlan(name) {
   if (!plan) return;
 
   state.selectedPlan = plan;
+
   document.getElementById("selectedPlan").textContent = plan.name;
   document.getElementById("dailyEstimate").textContent =
     money(plan.amount * state.rate / 100);
@@ -911,13 +1111,13 @@ function selectPlan(name) {
   openPage("dashboard");
 }
 
-function addTransaction(type,amount,reference) {
+function addTransaction(type, amount, reference) {
   state.transactions.unshift({
-    date:new Date().toLocaleString(),
+    date: new Date().toLocaleString(),
     type,
     amount,
     reference,
-    status:"Pending"
+    status: "Pending"
   });
 }
 
@@ -931,14 +1131,14 @@ function submitDeposit() {
     return;
   }
 
-  addTransaction("Deposit - " + method,amount,txid || "Not provided");
+  addTransaction("Deposit - " + method, amount, txid || "Not provided");
   state.depositTotal += amount;
 
   document.getElementById("depositAmount").value = "";
   document.getElementById("depositTxid").value = "";
 
   render();
-  toast("Deposit request added");
+  toast("Request recorded in this page");
 }
 
 function submitWithdrawal() {
@@ -960,7 +1160,7 @@ function submitWithdrawal() {
     return;
   }
 
-  addTransaction("Withdrawal",amount,destination);
+  addTransaction("Withdrawal", amount, destination);
   state.withdrawTotal += amount;
   state.balance -= amount;
 
@@ -968,7 +1168,7 @@ function submitWithdrawal() {
   document.getElementById("withdrawDestination").value = "";
 
   render();
-  toast("Withdrawal request added");
+  toast("Request recorded in this page");
 }
 
 function calculateReferral() {
@@ -984,16 +1184,21 @@ function calculateReferral() {
 
 async function copyText(text) {
   try {
+    if (!navigator.clipboard) throw new Error("Clipboard unavailable");
     await navigator.clipboard.writeText(text);
     toast("Copied successfully");
   } catch (error) {
     const field = document.createElement("textarea");
     field.value = text;
+    field.style.position = "fixed";
+    field.style.opacity = "0";
     document.body.appendChild(field);
     field.select();
-    document.execCommand("copy");
+
+    const copied = document.execCommand("copy");
     field.remove();
-    toast("Copied successfully");
+
+    toast(copied ? "Copied successfully" : "Copy failed; please copy manually");
   }
 }
 
@@ -1015,9 +1220,7 @@ function saveProfile() {
   }
 
   document.getElementById("profileMessage").textContent =
-    "Details entered for " + name +
-    (email ? " (" + email + ")" : "") +
-    ". Connect the account API to save permanently.";
+    "Profile details entered. Connect the backend API to save them permanently.";
 
   toast("Profile details checked");
 }
@@ -1034,16 +1237,16 @@ function updateRate() {
   document.getElementById("rateLabel").textContent = rate + "%";
 
   render();
-  toast("Display rate updated");
+  toast("Displayed calculation updated");
 }
 
 function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g,character => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
+  return String(value).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
   })[character]);
 }
 
