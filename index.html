@@ -8,9 +8,8 @@
 <style>
 :root {
   --bg: #07111f;
-  --card: #13243a;
   --gold: #f4c96b;
-  --text: #ffffff;
+  --text: #fff;
   --muted: #c0cce0;
   --border: #344c68;
 }
@@ -152,25 +151,78 @@ h3 {
   margin: 12px 0;
 }
 
+/* FOUR DASHBOARD SUMMARY CARDS */
+
 .stats {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: 16px;
 }
 
 .stat {
-  background: #091727;
-  border: 1px solid var(--border);
-  padding: 14px;
-  border-radius: 13px;
+  min-width: 0;
   overflow-wrap: anywhere;
 }
 
-.stat strong {
-  display: block;
-  margin-top: 8px;
-  font-size: 19px;
+.summary-card {
+  position: relative;
+  overflow: hidden;
+  padding: 20px 16px;
+  min-height: 150px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow: 0 8px 22px rgba(0,0,0,.22);
+  transition: transform .25s ease, box-shadow .25s ease;
 }
+
+.summary-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 16px 30px rgba(0,0,0,.35);
+}
+
+.summary-card span {
+  display: block;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+.summary-card strong {
+  display: block;
+  color: #fff;
+  font-size: 25px;
+  margin-top: 10px;
+}
+
+.summary-icon {
+  font-size: 27px;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 13px;
+  background: rgba(255,255,255,.18);
+}
+
+.deposit-card {
+  background: linear-gradient(135deg,#087f8c,#20c9b5);
+}
+
+.withdraw-card {
+  background: linear-gradient(135deg,#2455a4,#438df5);
+}
+
+.referral-card {
+  background: linear-gradient(135deg,#7638b8,#bd68f5);
+}
+
+.profit-card {
+  background: linear-gradient(135deg,#b77812,#f5c451);
+}
+
+/* PLAN CARDS */
 
 .plan-grid {
   display: grid;
@@ -178,7 +230,6 @@ h3 {
   gap: 15px;
 }
 
-/* Investment cards */
 .plan {
   position: relative;
   isolation: isolate;
@@ -189,14 +240,9 @@ h3 {
   border-radius: 20px;
   border: 1px solid #627b98;
   background: #172a42;
-  box-shadow:
-    0 10px 22px #0004,
-    inset 0 1px 0 #ffffff22;
+  box-shadow: 0 10px 22px #0004, inset 0 1px 0 #ffffff22;
   transform: translateY(0) scale(1);
-  transition:
-    transform .28s ease,
-    box-shadow .28s ease,
-    border-color .28s ease;
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
 }
 
 .plan::before {
@@ -204,7 +250,7 @@ h3 {
   position: absolute;
   inset: 0;
   z-index: -2;
-  background: linear-gradient(135deg, #294c71, #102038);
+  background: linear-gradient(135deg,#294c71,#102038);
 }
 
 .plan::after {
@@ -213,7 +259,7 @@ h3 {
   z-index: -1;
   right: -7px;
   bottom: -25px;
-  font-size: clamp(100px, 12vw, 155px);
+  font-size: clamp(100px,12vw,155px);
   line-height: 1;
   opacity: .20;
   filter: drop-shadow(0 8px 12px #0006);
@@ -223,9 +269,7 @@ h3 {
 
 .plan:hover {
   transform: translateY(-9px) scale(1.025);
-  box-shadow:
-    0 23px 38px #0007,
-    0 0 24px #f4c96b22;
+  box-shadow: 0 23px 38px #0007, 0 0 24px #f4c96b22;
   border-color: var(--gold);
 }
 
@@ -265,7 +309,7 @@ h3 {
 .plan button {
   width: 100%;
   margin-top: 13px;
-  background: linear-gradient(135deg, #ffe8ae, #edbd57);
+  background: linear-gradient(135deg,#ffe8ae,#edbd57);
   color: #172238;
   position: relative;
 }
@@ -274,37 +318,36 @@ h3 {
   transform: translateY(-2px);
 }
 
-/* Individual plan backgrounds */
 .plan-starter::before {
-  background: linear-gradient(135deg, #35714c, #102c25 85%);
+  background: linear-gradient(135deg,#35714c,#102c25 85%);
 }
 
 .plan-basic::before {
-  background: linear-gradient(135deg, #2877bd, #102746 85%);
+  background: linear-gradient(135deg,#2877bd,#102746 85%);
 }
 
 .plan-silver::before {
-  background: linear-gradient(135deg, #8296a9, #29394c 85%);
+  background: linear-gradient(135deg,#8296a9,#29394c 85%);
 }
 
 .plan-gold::before {
-  background: linear-gradient(135deg, #b68a32, #473016 85%);
+  background: linear-gradient(135deg,#b68a32,#473016 85%);
 }
 
 .plan-platinum::before {
-  background: linear-gradient(135deg, #657dc0, #24294b 85%);
+  background: linear-gradient(135deg,#657dc0,#24294b 85%);
 }
 
 .plan-bright::before {
-  background: linear-gradient(135deg, #9b60c1, #34204d 85%);
+  background: linear-gradient(135deg,#9b60c1,#34204d 85%);
 }
 
 .plan-shining::before {
-  background: linear-gradient(135deg, #c6a52c, #4a3713 85%);
+  background: linear-gradient(135deg,#c6a52c,#4a3713 85%);
 }
 
 .plan-sun-rising::before {
-  background: linear-gradient(135deg, #ed7a39, #632b19 85%);
+  background: linear-gradient(135deg,#ed7a39,#632b19 85%);
 }
 
 label {
@@ -395,33 +438,31 @@ footer {
   max-width: 90%;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .plan,
-  .plan button,
-  button {
+@media(prefers-reduced-motion:reduce) {
+  .plan, .plan button, .summary-card, button {
     transition: none;
   }
 
-  .plan:hover {
+  .plan:hover, .summary-card:hover {
     transform: none;
   }
 }
 
-@media(max-width: 850px) {
+@media(max-width:850px) {
   .s8, .s6, .s4 {
     grid-column: span 6;
   }
 
   .plan-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2,minmax(0,1fr));
   }
 
   .stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2,minmax(0,1fr));
   }
 }
 
-@media(max-width: 500px) {
+@media(max-width:500px) {
   .container {
     padding: 10px;
   }
@@ -443,6 +484,19 @@ footer {
     font-size: 23px;
   }
 
+  .summary-card {
+    padding: 14px 11px;
+    min-height: 130px;
+  }
+
+  .summary-card strong {
+    font-size: 21px;
+  }
+
+  .summary-card span {
+    font-size: 12px;
+  }
+
   header {
     padding: 13px;
   }
@@ -458,43 +512,28 @@ footer {
     <div class="subtitle">Account Dashboard</div>
   </div>
 
-  <button class="secondary"
-    onclick="openPage('dashboard')">Dashboard</button>
+  <button class="secondary" onclick="openPage('dashboard')">
+    Dashboard
+  </button>
 </header>
 
 <div class="container">
 
 <div class="notice">
-  Review the applicable terms, fees, eligibility rules and transaction
-  status before making financial decisions. Returns are not guaranteed.
+  Review applicable terms, fees, eligibility rules and transaction status
+  before making financial decisions. Returns are not guaranteed.
 </div>
 
 <div class="nav">
-  <button class="active" data-page="dashboard"
-    onclick="openPage('dashboard')">Dashboard</button>
-
-  <button data-page="deposit"
-    onclick="openPage('deposit')">Deposit</button>
-
-  <button data-page="withdraw"
-    onclick="openPage('withdraw')">Withdrawal</button>
-
-  <button data-page="plans"
-    onclick="openPage('plans')">Investment Plans</button>
-
-  <button data-page="referral"
-    onclick="openPage('referral')">Referral Bonus</button>
-
-  <button data-page="history"
-    onclick="openPage('history')">Transactions</button>
-
-  <button data-page="profile"
-    onclick="openPage('profile')">Profile</button>
-
-  <button data-page="admin"
-    onclick="openPage('admin')">Admin Interface</button>
+  <button class="active" data-page="dashboard" onclick="openPage('dashboard')">Dashboard</button>
+  <button data-page="deposit" onclick="openPage('deposit')">Deposit</button>
+  <button data-page="withdraw" onclick="openPage('withdraw')">Withdrawal</button>
+  <button data-page="plans" onclick="openPage('plans')">Investment Plans</button>
+  <button data-page="referral" onclick="openPage('referral')">Referral Bonus</button>
+  <button data-page="history" onclick="openPage('history')">Transactions</button>
+  <button data-page="profile" onclick="openPage('profile')">Profile</button>
+  <button data-page="admin" onclick="openPage('admin')">Admin Interface</button>
 </div>
-
 
 <!-- DASHBOARD -->
 <section id="dashboard" class="page active">
@@ -504,74 +543,62 @@ footer {
     <h2>Welcome to BAYA.COM</h2>
     <div class="muted">Account Balance</div>
     <div class="balance" id="balance">$1,000.00</div>
-
     <p class="muted">Account summary and available actions.</p>
 
-    <button class="primary"
-      onclick="openPage('deposit')">Deposit</button>
-
-    <button class="secondary"
-      onclick="openPage('withdraw')">Withdrawal</button>
-
-    <button class="secondary"
-      onclick="openPage('plans')">View Plans</button>
+    <button class="primary" onclick="openPage('deposit')">Deposit</button>
+    <button class="secondary" onclick="openPage('withdraw')">Withdrawal</button>
+    <button class="secondary" onclick="openPage('plans')">View Plans</button>
   </div>
 
   <div class="card s4">
     <h2>Account Overview</h2>
     <p class="muted">Account interface</p>
-
-    <p>Selected Plan:
-      <strong id="selectedPlan">None</strong>
-    </p>
-
-    <p>Daily Estimate:
-      <strong id="dailyEstimate">$0.00</strong>
-    </p>
-
-    <button class="secondary"
-      onclick="openPage('profile')">Profile Settings</button>
+    <p>Selected Plan: <strong id="selectedPlan">None</strong></p>
+    <p>Daily Estimate: <strong id="dailyEstimate">$0.00</strong></p>
+    <button class="secondary" onclick="openPage('profile')">Profile Settings</button>
   </div>
 
   <div class="card s12">
     <h2>Quick Summary</h2>
 
     <div class="stats">
-      <div class="stat">
-        <span class="muted">Deposit Requests</span>
+
+      <div class="stat summary-card deposit-card">
+        <div class="summary-icon">💰</div>
+        <span>Deposit Requests</span>
         <strong id="depositTotal">$0.00</strong>
       </div>
 
-      <div class="stat">
-        <span class="muted">Withdrawal Requests</span>
+      <div class="stat summary-card withdraw-card">
+        <div class="summary-icon">💸</div>
+        <span>Withdrawal Requests</span>
         <strong id="withdrawTotal">$0.00</strong>
       </div>
 
-      <div class="stat">
-        <span class="muted">Referral Rate</span>
-        <strong>8% Once</strong>
+      <div class="stat summary-card referral-card">
+        <div class="summary-icon">🎁</div>
+        <span>Referral Bonus</span>
+        <strong>8%</strong>
       </div>
 
-      <div class="stat">
-        <span class="muted">Daily Rate Setting</span>
+      <div class="stat summary-card profit-card">
+        <div class="summary-icon">📈</div>
+        <span>Daily Profit</span>
         <strong id="rateLabel">1%</strong>
       </div>
+
     </div>
   </div>
 
   <div class="card s12">
     <h2>Investment Plans</h2>
     <div class="plan-grid" id="featuredPlans"></div>
-
     <br>
-
-    <button class="primary"
-      onclick="openPage('plans')">View All Plans</button>
+    <button class="primary" onclick="openPage('plans')">View All Plans</button>
   </div>
 
 </div>
 </section>
-
 
 <!-- DEPOSIT -->
 <section id="deposit" class="page">
@@ -581,8 +608,7 @@ footer {
     <h2>Deposit Request</h2>
 
     <label>Amount (USD)</label>
-    <input id="depositAmount" type="number"
-      min="1" step="0.01" placeholder="Enter amount">
+    <input id="depositAmount" type="number" min="1" step="0.01" placeholder="Enter amount">
 
     <label>Payment Method</label>
     <select id="depositMethod">
@@ -592,12 +618,9 @@ footer {
     </select>
 
     <label>Transaction ID (TXID)</label>
-    <input id="depositTxid"
-      placeholder="Enter transaction reference">
+    <input id="depositTxid" placeholder="Enter transaction reference">
 
-    <button class="primary full" onclick="submitDeposit()">
-      Submit Deposit Request
-    </button>
+    <button class="primary full" onclick="submitDeposit()">Submit Deposit Request</button>
   </div>
 
   <div class="card s6">
@@ -605,10 +628,7 @@ footer {
     <p class="muted">Network: TRON (TRC20)</p>
 
     <div class="copyrow">
-      <input id="depositAddress"
-        value="TFEdkrQRfTWnu4RrkHHAugsKRwgNtbhBHT"
-        readonly>
-
+      <input id="depositAddress" value="TFEdkrQRfTWnu4RrkHHAugsKRwgNtbhBHT" readonly>
       <button onclick="copyAddress()">Copy</button>
     </div>
 
@@ -621,7 +641,6 @@ footer {
 </div>
 </section>
 
-
 <!-- WITHDRAWAL -->
 <section id="withdraw" class="page">
 <div class="grid">
@@ -630,21 +649,16 @@ footer {
     <h2>Withdrawal Request</h2>
 
     <label>Amount (USD)</label>
-    <input id="withdrawAmount" type="number"
-      min="1" step="0.01" placeholder="Enter amount">
+    <input id="withdrawAmount" type="number" min="1" step="0.01" placeholder="Enter amount">
 
     <label>Destination Address / Account</label>
-    <input id="withdrawDestination"
-      placeholder="Enter destination">
+    <input id="withdrawDestination" placeholder="Enter destination">
 
-    <button class="primary full" onclick="submitWithdrawal()">
-      Submit Withdrawal Request
-    </button>
+    <button class="primary full" onclick="submitWithdrawal()">Submit Withdrawal Request</button>
   </div>
 
   <div class="card s6">
     <h2>Withdrawal Information</h2>
-
     <p class="muted">
       Withdrawal requests must be checked against verified available
       balances, account requirements, applicable fees and payment rules.
@@ -654,21 +668,14 @@ footer {
 </div>
 </section>
 
-
 <!-- PLANS -->
 <section id="plans" class="page">
 <div class="card">
   <h2>Investment Plans</h2>
-
-  <p class="muted">
-    The displayed daily percentage is a calculation setting,
-    not a guaranteed return.
-  </p>
-
+  <p class="muted">The displayed daily percentage is a calculation setting, not a guaranteed return.</p>
   <div class="plan-grid" id="allPlans"></div>
 </div>
 </section>
-
 
 <!-- REFERRAL -->
 <section id="referral" class="page">
@@ -676,26 +683,21 @@ footer {
 
   <div class="card s6">
     <h2>Referral Bonus</h2>
-
     <p class="muted">
       One-time referral bonus calculation at 8%.
       Eligibility and payment depend on verified records and service terms.
     </p>
 
     <label>Qualifying Amount (USD)</label>
-    <input id="referralAmount" type="number"
-      min="0" step="0.01" placeholder="Enter amount">
+    <input id="referralAmount" type="number" min="0" step="0.01" placeholder="Enter amount">
 
     <label>Referral Code</label>
-
     <div class="copyrow">
       <input id="referralCode" value="BAYA-REF-001" readonly>
       <button onclick="copyReferral()">Copy</button>
     </div>
 
-    <button class="primary full" onclick="calculateReferral()">
-      Calculate 8% Bonus
-    </button>
+    <button class="primary full" onclick="calculateReferral()">Calculate 8% Bonus</button>
 
     <div class="stat" style="margin-top:15px">
       <span class="muted">Calculated Bonus</span>
@@ -707,22 +709,19 @@ footer {
     <h2>Referral Details</h2>
     <p>Referral Bonus: <strong>8%</strong></p>
     <p>Frequency: <strong>One time</strong></p>
-
     <p class="muted">
-      Referral rewards should be credited only after eligibility
-      and the qualifying transaction have been verified by the server.
+      Referral rewards should be credited only after eligibility and
+      the qualifying transaction have been verified by the server.
     </p>
   </div>
 
 </div>
 </section>
 
-
-<!-- TRANSACTION HISTORY -->
+<!-- TRANSACTIONS -->
 <section id="history" class="page">
 <div class="card">
   <h2>Transaction History</h2>
-
   <div class="table-wrap">
     <table>
       <thead>
@@ -734,17 +733,13 @@ footer {
           <th>Status</th>
         </tr>
       </thead>
-
       <tbody id="historyRows">
-        <tr>
-          <td colspan="5">No transactions available.</td>
-        </tr>
+        <tr><td colspan="5">No transactions available.</td></tr>
       </tbody>
     </table>
   </div>
 </div>
 </section>
-
 
 <!-- PROFILE -->
 <section id="profile" class="page">
@@ -752,35 +747,27 @@ footer {
 
   <div class="card s6">
     <h2>Profile Settings</h2>
-
     <label>Full Name</label>
     <input id="profileName" placeholder="Enter name">
 
     <label>Email</label>
     <input id="profileEmail" type="email" placeholder="Enter email">
 
-    <button class="primary full" onclick="saveProfile()">
-      Save Profile
-    </button>
-
+    <button class="primary full" onclick="saveProfile()">Save Profile</button>
     <p id="profileMessage" class="muted"></p>
   </div>
 
   <div class="card s6">
     <h2>Account Security</h2>
-
     <p class="muted">
-      Authentication, password management and permissions must
-      be enforced by the connected server.
+      Authentication, password management and permissions must be
+      enforced by the connected server.
     </p>
-
-    <button class="secondary"
-      onclick="openPage('dashboard')">Back to Dashboard</button>
+    <button class="secondary" onclick="openPage('dashboard')">Back to Dashboard</button>
   </div>
 
 </div>
 </section>
-
 
 <!-- ADMIN INTERFACE -->
 <section id="admin" class="page">
@@ -788,12 +775,10 @@ footer {
 
   <div class="card s6">
     <h2>Admin Overview</h2>
-
     <p class="muted">
       Administrative access must be protected by server-side
       authentication and permissions.
     </p>
-
     <div class="stat">
       <span class="muted">Requests in this page</span>
       <strong id="adminCount">0</strong>
@@ -802,15 +787,9 @@ footer {
 
   <div class="card s6">
     <h2>Display Settings</h2>
-
-    <label>Daily Rate (%)</label>
-    <input id="dailyRate" type="number"
-      min="0" max="100" step="0.1" value="1">
-
-    <button class="primary full" onclick="updateRate()">
-      Update Display Rate
-    </button>
-
+    <label>Daily Profit (%)</label>
+    <input id="dailyRate" type="number" min="0" max="100" step="0.1" value="1">
+    <button class="primary full" onclick="updateRate()">Update Display Rate</button>
     <p class="muted">
       This setting changes the displayed calculation only.
       Financial records must be maintained by the backend.
@@ -819,7 +798,6 @@ footer {
 
   <div class="card s12">
     <h2>Requests Overview</h2>
-
     <div class="table-wrap">
       <table>
         <thead>
@@ -831,11 +809,8 @@ footer {
             <th>Status</th>
           </tr>
         </thead>
-
         <tbody id="adminRows">
-          <tr>
-            <td colspan="5">No requests available.</td>
-          </tr>
+          <tr><td colspan="5">No requests available.</td></tr>
         </tbody>
       </table>
     </div>
@@ -844,48 +819,43 @@ footer {
 </div>
 </section>
 
-<footer>
-  BAYA.COM · Account Dashboard
-</footer>
-
+<footer>BAYA.COM · Account Dashboard</footer>
 </div>
 
 <div id="toast"></div>
-
 
 <script>
 "use strict";
 
 const plans = [
-  {name:"Starter", amount:10, icon:"🌱"},
-  {name:"Basic", amount:30, icon:"🔹"},
-  {name:"Silver", amount:50, icon:"🥈"},
-  {name:"Gold", amount:100, icon:"🥇"},
-  {name:"Platinum", amount:200, icon:"💠"},
-  {name:"Bright", amount:500, icon:"✨"},
-  {name:"Shining", amount:1000, icon:"🌟"},
-  {name:"Sun Rising", amount:2000, icon:"☀️"}
+  {name:"Starter",amount:10,icon:"🌱"},
+  {name:"Basic",amount:30,icon:"🔹"},
+  {name:"Silver",amount:50,icon:"🥈"},
+  {name:"Gold",amount:100,icon:"🥇"},
+  {name:"Platinum",amount:200,icon:"💠"},
+  {name:"Bright",amount:500,icon:"✨"},
+  {name:"Shining",amount:1000,icon:"🌟"},
+  {name:"Sun Rising",amount:2000,icon:"☀️"}
 ];
 
 const state = {
-  balance: 1000,
-  depositTotal: 0,
-  withdrawTotal: 0,
-  rate: 1,
-  selectedPlan: null,
-  transactions: []
+  balance:1000,
+  depositTotal:0,
+  withdrawTotal:0,
+  rate:1,
+  selectedPlan:null,
+  transactions:[]
 };
 
 function money(value) {
   return "$" + Number(value).toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
   });
 }
 
 function toast(message) {
   const element = document.getElementById("toast");
-
   element.textContent = message;
   element.style.display = "block";
 
@@ -893,64 +863,47 @@ function toast(message) {
 
   window.toastTimer = setTimeout(() => {
     element.style.display = "none";
-  }, 2500);
+  },2500);
 }
 
 function openPage(id) {
   document.querySelectorAll(".page").forEach(page => {
-    page.classList.toggle("active", page.id === id);
+    page.classList.toggle("active",page.id === id);
   });
 
   document.querySelectorAll(".nav button").forEach(button => {
-    button.classList.toggle("active", button.dataset.page === id);
+    button.classList.toggle("active",button.dataset.page === id);
   });
 
-  window.scrollTo({top: 0, behavior: "smooth"});
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function planCard(plan) {
-  const slug = plan.name.toLowerCase().replace(/\s+/g, "-");
+  const slug = plan.name.toLowerCase().replace(/\s+/g,"-");
   const dailyAmount = plan.amount * state.rate / 100;
 
   return `
     <div class="plan plan-${slug}" data-symbol="${plan.icon}">
       <div class="icon">${plan.icon}</div>
-
       <h3>${plan.name}</h3>
-
-      <div class="price">
-        $${plan.amount.toLocaleString("en-US")}
-      </div>
-
-      <div class="rate">
-        Daily calculation at ${state.rate}%:
-        ${money(dailyAmount)}
-      </div>
-
-      <button onclick="selectPlan('${plan.name}')">
-        Select Plan
-      </button>
+      <div class="price">$${plan.amount.toLocaleString("en-US")}</div>
+      <div class="rate">Daily calculation at ${state.rate}%: ${money(dailyAmount)}</div>
+      <button onclick="selectPlan('${plan.name}')">Select Plan</button>
     </div>
   `;
 }
 
 function renderPlans() {
-  document.getElementById("allPlans").innerHTML =
-    plans.map(planCard).join("");
-
-  document.getElementById("featuredPlans").innerHTML =
-    plans.slice(0, 4).map(planCard).join("");
+  document.getElementById("allPlans").innerHTML = plans.map(planCard).join("");
+  document.getElementById("featuredPlans").innerHTML = plans.slice(0,4).map(planCard).join("");
 }
 
 function selectPlan(name) {
   const plan = plans.find(item => item.name === name);
-
   if (!plan) return;
 
   state.selectedPlan = plan;
-
   document.getElementById("selectedPlan").textContent = plan.name;
-
   document.getElementById("dailyEstimate").textContent =
     money(plan.amount * state.rate / 100);
 
@@ -958,23 +911,19 @@ function selectPlan(name) {
   openPage("dashboard");
 }
 
-function addTransaction(type, amount, reference) {
+function addTransaction(type,amount,reference) {
   state.transactions.unshift({
-    date: new Date().toLocaleString(),
-    type: type,
-    amount: amount,
-    reference: reference,
-    status: "Pending"
+    date:new Date().toLocaleString(),
+    type,
+    amount,
+    reference,
+    status:"Pending"
   });
 }
 
 function submitDeposit() {
-  const amount = Number(
-    document.getElementById("depositAmount").value
-  );
-
+  const amount = Number(document.getElementById("depositAmount").value);
   const method = document.getElementById("depositMethod").value;
-
   const txid = document.getElementById("depositTxid").value.trim();
 
   if (!Number.isFinite(amount) || amount <= 0) {
@@ -982,12 +931,7 @@ function submitDeposit() {
     return;
   }
 
-  addTransaction(
-    "Deposit - " + method,
-    amount,
-    txid || "Not provided"
-  );
-
+  addTransaction("Deposit - " + method,amount,txid || "Not provided");
   state.depositTotal += amount;
 
   document.getElementById("depositAmount").value = "";
@@ -998,13 +942,8 @@ function submitDeposit() {
 }
 
 function submitWithdrawal() {
-  const amount = Number(
-    document.getElementById("withdrawAmount").value
-  );
-
-  const destination = document.getElementById(
-    "withdrawDestination"
-  ).value.trim();
+  const amount = Number(document.getElementById("withdrawAmount").value);
+  const destination = document.getElementById("withdrawDestination").value.trim();
 
   if (!Number.isFinite(amount) || amount <= 0) {
     toast("Please enter a valid amount");
@@ -1021,8 +960,7 @@ function submitWithdrawal() {
     return;
   }
 
-  addTransaction("Withdrawal", amount, destination);
-
+  addTransaction("Withdrawal",amount,destination);
   state.withdrawTotal += amount;
   state.balance -= amount;
 
@@ -1034,17 +972,14 @@ function submitWithdrawal() {
 }
 
 function calculateReferral() {
-  const amount = Number(
-    document.getElementById("referralAmount").value
-  );
+  const amount = Number(document.getElementById("referralAmount").value);
 
   if (!Number.isFinite(amount) || amount < 0) {
     toast("Please enter a valid amount");
     return;
   }
 
-  document.getElementById("referralResult").textContent =
-    money(amount * 0.08);
+  document.getElementById("referralResult").textContent = money(amount * 0.08);
 }
 
 async function copyText(text) {
@@ -1053,14 +988,11 @@ async function copyText(text) {
     toast("Copied successfully");
   } catch (error) {
     const field = document.createElement("textarea");
-
     field.value = text;
     document.body.appendChild(field);
-
     field.select();
     document.execCommand("copy");
     field.remove();
-
     toast("Copied successfully");
   }
 }
@@ -1099,7 +1031,6 @@ function updateRate() {
   }
 
   state.rate = rate;
-
   document.getElementById("rateLabel").textContent = rate + "%";
 
   render();
@@ -1107,27 +1038,20 @@ function updateRate() {
 }
 
 function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, character => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
+  return String(value).replace(/[&<>"']/g,character => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
   })[character]);
 }
 
 function render() {
-  document.getElementById("balance").textContent =
-    money(state.balance);
-
-  document.getElementById("depositTotal").textContent =
-    money(state.depositTotal);
-
-  document.getElementById("withdrawTotal").textContent =
-    money(state.withdrawTotal);
-
-  document.getElementById("adminCount").textContent =
-    state.transactions.length;
+  document.getElementById("balance").textContent = money(state.balance);
+  document.getElementById("depositTotal").textContent = money(state.depositTotal);
+  document.getElementById("withdrawTotal").textContent = money(state.withdrawTotal);
+  document.getElementById("adminCount").textContent = state.transactions.length;
 
   const rows = state.transactions.map(transaction => `
     <tr>
@@ -1139,11 +1063,10 @@ function render() {
     </tr>
   `).join("");
 
-  document.getElementById("historyRows").innerHTML =
-    rows || '<tr><td colspan="5">No transactions available.</td></tr>';
+  const emptyRows = '<tr><td colspan="5">No transactions available.</td></tr>';
 
-  document.getElementById("adminRows").innerHTML =
-    rows || '<tr><td colspan="5">No requests available.</td></tr>';
+  document.getElementById("historyRows").innerHTML = rows || emptyRows;
+  document.getElementById("adminRows").innerHTML = rows || emptyRows;
 
   document.getElementById("dailyEstimate").textContent =
     state.selectedPlan
