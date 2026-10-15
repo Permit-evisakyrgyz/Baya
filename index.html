@@ -2,819 +2,329 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BAYA | Account Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BAYA Account Portal</title>
 
 <style>
-:root {
-  --bg: #071326;
-  --panel: #102440;
-  --panel2: #163252;
-  --gold: #f6bd55;
-  --text: #f4f7fc;
-  --muted: #aabbd0;
-  --border: #294563;
-  --green: #42d69b;
-  --red: #ff7777;
+:root{
+  --bg:#071326;
+  --panel:#102440;
+  --panel2:#163252;
+  --gold:#ffc45e;
+  --text:#f4f7fc;
+  --muted:#aabbd0;
+  --border:#294563;
 }
-
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  color:var(--text);
+  font-family:Arial,sans-serif;
+  background:linear-gradient(140deg,#071326,#10365c,#071326);
+  min-height:100vh;
 }
-
-body {
-  margin: 0;
-  background: linear-gradient(140deg, #071326, #10365c, #071326);
-  color: var(--text);
-  font-family: Arial, sans-serif;
-  min-height: 100vh;
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.container{width:min(1100px,94%);margin:auto}
+header{
+  background:#071326dd;
+  border-bottom:1px solid var(--border);
+  padding:17px 0;
 }
-
-button, input, select, textarea {
-  font: inherit;
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
 }
-
-button {
-  cursor: pointer;
+.logo{font-size:27px;font-weight:bold;color:var(--gold);letter-spacing:2px}
+.small{font-size:12px;color:var(--muted)}
+.card{
+  background:#102440f5;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:22px;
+  margin-bottom:18px;
+  box-shadow:0 10px 30px #0002;
 }
-
-.hidden {
-  display: none !important;
+button.btn{
+  border:0;
+  border-radius:10px;
+  padding:12px 16px;
+  font-weight:bold;
 }
-
-.container {
-  width: min(1100px, 94%);
-  margin: auto;
+.gold{background:linear-gradient(110deg,#ffe4a4,#f6a62c);color:#382306}
+.dark{background:var(--panel2);color:white;border:1px solid var(--border)!important}
+.full{width:100%;margin-top:18px}
+.auth-wrap{
+  min-height:80vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px 0;
 }
-
-header {
-  padding: 18px 0;
-  border-bottom: 1px solid var(--border);
-  background: rgba(4, 15, 31, .75);
+.auth-card{width:min(500px,100%);padding:26px}
+.muted{color:var(--muted);line-height:1.6}
+.tabs,.nav{display:flex;gap:9px;flex-wrap:wrap;margin:20px 0}
+.tabs button{flex:1;padding:14px;border-radius:11px;border:1px solid var(--border);background:var(--panel2);color:white}
+.tabs button.active,.nav button.active{background:var(--gold);color:#382306}
+label{display:block;margin:14px 0 7px;color:#c7d5e7;font-size:14px}
+input,select,textarea{
+  width:100%;
+  padding:13px;
+  border-radius:10px;
+  border:1px solid #365578;
+  background:#0a1a30;
+  color:white;
+  outline:none;
 }
-
-.header-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.link{
+  display:block;
+  margin:14px auto 0;
+  border:0;
+  background:none;
+  color:#d7e9ff;
+  text-decoration:underline;
 }
-
-.logo {
-  font-size: 27px;
-  font-weight: bold;
-  color: var(--gold);
-  letter-spacing: 2px;
-}
-
-.small {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.btn {
-  border: 0;
-  border-radius: 10px;
-  padding: 12px 16px;
-  font-weight: bold;
-  transition: .2s;
-}
-
-.btn:hover {
-  filter: brightness(1.1);
-}
-
-.btn-gold {
-  background: linear-gradient(110deg, #ffe2a0, #f6a62c);
-  color: #382306;
-}
-
-.btn-dark {
-  background: var(--panel2);
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-
-.btn-red {
-  background: #612d3b;
-  color: white;
-}
-
-.btn-green {
-  background: #145d49;
-  color: white;
-}
-
-.card {
-  background: rgba(16, 36, 64, .94);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 22px;
-  margin-bottom: 18px;
-  box-shadow: 0 10px 30px #0002;
-}
-
-h1, h2, h3 {
-  margin-top: 0;
-}
-
-.muted {
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.auth-wrap {
-  min-height: 82vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 25px 0;
-}
-
-.auth-card {
-  width: min(500px, 100%);
-  padding: 28px;
-  background: rgba(16, 36, 64, .97);
-  border: 1px solid #35577b;
-  border-radius: 22px;
-  box-shadow: 0 20px 60px #0004;
-}
-
-.auth-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin: 22px 0;
-}
-
-.auth-tabs button {
-  padding: 14px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--panel2);
-  color: white;
-  font-weight: bold;
-}
-
-.auth-tabs button.active {
-  background: var(--gold);
-  color: #34220b;
-}
-
-label {
-  display: block;
-  color: #c7d5e7;
-  margin: 15px 0 7px;
-  font-size: 14px;
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: 14px;
-  border-radius: 11px;
-  border: 1px solid #365578;
-  background: #0a1a30;
-  color: white;
-  outline: none;
-}
-
-input:focus, select:focus, textarea:focus {
-  border-color: var(--gold);
-}
-
-input::placeholder, textarea::placeholder {
-  color: #8295ac;
-}
-
-.full {
-  width: 100%;
-  margin-top: 18px;
-}
-
-.message {
-  padding: 12px;
-  border-radius: 10px;
-  margin-top: 15px;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
-}
-
-.message.error {
-  background: #542d3b;
-  color: #ffe1e6;
-}
-
-.message.success {
-  background: #154d41;
-  color: #c8ffeb;
-}
-
-.message.info {
-  background: #193c60;
-  color: #e0edff;
-}
-
-.link-button {
-  background: none;
-  border: none;
-  color: #d7e9ff;
-  text-decoration: underline;
-  padding: 10px;
-}
-
-main {
-  padding: 25px 0 60px;
-}
-
-.welcome {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 14px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.stat {
-  background: linear-gradient(135deg, #15365a, #102440);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-}
-
-.stat-title {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.stat-value {
-  font-size: 26px;
-  font-weight: bold;
-  margin-top: 10px;
-  overflow-wrap: anywhere;
-}
-
-.nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
-  margin: 20px 0;
-}
-
-.nav button {
-  padding: 11px 14px;
-}
-
-.nav button.active {
-  background: var(--gold);
-  color: #382306;
-  border-color: var(--gold);
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
-
-.two-col {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 480px;
-}
-
-th, td {
-  padding: 13px 10px;
-  border-bottom: 1px solid var(--border);
-  text-align: left;
-  font-size: 14px;
-}
-
-th {
-  color: var(--gold);
-}
-
-.table-wrap {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.badge {
-  display: inline-block;
-  padding: 5px 9px;
-  border-radius: 20px;
-  background: #254461;
-  font-size: 12px;
-}
-
-footer {
-  text-align: center;
-  color: var(--muted);
-  border-top: 1px solid var(--border);
-  padding: 20px 0;
-}
-
-@media (max-width: 700px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .two-col {
-    grid-template-columns: 1fr;
-  }
-
-  .auth-card {
-    padding: 20px;
-  }
-
-  .stat-value {
-    font-size: 23px;
-  }
-
-  .logo {
-    font-size: 23px;
-  }
+.message{padding:12px;border-radius:10px;margin-top:15px;overflow-wrap:anywhere;line-height:1.5}
+.info{background:#193c60}
+.error{background:#542d3b}
+.success{background:#154d41}
+main{padding:25px 0 50px}
+.welcome{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.stat{background:linear-gradient(135deg,#15365a,#102440);border:1px solid var(--border);border-radius:15px;padding:20px;overflow-wrap:anywhere}
+.stat-title{font-size:13px;color:var(--muted)}
+.stat-value{font-size:25px;font-weight:bold;margin-top:12px}
+.page{display:none}
+.page.active{display:block}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:450px}
+th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--border)}
+th{color:var(--gold)}
+footer{text-align:center;color:var(--muted);padding:20px;border-top:1px solid var(--border)}
+@media(max-width:700px){
+  .grid,.two{grid-template-columns:1fr}
+  .auth-card{padding:20px}
+  .stat-value{font-size:22px}
 }
 </style>
 </head>
 
 <body>
-
 <header>
-  <div class="container header-inner">
+  <div class="container header-row">
     <div>
       <div class="logo">BAYA</div>
       <div class="small">ACCOUNT PORTAL</div>
     </div>
-
-    <button id="headerLogout"
-            class="btn btn-dark hidden"
-            onclick="logout()">
-      Logout
-    </button>
+    <button id="logoutBtn" class="btn dark hidden" onclick="logout()">Logout</button>
   </div>
 </header>
 
 <div class="container">
 
-  <!-- LOGIN AND REGISTER -->
-  <section id="authSection" class="auth-wrap">
-    <div class="auth-card">
+<section id="auth" class="auth-wrap">
+  <div class="card auth-card">
+    <h2 id="authTitle">Welcome Back</h2>
+    <p class="muted">Login to your account or register as a new user.</p>
 
-      <h2 id="authHeading">Welcome to BAYA</h2>
-      <p class="muted">
-        Login to your account or register as a new user.
-      </p>
+    <div class="tabs">
+      <button id="loginTab" class="active" onclick="showAuth('login')">Login</button>
+      <button id="registerTab" onclick="showAuth('register')">Register</button>
+    </div>
 
-      <div class="auth-tabs">
-        <button id="loginTab" class="active"
-                onclick="showAuth('login')">
-          Login
-        </button>
+    <form id="loginForm" onsubmit="login(event)">
+      <label>Email Address</label>
+      <input id="loginEmail" type="email" autocomplete="email" required placeholder="Enter your email">
 
-        <button id="registerTab"
-                onclick="showAuth('register')">
-          Register
-        </button>
+      <label>Password</label>
+      <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Enter your password">
+
+      <button id="loginBtn" class="btn gold full" type="submit">Login</button>
+      <button type="button" class="link" onclick="showAuth('register')">New user? Create an account</button>
+    </form>
+
+    <form id="registerForm" class="hidden" onsubmit="register(event)">
+      <label>Full Name</label>
+      <input id="regName" required minlength="2" maxlength="70" placeholder="Enter your full name">
+
+      <label>Email Address</label>
+      <input id="regEmail" type="email" autocomplete="email" required placeholder="Enter your email">
+
+      <label>Password (minimum 10 characters)</label>
+      <input id="regPassword" type="password" autocomplete="new-password" required minlength="10" placeholder="Create a password">
+
+      <label>Confirm Password</label>
+      <input id="regConfirm" type="password" autocomplete="new-password" required minlength="10" placeholder="Confirm your password">
+
+      <label>Referral Code (optional)</label>
+      <input id="referralCode" placeholder="Referral code, if any">
+
+      <button id="registerBtn" class="btn gold full" type="submit">Create Account</button>
+      <button type="button" class="link" onclick="showAuth('login')">Already registered? Login</button>
+    </form>
+
+    <div id="authMessage" class="message info">Connecting to BAYA server...</div>
+  </div>
+</section>
+
+<section id="dashboard" class="hidden">
+<main>
+
+  <div class="card welcome">
+    <div>
+      <h2>Hello, <span id="userName">User</span>!</h2>
+      <p class="muted">Welcome to your BAYA account.</p>
+    </div>
+    <span id="userEmail" class="small"></span>
+  </div>
+
+  <nav class="nav">
+    <button class="btn dark active" onclick="openPage('home',this)">Dashboard</button>
+    <button class="btn dark" onclick="openPage('deposit',this)">Deposit</button>
+    <button class="btn dark" onclick="openPage('withdraw',this)">Withdraw</button>
+    <button class="btn dark" onclick="openPage('plans',this)">Plans</button>
+    <button class="btn dark" onclick="openPage('transactions',this)">Transactions</button>
+    <button class="btn dark" onclick="openPage('profile',this)">Profile</button>
+  </nav>
+
+  <section id="page-home" class="page active">
+    <div class="grid">
+      <div class="stat">
+        <div class="stat-title">Available Balance</div>
+        <div id="balance" class="stat-value">—</div>
       </div>
-
-      <form id="loginForm" onsubmit="login(event)">
-
-        <label>Email Address</label>
-        <input id="loginEmail"
-               type="email"
-               autocomplete="email"
-               placeholder="Enter your email"
-               required>
-
-        <label>Password</label>
-        <input id="loginPassword"
-               type="password"
-               autocomplete="current-password"
-               placeholder="Enter your password"
-               required>
-
-        <button class="btn btn-gold full"
-                id="loginButton"
-                type="submit">
-          Login
-        </button>
-
-        <div style="text-align:center">
-          <button class="link-button" type="button"
-                  onclick="showAuth('register')">
-            New user? Create an account
-          </button>
-        </div>
-      </form>
-
-      <form id="registerForm"
-            class="hidden"
-            onsubmit="register(event)">
-
-        <label>Full Name</label>
-        <input id="regName"
-               type="text"
-               autocomplete="name"
-               placeholder="Enter your full name"
-               required
-               minlength="2"
-               maxlength="100">
-
-        <label>Email Address</label>
-        <input id="regEmail"
-               type="email"
-               autocomplete="email"
-               placeholder="Enter your email"
-               required>
-
-        <label>Password</label>
-        <input id="regPassword"
-               type="password"
-               autocomplete="new-password"
-               placeholder="Create a password"
-               required
-               minlength="8">
-
-        <label>Confirm Password</label>
-        <input id="regConfirm"
-               type="password"
-               autocomplete="new-password"
-               placeholder="Confirm your password"
-               required
-               minlength="8">
-
-        <button class="btn btn-gold full"
-                id="registerButton"
-                type="submit">
-          Create Account
-        </button>
-
-        <div style="text-align:center">
-          <button class="link-button" type="button"
-                  onclick="showAuth('login')">
-            Already registered? Login
-          </button>
-        </div>
-      </form>
-
-      <div id="authMessage"
-           class="message info"
-           role="status">
-        Connecting to BAYA server...
+      <div class="stat">
+        <div class="stat-title">Total Deposits</div>
+        <div id="totalDeposits" class="stat-value">—</div>
       </div>
-
+      <div class="stat">
+        <div class="stat-title">Total Withdrawals</div>
+        <div id="totalWithdrawals" class="stat-value">—</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3>Account Overview</h3>
+      <p class="muted">Account information is loaded from your server.</p>
+      <button class="btn gold" onclick="refreshAccount()">Refresh Account</button>
+      <div id="homeMsg" class="message hidden"></div>
     </div>
   </section>
 
-
-  <!-- USER DASHBOARD -->
-  <section id="dashboardSection" class="hidden">
-
-    <main>
-
-      <div class="card welcome">
-        <div>
-          <h2>Hello, <span id="userName">User</span>!</h2>
-          <p class="muted">
-            Welcome to your BAYA account dashboard.
-          </p>
-        </div>
-
-        <span class="badge">Account Portal</span>
+  <section id="page-deposit" class="page">
+    <div class="two">
+      <div class="card">
+        <h3>Deposit Request</h3>
+        <p class="muted">This form submits a request. It does not transfer funds itself.</p>
+        <form onsubmit="submitDeposit(event)">
+          <label>Amount</label>
+          <input id="depAmount" type="number" min="0.01" step="0.01" required>
+          <label>Payment Method</label>
+          <select id="depMethod" required>
+            <option value="">Select method</option>
+            <option value="USDT-TRC20">USDT TRC20</option>
+            <option value="Bank">Bank Transfer</option>
+            <option value="Other">Other</option>
+          </select>
+          <label>Transaction Reference</label>
+          <input id="depReference" maxlength="200" required>
+          <button class="btn gold full">Submit Deposit Request</button>
+        </form>
+        <div id="depMsg" class="message hidden"></div>
       </div>
-
-      <nav class="nav">
-        <button class="btn btn-dark active"
-                onclick="openPage('dashboard',this)">
-          Dashboard
-        </button>
-
-        <button class="btn btn-dark"
-                onclick="openPage('deposit',this)">
-          Deposit
-        </button>
-
-        <button class="btn btn-dark"
-                onclick="openPage('withdraw',this)">
-          Withdraw
-        </button>
-
-        <button class="btn btn-dark"
-                onclick="openPage('plans',this)">
-          Plans
-        </button>
-
-        <button class="btn btn-dark"
-                onclick="openPage('transactions',this)">
-          Transactions
-        </button>
-
-        <button class="btn btn-dark"
-                onclick="openPage('profile',this)">
-          Profile
-        </button>
-      </nav>
-
-
-      <!-- DASHBOARD PAGE -->
-      <section id="page-dashboard" class="page active">
-
-        <div class="grid">
-
-          <div class="stat">
-            <div class="stat-title">Available Balance</div>
-            <div class="stat-value" id="balanceValue">—</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-title">Total Deposits</div>
-            <div class="stat-value" id="depositValue">—</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-title">Total Withdrawals</div>
-            <div class="stat-value" id="withdrawValue">—</div>
-          </div>
-
-        </div>
-
-        <div class="card" style="margin-top:18px">
-          <h3>Account Overview</h3>
-          <p class="muted">
-            Your account information will appear here after
-            the server returns your account data.
-          </p>
-
-          <button class="btn btn-gold"
-                  onclick="refreshAccount()">
-            Refresh Account
-          </button>
-
-          <div id="dashboardMessage"
-               class="message info hidden"></div>
-        </div>
-
-      </section>
-
-
-      <!-- DEPOSIT PAGE -->
-      <section id="page-deposit" class="page">
-
-        <div class="two-col">
-
-          <div class="card">
-            <h3>Deposit Request</h3>
-
-            <p class="muted">
-              Submit a deposit request for administrator review.
-              This form does not itself transfer money.
-            </p>
-
-            <form onsubmit="submitDeposit(event)">
-
-              <label>Amount</label>
-              <input id="depositAmount"
-                     type="number"
-                     min="0.01"
-                     step="0.01"
-                     placeholder="Enter amount"
-                     required>
-
-              <label>Payment Method</label>
-              <select id="depositMethod" required>
-                <option value="">Select method</option>
-                <option value="USDT-TRC20">USDT TRC20</option>
-                <option value="Bank">Bank Transfer</option>
-                <option value="Other">Other</option>
-              </select>
-
-              <label>Transaction ID / Reference</label>
-              <input id="depositReference"
-                     maxlength="200"
-                     placeholder="Enter transaction reference"
-                     required>
-
-              <button class="btn btn-gold full"
-                      type="submit">
-                Submit Deposit Request
-              </button>
-
-            </form>
-
-            <div id="depositMessage"
-                 class="message hidden"></div>
-          </div>
-
-          <div class="card">
-            <h3>Payment Instructions</h3>
-
-            <p class="muted">
-              Obtain the official payment address and instructions
-              from your authorized administrator before transferring
-              any funds.
-            </p>
-
-            <p class="muted">
-              Always verify the network and destination address.
-              Never submit a wallet recovery phrase or private key.
-            </p>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- WITHDRAW PAGE -->
-      <section id="page-withdraw" class="page">
-
-        <div class="card">
-          <h3>Withdrawal Request</h3>
-
-          <p class="muted">
-            Submit a request for review. The server must verify
-            your balance and eligibility before processing it.
-          </p>
-
-          <form onsubmit="submitWithdrawal(event)">
-
-            <label>Amount</label>
-            <input id="withdrawAmount"
-                   type="number"
-                   min="0.01"
-                   step="0.01"
-                   placeholder="Enter amount"
-                   required>
-
-            <label>Payment Method</label>
-            <select id="withdrawMethod" required>
-              <option value="">Select method</option>
-              <option value="USDT-TRC20">USDT TRC20</option>
-              <option value="Bank">Bank Transfer</option>
-              <option value="Other">Other</option>
-            </select>
-
-            <label>Destination Address / Account Details</label>
-            <textarea id="withdrawAddress"
-                      rows="3"
-                      maxlength="500"
-                      placeholder="Enter destination details"
-                      required></textarea>
-
-            <button class="btn btn-gold full"
-                    type="submit">
-              Submit Withdrawal Request
-            </button>
-
-          </form>
-
-          <div id="withdrawMessage"
-               class="message hidden"></div>
-        </div>
-
-      </section>
-
-
-      <!-- PLANS PAGE -->
-      <section id="page-plans" class="page">
-
-        <div class="card">
-          <h3>Available Plans</h3>
-
-          <p class="muted">
-            Plan details and terms must be supplied by the server.
-            No profit or return is guaranteed by this interface.
-          </p>
-
-          <div id="plansList" class="grid">
-            <div class="stat">
-              <div class="stat-title">Plans</div>
-              <p class="muted">
-                Plan information is not loaded yet.
-              </p>
-            </div>
-          </div>
-
-          <div id="plansMessage"
-               class="message hidden"></div>
-        </div>
-
-      </section>
-
-
-      <!-- TRANSACTIONS PAGE -->
-      <section id="page-transactions" class="page">
-
-        <div class="card">
-          <h3>Transaction History</h3>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Type</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-
-              <tbody id="transactionsBody">
-                <tr>
-                  <td colspan="4">No data loaded.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <button class="btn btn-gold"
-                  style="margin-top:18px"
-                  onclick="loadTransactions()">
-            Refresh Transactions
-          </button>
-
-          <div id="transactionsMessage"
-               class="message hidden"></div>
-        </div>
-
-      </section>
-
-
-      <!-- PROFILE PAGE -->
-      <section id="page-profile" class="page">
-
-        <div class="card">
-          <h3>My Profile</h3>
-
-          <form onsubmit="updateProfile(event)">
-
-            <label>Full Name</label>
-            <input id="profileName"
-                   maxlength="100"
-                   required>
-
-            <label>Email Address</label>
-            <input id="profileEmail"
-                   type="email"
-                   readonly>
-
-            <button class="btn btn-gold full"
-                    type="submit">
-              Update Profile
-            </button>
-
-          </form>
-
-          <div id="profileMessage"
-               class="message hidden"></div>
-        </div>
-
-      </section>
-
-    </main>
+      <div class="card">
+        <h3>Payment Safety</h3>
+        <p class="muted">Use only payment details verified through your official administrator. Verify the network and destination before transferring funds. Never share your wallet private key or recovery phrase.</p>
+      </div>
+    </div>
   </section>
 
+  <section id="page-withdraw" class="page">
+    <div class="card">
+      <h3>Withdrawal Request</h3>
+      <p class="muted">The server must verify the balance and eligibility before processing any withdrawal.</p>
+      <form onsubmit="submitWithdrawal(event)">
+        <label>Amount</label>
+        <input id="wdAmount" type="number" min="0.01" step="0.01" required>
+        <label>Payment Method</label>
+        <select id="wdMethod" required>
+          <option value="">Select method</option>
+          <option value="USDT-TRC20">USDT TRC20</option>
+          <option value="Bank">Bank Transfer</option>
+          <option value="Other">Other</option>
+        </select>
+        <label>Destination Address / Account Details</label>
+        <textarea id="wdAddress" rows="3" maxlength="500" required></textarea>
+        <button class="btn gold full">Submit Withdrawal Request</button>
+      </form>
+      <div id="wdMsg" class="message hidden"></div>
+    </div>
+  </section>
+
+  <section id="page-plans" class="page">
+    <div class="card">
+      <h3>Available Plans</h3>
+      <p class="muted">Plan details must come from the server. Returns are not guaranteed.</p>
+      <div id="plansList" class="grid">Plans have not been loaded.</div>
+      <div id="plansMsg" class="message hidden"></div>
+    </div>
+  </section>
+
+  <section id="page-transactions" class="page">
+    <div class="card">
+      <h3>Transaction History</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody id="transactionsBody"><tr><td colspan="4">No data loaded.</td></tr></tbody>
+        </table>
+      </div>
+      <button class="btn gold" style="margin-top:18px" onclick="loadTransactions()">Refresh Transactions</button>
+      <div id="transactionsMsg" class="message hidden"></div>
+    </div>
+  </section>
+
+  <section id="page-profile" class="page">
+    <div class="card">
+      <h3>My Profile</h3>
+      <form onsubmit="updateProfile(event)">
+        <label>Full Name</label>
+        <input id="profileName" maxlength="70" required>
+        <label>Email Address</label>
+        <input id="profileEmail" type="email" readonly>
+        <button class="btn gold full">Update Profile</button>
+      </form>
+      <div id="profileMsg" class="message hidden"></div>
+    </div>
+  </section>
+
+</main>
+</section>
 </div>
 
 <footer>
-  <div class="container">
-    BAYA Account Portal
-    <div class="small">
-      Use only verified account and payment information.
-    </div>
-  </div>
+  <div class="container">BAYA Account Portal</div>
 </footer>
 
-
 <script>
-/* ======================================================
-   BAYA FRONTEND CONFIGURATION
-   Your Replit backend URL is inserted below.
-   API ROUTES STILL NEED TO MATCH server.js.
-====================================================== */
+/*
+  BAYA BACKEND
+  Replit URL supplied by the user.
+  Register route confirmed from server.js screenshot.
+  Other routes must match server.js exactly.
+*/
 
-const API_BASE =
-  "https://3d99bc2a-0e4d-4ed2-a3f3-3addcd0ab3e5-00-26nk7afdzfjn7.sisko.replit.dev";
+const API_BASE = "https://3d99bc2a-0e4d-4ed2-a3f3-3addcd0ab3e5-00-26nk7afdzfjn7.sisko.replit.dev";
 
 const API = {
-  register: "/api/register",
-  login: "/api/login",
-  me: "/api/me",
-  logout: "/api/logout",
+  register: "/api/auth/register",
+  login: "/api/auth/login",
+  me: "/api/auth/me",
+  logout: "/api/auth/logout",
   profile: "/api/profile",
   deposit: "/api/deposits",
   withdrawal: "/api/withdrawals",
@@ -824,694 +334,1120 @@ const API = {
 
 let currentUser = null;
 
+function $(id){return document.getElementById(id)}
 
-/* ---------- GENERAL HELPERS ---------- */
-
-function $(id) {
-  return document.getElementById(id);
+function message(id,text,type="info"){
+  const el=$(id);
+  if(!el)return;
+  el.textContent=text;
+  el.className="message "+type;
 }
 
-function showMessage(id, text, type = "info") {
-  const el = $(id);
-  if (!el) return;
-
-  el.textContent = text;
-  el.className = "message " + type;
-  el.classList.remove("hidden");
+function money(value){
+  if(value===undefined||value===null||value==="")return "—";
+  const n=Number(value);
+  return Number.isFinite(n)
+    ? n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})
+    : String(value);
 }
 
-function hideMessage(id) {
-  const el = $(id);
-  if (el) el.classList.add("hidden");
+function userName(user){
+  return user?.name || user?.fullName || user?.full_name || user?.username || "User";
 }
 
-function formatAmount(value) {
-  if (value === undefined || value === null || value === "") {
-    return "—";
-  }
-
-  const n = Number(value);
-
-  if (!Number.isFinite(n)) {
-    return String(value);
-  }
-
-  return n.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-}
-
-function getUserName(user) {
-  return user?.fullName ||
-         user?.full_name ||
-         user?.name ||
-         user?.username ||
-         "User";
-}
-
-function getUserEmail(user) {
+function userEmail(user){
   return user?.email || "";
 }
 
-
-/* ---------- API REQUEST HELPER ---------- */
-
-async function apiRequest(path, options = {}) {
-  if (!API_BASE || API_BASE.includes("YOUR-REPLIT")) {
-    throw new Error("Backend URL is not configured.");
-  }
-
-  const headers = {
-    "Accept": "application/json",
-    ...(options.body ? {
-      "Content-Type": "application/json"
-    } : {}),
-    ...(options.headers || {})
-  };
-
-  const response = await fetch(API_BASE + path, {
-    method: options.method || "GET",
-    headers,
-    credentials: "include",
-    body: options.body
-      ? JSON.stringify(options.body)
-      : undefined
+async function api(path,options={}){
+  const response=await fetch(API_BASE+path,{
+    method:options.method||"GET",
+    credentials:"include",
+    headers:{
+      "Accept":"application/json",
+      ...(options.body?{"Content-Type":"application/json"}:{}),
+      ...(options.headers||{})
+    },
+    body:options.body?JSON.stringify(options.body):undefined
   });
 
-  const text = await response.text();
+  const text=await response.text();
+  let data={};
 
-  let data = {};
-
-  if (text) {
-    try {
-      data = JSON.parse(text);
-    } catch {
-      data = { message: text };
-    }
+  if(text){
+    try{data=JSON.parse(text)}
+    catch{data={message:text}}
   }
 
-  if (!response.ok) {
-    throw new Error(
-      data.message ||
-      data.error ||
-      "Server error: HTTP " + response.status
-    );
+  if(!response.ok){
+    throw new Error(data.message||data.error||("HTTP "+response.status));
   }
 
-  if (data && data.success === false) {
-    throw new Error(data.message || "Request failed.");
+  if(data && data.success===false){
+    throw new Error(data.message||"Request failed");
   }
 
   return data;
 }
 
+function showAuth(mode){
+  $("auth").classList.remove("hidden");
+  $("dashboard").classList.add("hidden");
 
-/* ---------- AUTH SCREEN ---------- */
+  $("loginForm").classList.toggle("hidden",mode!=="login");
+  $("registerForm").classList.toggle("hidden",mode!=="register");
 
-function showAuth(mode) {
-  $("authSection").classList.remove("hidden");
-  $("dashboardSection").classList.add("hidden");
+  $("loginTab").classList.toggle("active",mode==="login");
+  $("registerTab").classList.toggle("active",mode==="register");
 
-  $("loginForm").classList.toggle("hidden", mode !== "login");
-  $("registerForm").classList.toggle("hidden", mode !== "register");
-
-  $("loginTab").classList.toggle("active", mode === "login");
-  $("registerTab").classList.toggle("active", mode === "register");
-
-  $("authHeading").textContent =
-    mode === "login" ? "Welcome Back" : "Create Your Account";
-
-  $("authMessage").className = "message info";
-  $("authMessage").textContent =
-    mode === "login"
-      ? "Login to access your account."
-      : "Enter your details to register.";
-
-  $("authMessage").classList.remove("hidden");
+  $("authTitle").textContent=mode==="login"?"Welcome Back":"Create Your Account";
+  message("authMessage",mode==="login"?"Login to your account.":"Enter your details to register.");
 }
 
-function showLoggedOut(message) {
-  currentUser = null;
+function showDashboard(user){
+  currentUser=user;
 
-  $("authSection").classList.remove("hidden");
-  $("dashboardSection").classList.add("hidden");
-  $("headerLogout").classList.add("hidden");
+  $("auth").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  $("logoutBtn").classList.remove("hidden");
 
-  showAuth("login");
+  $("userName").textContent=userName(user);
+  $("userEmail").textContent=userEmail(user);
+  $("profileName").value=userName(user);
+  $("profileEmail").value=userEmail(user);
 
-  if (message) {
-    showMessage("authMessage", message, "info");
-  }
+  $("balance").textContent=money(user.balance??user.availableBalance??user.available_balance);
+  $("totalDeposits").textContent=money(user.totalDeposits??user.total_deposits);
+  $("totalWithdrawals").textContent=money(user.totalWithdrawals??user.total_withdrawals);
+
+  openPage("home",document.querySelector(".nav button"));
 }
 
+function openPage(name,button){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  $("page-"+name).classList.add("active");
 
-/* ---------- REGISTER ---------- */
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  if(button)button.classList.add("active");
 
-async function register(event) {
+  if(name==="transactions")loadTransactions();
+  if(name==="plans")loadPlans();
+}
+
+async function register(event){
   event.preventDefault();
 
-  const name = $("regName").value.trim();
-  const email = $("regEmail").value.trim();
-  const password = $("regPassword").value;
-  const confirm = $("regConfirm").value;
+  const name=$("regName").value.trim();
+  const email=$("regEmail").value.trim();
+  const password=$("regPassword").value;
+  const confirm=$("regConfirm").value;
+  const referralCode=$("referralCode").value.trim();
 
-  if (password !== confirm) {
-    showMessage(
-      "authMessage",
-      "Passwords do not match.",
-      "error"
-    );
+  if(password!==confirm){
+    message("authMessage","Passwords do not match.","error");
     return;
   }
 
-  if (password.length < 8) {
-    showMessage(
-      "authMessage",
-      "Password must contain at least 8 characters.",
-      "error"
-    );
+  if(password.length<10){
+    message("authMessage","Password must be at least 10 characters.","error");
     return;
   }
 
-  const button = $("registerButton");
-  button.disabled = true;
-  button.textContent = "Creating Account...";
+  $("registerBtn").disabled=true;
+  $("registerBtn").textContent="Creating Account...";
 
-  try {
-    const data = await apiRequest(API.register, {
-      method: "POST",
-      body: {
-        name: name,
-        fullName: name,
-        email: email,
-        password: password
-      }
+  try{
+    const data=await api(API.register,{
+      method:"POST",
+      body:{name,email,password,referralCode}
     });
 
-    const user = data.user || data.account || null;
+    const user=data.user||data.account;
 
-    if (user) {
-      currentUser = user;
+    if(user){
       showDashboard(user);
-      await refreshAccount();
-    } else {
-      showMessage(
-        "authMessage",
-        data.message ||
-        "Registration request succeeded. Please log in.",
-        "success"
-      );
-
-      $("loginEmail").value = email;
-      $("loginPassword").value = "";
+      message("homeMsg",data.message||"Account created.","success");
+    }else{
+      message("authMessage",data.message||"Registration request accepted. Please log in.", "success");
+      $("loginEmail").value=email;
+      $("loginPassword").value="";
       $("registerForm").reset();
-
       showAuth("login");
     }
-
-  } catch (error) {
-    showMessage(
-      "authMessage",
-      "Registration failed: " + error.message,
-      "error"
-    );
-  } finally {
-    button.disabled = false;
-    button.textContent = "Create Account";
+  }catch(error){
+    message("authMessage","Registration failed: "+error.message,"error");
+  }finally{
+    $("registerBtn").disabled=false;
+    $("registerBtn").textContent="Create Account";
   }
 }
 
-
-/* ---------- LOGIN ---------- */
-
-async function login(event) {
+async function login(event){
   event.preventDefault();
 
-  const email = $("loginEmail").value.trim();
-  const password = $("loginPassword").value;
+  const email=$("loginEmail").value.trim();
+  const password=$("loginPassword").value;
 
-  const button = $("loginButton");
-  button.disabled = true;
-  button.textContent = "Logging In...";
+  $("loginBtn").disabled=true;
+  $("loginBtn").textContent="Logging In...";
 
-  try {
-    const data = await apiRequest(API.login, {
-      method: "POST",
-      body: {
-        email: email,
-        password: password
-      }
+  try{
+    const data=await api(API.login,{
+      method:"POST",
+      body:{email,password}
     });
 
-    const user = data.user || data.account || null;
+    let user=data.user||data.account;
 
-    if (user) {
-      currentUser = user;
-      showDashboard(user);
-      await refreshAccount();
-    } else {
-      /*
-        If the backend uses cookie sessions, /api/me
-        may identify the logged-in user.
-      */
-      const me = await apiRequest(API.me);
-      const meUser = me.user || me.account || null;
-
-      if (meUser) {
-        currentUser = meUser;
-        showDashboard(meUser);
-        await refreshAccount();
-      } else {
-        showMessage(
-          "authMessage",
-          data.message ||
-          "Login response did not contain a user. Check server.js.",
-          "error"
-        );
-      }
+    if(!user){
+      const me=await api(API.me);
+      user=me.user||me.account;
     }
 
-  } catch (error) {
-    showMessage(
-      "authMessage",
-      "Login failed: " + error.message,
-      "error"
-    );
-  } finally {
-    button.disabled = false;
-    button.textContent = "Login";
-  }
-}
-
-
-/* ---------- DASHBOARD ---------- */
-
-function showDashboard(user) {
-  currentUser = user;
-
-  $("authSection").classList.add("hidden");
-  $("dashboardSection").classList.remove("hidden");
-  $("headerLogout").classList.remove("hidden");
-
-  $("userName").textContent = getUserName(user);
-  $("profileName").value = getUserName(user);
-  $("profileEmail").value = getUserEmail(user);
-
-  $("balanceValue").textContent =
-    formatAmount(
-      user.balance ??
-      user.availableBalance ??
-      user.available_balance
-    );
-
-  $("depositValue").textContent =
-    formatAmount(
-      user.totalDeposits ??
-      user.total_deposits
-    );
-
-  $("withdrawValue").textContent =
-    formatAmount(
-      user.totalWithdrawals ??
-      user.total_withdrawals
-    );
-
-  openPage("dashboard", document.querySelector(".nav button"));
-}
-
-function openPage(pageName, button) {
-  document.querySelectorAll(".page").forEach(page => {
-    page.classList.remove("active");
-  });
-
-  const page = $("page-" + pageName);
-  if (page) page.classList.add("active");
-
-  document.querySelectorAll(".nav button").forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  if (button) button.classList.add("active");
-
-  if (pageName === "transactions") {
-    loadTransactions();
-  }
-
-  if (pageName === "plans") {
-    loadPlans();
-  }
-}
-
-async function refreshAccount() {
-  try {
-    const data = await apiRequest(API.me);
-    const user = data.user || data.account || null;
-
-    if (user) {
-      showDashboard(user);
-      showMessage(
-        "dashboardMessage",
-        "Account information refreshed.",
-        "success"
-      );
-    } else {
-      showMessage(
-        "dashboardMessage",
-        "Server response did not contain account information.",
-        "error"
-      );
+    if(!user){
+      throw new Error("Server did not return account information.");
     }
 
-  } catch (error) {
-    showMessage(
-      "dashboardMessage",
-      "Could not refresh account: " + error.message,
-      "error"
-    );
+    showDashboard(user);
+    await refreshAccount();
+  }catch(error){
+    message("authMessage","Login failed: "+error.message,"error");
+  }finally{
+    $("loginBtn").disabled=false;
+    $("loginBtn").textContent="Login";
   }
 }
 
+async function refreshAccount(){
+  try{
+    const data=await api(API.me);
+    const user=data.user||data.account;
 
-/* ---------- DEPOSIT ---------- */
+    if(user){
+      showDashboard(user);
+      message("homeMsg","Account information refreshed.","success");
+    }else{
+      message("homeMsg","The server did not return account details.","error");
+    }
+  }catch(error){
+    message("homeMsg","Could not refresh account: "+error.message,"error");
+  }
+}
 
-async function submitDeposit(event) {
+async function submitDeposit(event){
   event.preventDefault();
 
-  const amount = Number($("depositAmount").value);
-  const method = $("depositMethod").value;
-  const reference = $("depositReference").value.trim();
+  const amount=Number($("depAmount").value);
+  const method=$("depMethod").value;
+  const reference=$("depReference").value.trim();
 
-  if (!Number.isFinite(amount) || amount <= 0) {
-    showMessage(
-      "depositMessage",
-      "Enter a valid amount.",
-      "error"
-    );
+  if(!Number.isFinite(amount)||amount<=0){
+    message("depMsg","Enter a valid amount.","error");
     return;
   }
 
-  try {
-    const data = await apiRequest(API.deposit, {
-      method: "POST",
-      body: {
-        amount: amount,
-        method: method,
-        reference: reference,
-        transactionId: reference
-      }
+  try{
+    const data=await api(API.deposit,{
+      method:"POST",
+      body:{amount,method,reference,transactionId:reference}
     });
-
-    showMessage(
-      "depositMessage",
-      data.message ||
-      "Deposit request submitted. Wait for server confirmation.",
-      "success"
-    );
-
-    $("depositAmount").value = "";
-    $("depositReference").value = "";
-
-  } catch (error) {
-    showMessage(
-      "depositMessage",
-      "Deposit request failed: " + error.message,
-      "error"
-    );
+    message("depMsg",data.message||"Deposit request submitted for review.","success");
+    $("depAmount").value="";
+    $("depReference").value="";
+  }catch(error){
+    message("depMsg","Deposit request failed: "+error.message,"error");
   }
 }
 
-
-/* ---------- WITHDRAWAL ---------- */
-
-async function submitWithdrawal(event) {
+async function submitWithdrawal(event){
   event.preventDefault();
 
-  const amount = Number($("withdrawAmount").value);
-  const method = $("withdrawMethod").value;
-  const address = $("withdrawAddress").value.trim();
+  const amount=Number($("wdAmount").value);
+  const method=$("wdMethod").value;
+  const address=$("wdAddress").value.trim();
 
-  if (!Number.isFinite(amount) || amount <= 0) {
-    showMessage(
-      "withdrawMessage",
-      "Enter a valid amount.",
-      "error"
-    );
+  if(!Number.isFinite(amount)||amount<=0){
+    message("wdMsg","Enter a valid amount.","error");
     return;
   }
 
-  try {
-    const data = await apiRequest(API.withdrawal, {
-      method: "POST",
-      body: {
-        amount: amount,
-        method: method,
-        address: address,
-        destination: address
-      }
+  try{
+    const data=await api(API.withdrawal,{
+      method:"POST",
+      body:{amount,method,address,destination:address}
     });
-
-    showMessage(
-      "withdrawMessage",
-      data.message ||
-      "Withdrawal request submitted for review.",
-      "success"
-    );
-
-    $("withdrawAmount").value = "";
-    $("withdrawAddress").value = "";
-
-  } catch (error) {
-    showMessage(
-      "withdrawMessage",
-      "Withdrawal failed: " + error.message,
-      "error"
-    );
+    message("wdMsg",data.message||"Withdrawal request submitted for review.","success");
+    $("wdAmount").value="";
+    $("wdAddress").value="";
+  }catch(error){
+    message("wdMsg","Withdrawal failed: "+error.message,"error");
   }
 }
 
+async function loadTransactions(){
+  const body=$("transactionsBody");
+  body.innerHTML="<tr><td colspan='4'>Loading...</td></tr>";
 
-/* ---------- TRANSACTIONS ---------- */
-
-async function loadTransactions() {
-  const body = $("transactionsBody");
-
-  body.innerHTML =
-    '<tr><td colspan="4">Loading transactions...</td></tr>';
-
-  try {
-    const data = await apiRequest(API.transactions);
-
-    const list =
-      Array.isArray(data)
-        ? data
-        : data.transactions || data.items || [];
+  try{
+    const data=await api(API.transactions);
+    const rows=Array.isArray(data)?data:(data.transactions||data.items||[]);
 
     body.replaceChildren();
 
-    if (!list.length) {
-      body.innerHTML =
-        '<tr><td colspan="4">No transactions found.</td></tr>';
+    if(!rows.length){
+      body.innerHTML="<tr><td colspan='4'>No transactions found.</td></tr>";
       return;
     }
 
-    list.forEach(item => {
-      const row = document.createElement("tr");
+    rows.forEach(item=>{
+      const tr=document.createElement("tr");
+      const values=[
+        item.createdAt||item.created_at||item.date||"—",
+        item.type||item.transaction_type||"—",
+        money(item.amount),
+        item.status||"Pending"
+      ];
 
-      const date = item.createdAt ||
-                   item.created_at ||
-                   item.date ||
-                   "—";
-
-      const type = item.type ||
-                   item.transactionType ||
-                   item.transaction_type ||
-                   "—";
-
-      const amount = item.amount ?? "—";
-      const status = item.status || "Pending";
-
-      [date, type, formatAmount(amount), status].forEach(value => {
-        const cell = document.createElement("td");
-        cell.textContent = String(value);
-        row.appendChild(cell);
+      values.forEach(value=>{
+        const td=document.createElement("td");
+        td.textContent=String(value);
+        tr.appendChild(td);
       });
 
-      body.appendChild(row);
+      body.appendChild(tr);
     });
-
-  } catch (error) {
-    body.innerHTML =
-      '<tr><td colspan="4">Could not load transactions.</td></tr>';
-
-    showMessage(
-      "transactionsMessage",
-      "Transactions error: " + error.message,
-      "error"
-    );
+  }catch(error){
+    body.innerHTML="<tr><td colspan='4'>Could not load transactions.</td></tr>";
+    message("transactionsMsg","Error: "+error.message,"error");
   }
 }
 
+async function loadPlans(){
+  const list=$("plansList");
+  list.replaceChildren();
 
-/* ---------- PLANS ---------- */
+  try{
+    const data=await api(API.plans);
+    const plans=Array.isArray(data)?data:(data.plans||data.items||[]);
 
-async function loadPlans() {
-  const listElement = $("plansList");
-
-  listElement.replaceChildren();
-
-  try {
-    const data = await apiRequest(API.plans);
-
-    const plans = Array.isArray(data)
-      ? data
-      : data.plans || data.items || [];
-
-    if (!plans.length) {
-      listElement.textContent =
-        "No plans are currently available.";
+    if(!plans.length){
+      list.textContent="No plans returned by the server.";
       return;
     }
 
-    plans.forEach(plan => {
-      const card = document.createElement("div");
-      card.className = "stat";
+    plans.forEach(plan=>{
+      const card=document.createElement("div");
+      card.className="stat";
 
-      const title = document.createElement("h3");
-      title.textContent =
-        plan.name || plan.title || "Plan";
+      const title=document.createElement("h3");
+      title.textContent=plan.name||plan.title||"Plan";
 
-      const description = document.createElement("p");
-      description.className = "muted";
-      description.textContent =
-        plan.description || "Plan details provided by server.";
+      const desc=document.createElement("p");
+      desc.className="muted";
+      desc.textContent=plan.description||"Plan details supplied by server.";
 
-      const amount = document.createElement("p");
-      amount.textContent =
-        "Amount: " + formatAmount(
-          plan.amount ?? plan.minimumAmount ?? plan.minimum_amount
-        );
+      const amount=document.createElement("p");
+      amount.textContent="Amount: "+money(plan.amount??plan.minimum_amount);
 
-      card.append(title, description, amount);
-      listElement.appendChild(card);
+      card.append(title,desc,amount);
+      list.appendChild(card);
     });
-
-  } catch (error) {
-    listElement.textContent =
-      "Plans could not be loaded. Verify the /api/plans route.";
+  }catch(error){
+    list.textContent="Plans could not be loaded. Verify the server route.";
+    message("plansMsg",error.message,"error");
   }
 }
 
-
-/* ---------- PROFILE ---------- */
-
-async function updateProfile(event) {
+async function updateProfile(event){
   event.preventDefault();
 
-  const name = $("profileName").value.trim();
+  const name=$("profileName").value.trim();
 
-  if (!name) {
-    showMessage(
-      "profileMessage",
-      "Enter your full name.",
-      "error"
-    );
+  if(!name){
+    message("profileMsg","Enter your name.","error");
     return;
   }
 
-  try {
-    const data = await apiRequest(API.profile, {
-      method: "PUT",
-      body: {
-        name: name,
-        fullName: name
-      }
+  try{
+    const data=await api(API.profile,{
+      method:"PUT",
+      body:{name}
     });
 
-    if (data.user || data.account) {
-      currentUser = data.user || data.account;
-      $("userName").textContent = getUserName(currentUser);
-    } else if (currentUser) {
-      currentUser.fullName = name;
-      currentUser.name = name;
-      $("userName").textContent = name;
+    if(currentUser){
+      currentUser.name=name;
+      currentUser.fullName=name;
     }
 
-    showMessage(
-      "profileMessage",
-      data.message || "Profile update request completed.",
-      "success"
-    );
-
-  } catch (error) {
-    showMessage(
-      "profileMessage",
-      "Profile update failed: " + error.message,
-      "error"
-    );
+    $("userName").textContent=name;
+    message("profileMsg",data.message||"Profile update request completed.","success");
+  }catch(error){
+    message("profileMsg","Profile update failed: "+error.message,"error");
   }
 }
 
+async function logout(){
+  try{
+    await api(API.logout,{method:"POST",body:{}});
+  }catch(error){}
 
-/* ---------- LOGOUT ---------- */
-
-async function logout() {
-  try {
-    await apiRequest(API.logout, {
-      method: "POST",
-      body: {}
-    });
-  } catch (error) {
-    /*
-      We still return to the login screen.
-      The backend must invalidate its session correctly.
-    */
-  }
-
-  showLoggedOut("You have returned to the login screen.");
+  currentUser=null;
+  $("dashboard").classList.add("hidden");
+  $("logoutBtn").classList.add("hidden");
+  $("auth").classList.remove("hidden");
+  $("loginForm").reset();
+  showAuth("login");
+  message("authMessage","You have returned to the login screen.");
 }
 
-
-/* ---------- INITIAL PAGE LOAD ---------- */
-
-async function initializeApp() {
+async function initialize(){
   showAuth("login");
 
-  if (!API_BASE || API_BASE.includes("YOUR-REPLIT")) {
-    showMessage(
-      "authMessage",
-      "Backend URL is not configured.",
-      "error"
-    );
-    return;
-  }
+  try{
+    const data=await api(API.me);
+    const user=data.user||data.account;
 
-  try {
-    const data = await apiRequest(API.me);
-    const user = data.user || data.account || null;
-
-    if (user) {
-      currentUser = user;
+    if(user){
       showDashboard(user);
-    } else {
-      showMessage(
-        "authMessage",
-        "Server connected. Please log in or register.",
-        "info"
-      );
+    }else{
+      message("authMessage","Server responded. Please log in or register.");
     }
-
-  } catch (error) {
-    showMessage(
+  }catch(error){
+    message(
       "authMessage",
-      "Backend connection needs checking: " + error.message,
+      "Server connection needs checking: "+error.message,
       "error"
     );
   }
 }
 
-initializeApp();
+initialize();
 </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BAYA Account Portal</title>
 
+<style>
+:root{
+  --bg:#071326;
+  --panel:#102440;
+  --panel2:#163252;
+  --gold:#ffc45e;
+  --text:#f4f7fc;
+  --muted:#aabbd0;
+  --border:#294563;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  color:var(--text);
+  font-family:Arial,sans-serif;
+  background:linear-gradient(140deg,#071326,#10365c,#071326);
+  min-height:100vh;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.container{width:min(1100px,94%);margin:auto}
+header{
+  background:#071326dd;
+  border-bottom:1px solid var(--border);
+  padding:17px 0;
+}
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.logo{font-size:27px;font-weight:bold;color:var(--gold);letter-spacing:2px}
+.small{font-size:12px;color:var(--muted)}
+.card{
+  background:#102440f5;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:22px;
+  margin-bottom:18px;
+  box-shadow:0 10px 30px #0002;
+}
+button.btn{
+  border:0;
+  border-radius:10px;
+  padding:12px 16px;
+  font-weight:bold;
+}
+.gold{background:linear-gradient(110deg,#ffe4a4,#f6a62c);color:#382306}
+.dark{background:var(--panel2);color:white;border:1px solid var(--border)!important}
+.full{width:100%;margin-top:18px}
+.auth-wrap{
+  min-height:80vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px 0;
+}
+.auth-card{width:min(500px,100%);padding:26px}
+.muted{color:var(--muted);line-height:1.6}
+.tabs,.nav{display:flex;gap:9px;flex-wrap:wrap;margin:20px 0}
+.tabs button{flex:1;padding:14px;border-radius:11px;border:1px solid var(--border);background:var(--panel2);color:white}
+.tabs button.active,.nav button.active{background:var(--gold);color:#382306}
+label{display:block;margin:14px 0 7px;color:#c7d5e7;font-size:14px}
+input,select,textarea{
+  width:100%;
+  padding:13px;
+  border-radius:10px;
+  border:1px solid #365578;
+  background:#0a1a30;
+  color:white;
+  outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.link{
+  display:block;
+  margin:14px auto 0;
+  border:0;
+  background:none;
+  color:#d7e9ff;
+  text-decoration:underline;
+}
+.message{padding:12px;border-radius:10px;margin-top:15px;overflow-wrap:anywhere;line-height:1.5}
+.info{background:#193c60}
+.error{background:#542d3b}
+.success{background:#154d41}
+main{padding:25px 0 50px}
+.welcome{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.stat{background:linear-gradient(135deg,#15365a,#102440);border:1px solid var(--border);border-radius:15px;padding:20px;overflow-wrap:anywhere}
+.stat-title{font-size:13px;color:var(--muted)}
+.stat-value{font-size:25px;font-weight:bold;margin-top:12px}
+.page{display:none}
+.page.active{display:block}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:450px}
+th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--border)}
+th{color:var(--gold)}
+footer{text-align:center;color:var(--muted);padding:20px;border-top:1px solid var(--border)}
+@media(max-width:700px){
+  .grid,.two{grid-template-columns:1fr}
+  .auth-card{padding:20px}
+  .stat-value{font-size:22px}
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="container header-row">
+    <div>
+      <div class="logo">BAYA</div>
+      <div class="small">ACCOUNT PORTAL</div>
+    </div>
+    <button id="logoutBtn" class="btn dark hidden" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<div class="container">
+
+<section id="auth" class="auth-wrap">
+  <div class="card auth-card">
+    <h2 id="authTitle">Welcome Back</h2>
+    <p class="muted">Login to your account or register as a new user.</p>
+
+    <div class="tabs">
+      <button id="loginTab" class="active" onclick="showAuth('login')">Login</button>
+      <button id="registerTab" onclick="showAuth('register')">Register</button>
+    </div>
+
+    <form id="loginForm" onsubmit="login(event)">
+      <label>Email Address</label>
+      <input id="loginEmail" type="email" autocomplete="email" required placeholder="Enter your email">
+
+      <label>Password</label>
+      <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Enter your password">
+
+      <button id="loginBtn" class="btn gold full" type="submit">Login</button>
+      <button type="button" class="link" onclick="showAuth('register')">New user? Create an account</button>
+    </form>
+
+    <form id="registerForm" class="hidden" onsubmit="register(event)">
+      <label>Full Name</label>
+      <input id="regName" required minlength="2" maxlength="70" placeholder="Enter your full name">
+
+      <label>Email Address</label>
+      <input id="regEmail" type="email" autocomplete="email" required placeholder="Enter your email">
+
+      <label>Password (minimum 10 characters)</label>
+      <input id="regPassword" type="password" autocomplete="new-password" required minlength="10" placeholder="Create a password">
+
+      <label>Confirm Password</label>
+      <input id="regConfirm" type="password" autocomplete="new-password" required minlength="10" placeholder="Confirm your password">
+
+      <label>Referral Code (optional)</label>
+      <input id="referralCode" placeholder="Referral code, if any">
+
+      <button id="registerBtn" class="btn gold full" type="submit">Create Account</button>
+      <button type="button" class="link" onclick="showAuth('login')">Already registered? Login</button>
+    </form>
+
+    <div id="authMessage" class="message info">Connecting to BAYA server...</div>
+  </div>
+</section>
+
+<section id="dashboard" class="hidden">
+<main>
+
+  <div class="card welcome">
+    <div>
+      <h2>Hello, <span id="userName">User</span>!</h2>
+      <p class="muted">Welcome to your BAYA account.</p>
+    </div>
+    <span id="userEmail" class="small"></span>
+  </div>
+
+  <nav class="nav">
+    <button class="btn dark active" onclick="openPage('home',this)">Dashboard</button>
+    <button class="btn dark" onclick="openPage('deposit',this)">Deposit</button>
+    <button class="btn dark" onclick="openPage('withdraw',this)">Withdraw</button>
+    <button class="btn dark" onclick="openPage('plans',this)">Plans</button>
+    <button class="btn dark" onclick="openPage('transactions',this)">Transactions</button>
+    <button class="btn dark" onclick="openPage('profile',this)">Profile</button>
+  </nav>
+
+  <section id="page-home" class="page active">
+    <div class="grid">
+      <div class="stat">
+        <div class="stat-title">Available Balance</div>
+        <div id="balance" class="stat-value">—</div>
+      </div>
+      <div class="stat">
+        <div class="stat-title">Total Deposits</div>
+        <div id="totalDeposits" class="stat-value">—</div>
+      </div>
+      <div class="stat">
+        <div class="stat-title">Total Withdrawals</div>
+        <div id="totalWithdrawals" class="stat-value">—</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3>Account Overview</h3>
+      <p class="muted">Account information is loaded from your server.</p>
+      <button class="btn gold" onclick="refreshAccount()">Refresh Account</button>
+      <div id="homeMsg" class="message hidden"></div>
+    </div>
+  </section>
+
+  <section id="page-deposit" class="page">
+    <div class="two">
+      <div class="card">
+        <h3>Deposit Request</h3>
+        <p class="muted">This form submits a request. It does not transfer funds itself.</p>
+        <form onsubmit="submitDeposit(event)">
+          <label>Amount</label>
+          <input id="depAmount" type="number" min="0.01" step="0.01" required>
+          <label>Payment Method</label>
+          <select id="depMethod" required>
+            <option value="">Select method</option>
+            <option value="USDT-TRC20">USDT TRC20</option>
+            <option value="Bank">Bank Transfer</option>
+            <option value="Other">Other</option>
+          </select>
+          <label>Transaction Reference</label>
+          <input id="depReference" maxlength="200" required>
+          <button class="btn gold full">Submit Deposit Request</button>
+        </form>
+        <div id="depMsg" class="message hidden"></div>
+      </div>
+      <div class="card">
+        <h3>Payment Safety</h3>
+        <p class="muted">Use only payment details verified through your official administrator. Verify the network and destination before transferring funds. Never share your wallet private key or recovery phrase.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="page-withdraw" class="page">
+    <div class="card">
+      <h3>Withdrawal Request</h3>
+      <p class="muted">The server must verify the balance and eligibility before processing any withdrawal.</p>
+      <form onsubmit="submitWithdrawal(event)">
+        <label>Amount</label>
+        <input id="wdAmount" type="number" min="0.01" step="0.01" required>
+        <label>Payment Method</label>
+        <select id="wdMethod" required>
+          <option value="">Select method</option>
+          <option value="USDT-TRC20">USDT TRC20</option>
+          <option value="Bank">Bank Transfer</option>
+          <option value="Other">Other</option>
+        </select>
+        <label>Destination Address / Account Details</label>
+        <textarea id="wdAddress" rows="3" maxlength="500" required></textarea>
+        <button class="btn gold full">Submit Withdrawal Request</button>
+      </form>
+      <div id="wdMsg" class="message hidden"></div>
+    </div>
+  </section>
+
+  <section id="page-plans" class="page">
+    <div class="card">
+      <h3>Available Plans</h3>
+      <p class="muted">Plan details must come from the server. Returns are not guaranteed.</p>
+      <div id="plansList" class="grid">Plans have not been loaded.</div>
+      <div id="plansMsg" class="message hidden"></div>
+    </div>
+  </section>
+
+  <section id="page-transactions" class="page">
+    <div class="card">
+      <h3>Transaction History</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody id="transactionsBody"><tr><td colspan="4">No data loaded.</td></tr></tbody>
+        </table>
+      </div>
+      <button class="btn gold" style="margin-top:18px" onclick="loadTransactions()">Refresh Transactions</button>
+      <div id="transactionsMsg" class="message hidden"></div>
+    </div>
+  </section>
+
+  <section id="page-profile" class="page">
+    <div class="card">
+      <h3>My Profile</h3>
+      <form onsubmit="updateProfile(event)">
+        <label>Full Name</label>
+        <input id="profileName" maxlength="70" required>
+        <label>Email Address</label>
+        <input id="profileEmail" type="email" readonly>
+        <button class="btn gold full">Update Profile</button>
+      </form>
+      <div id="profileMsg" class="message hidden"></div>
+    </div>
+  </section>
+
+</main>
+</section>
+</div>
+
+<footer>
+  <div class="container">BAYA Account Portal</div>
+</footer>
+
+<script>
+/*
+  BAYA BACKEND
+  Replit URL supplied by the user.
+  Register route confirmed from server.js screenshot.
+  Other routes must match server.js exactly.
+*/
+
+const API_BASE = "https://3d99bc2a-0e4d-4ed2-a3f3-3addcd0ab3e5-00-26nk7afdzfjn7.sisko.replit.dev";
+
+const API = {
+  register: "/api/auth/register",
+  login: "/api/auth/login",
+  me: "/api/auth/me",
+  logout: "/api/auth/logout",
+  profile: "/api/profile",
+  deposit: "/api/deposits",
+  withdrawal: "/api/withdrawals",
+  transactions: "/api/transactions",
+  plans: "/api/plans"
+};
+
+let currentUser = null;
+
+function $(id){return document.getElementById(id)}
+
+function message(id,text,type="info"){
+  const el=$(id);
+  if(!el)return;
+  el.textContent=text;
+  el.className="message "+type;
+}
+
+function money(value){
+  if(value===undefined||value===null||value==="")return "—";
+  const n=Number(value);
+  return Number.isFinite(n)
+    ? n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})
+    : String(value);
+}
+
+function userName(user){
+  return user?.name || user?.fullName || user?.full_name || user?.username || "User";
+}
+
+function userEmail(user){
+  return user?.email || "";
+}
+
+async function api(path,options={}){
+  const response=await fetch(API_BASE+path,{
+    method:options.method||"GET",
+    credentials:"include",
+    headers:{
+      "Accept":"application/json",
+      ...(options.body?{"Content-Type":"application/json"}:{}),
+      ...(options.headers||{})
+    },
+    body:options.body?JSON.stringify(options.body):undefined
+  });
+
+  const text=await response.text();
+  let data={};
+
+  if(text){
+    try{data=JSON.parse(text)}
+    catch{data={message:text}}
+  }
+
+  if(!response.ok){
+    throw new Error(data.message||data.error||("HTTP "+response.status));
+  }
+
+  if(data && data.success===false){
+    throw new Error(data.message||"Request failed");
+  }
+
+  return data;
+}
+
+function showAuth(mode){
+  $("auth").classList.remove("hidden");
+  $("dashboard").classList.add("hidden");
+
+  $("loginForm").classList.toggle("hidden",mode!=="login");
+  $("registerForm").classList.toggle("hidden",mode!=="register");
+
+  $("loginTab").classList.toggle("active",mode==="login");
+  $("registerTab").classList.toggle("active",mode==="register");
+
+  $("authTitle").textContent=mode==="login"?"Welcome Back":"Create Your Account";
+  message("authMessage",mode==="login"?"Login to your account.":"Enter your details to register.");
+}
+
+function showDashboard(user){
+  currentUser=user;
+
+  $("auth").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  $("logoutBtn").classList.remove("hidden");
+
+  $("userName").textContent=userName(user);
+  $("userEmail").textContent=userEmail(user);
+  $("profileName").value=userName(user);
+  $("profileEmail").value=userEmail(user);
+
+  $("balance").textContent=money(user.balance??user.availableBalance??user.available_balance);
+  $("totalDeposits").textContent=money(user.totalDeposits??user.total_deposits);
+  $("totalWithdrawals").textContent=money(user.totalWithdrawals??user.total_withdrawals);
+
+  openPage("home",document.querySelector(".nav button"));
+}
+
+function openPage(name,button){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  $("page-"+name).classList.add("active");
+
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  if(button)button.classList.add("active");
+
+  if(name==="transactions")loadTransactions();
+  if(name==="plans")loadPlans();
+}
+
+async function register(event){
+  event.preventDefault();
+
+  const name=$("regName").value.trim();
+  const email=$("regEmail").value.trim();
+  const password=$("regPassword").value;
+  const confirm=$("regConfirm").value;
+  const referralCode=$("referralCode").value.trim();
+
+  if(password!==confirm){
+    message("authMessage","Passwords do not match.","error");
+    return;
+  }
+
+  if(password.length<10){
+    message("authMessage","Password must be at least 10 characters.","error");
+    return;
+  }
+
+  $("registerBtn").disabled=true;
+  $("registerBtn").textContent="Creating Account...";
+
+  try{
+    const data=await api(API.register,{
+      method:"POST",
+      body:{name,email,password,referralCode}
+    });
+
+    const user=data.user||data.account;
+
+    if(user){
+      showDashboard(user);
+      message("homeMsg",data.message||"Account created.","success");
+    }else{
+      message("authMessage",data.message||"Registration request accepted. Please log in.", "success");
+      $("loginEmail").value=email;
+      $("loginPassword").value="";
+      $("registerForm").reset();
+      showAuth("login");
+    }
+  }catch(error){
+    message("authMessage","Registration failed: "+error.message,"error");
+  }finally{
+    $("registerBtn").disabled=false;
+    $("registerBtn").textContent="Create Account";
+  }
+}
+
+async function login(event){
+  event.preventDefault();
+
+  const email=$("loginEmail").value.trim();
+  const password=$("loginPassword").value;
+
+  $("loginBtn").disabled=true;
+  $("loginBtn").textContent="Logging In...";
+
+  try{
+    const data=await api(API.login,{
+      method:"POST",
+      body:{email,password}
+    });
+
+    let user=data.user||data.account;
+
+    if(!user){
+      const me=await api(API.me);
+      user=me.user||me.account;
+    }
+
+    if(!user){
+      throw new Error("Server did not return account information.");
+    }
+
+    showDashboard(user);
+    await refreshAccount();
+  }catch(error){
+    message("authMessage","Login failed: "+error.message,"error");
+  }finally{
+    $("loginBtn").disabled=false;
+    $("loginBtn").textContent="Login";
+  }
+}
+
+async function refreshAccount(){
+  try{
+    const data=await api(API.me);
+    const user=data.user||data.account;
+
+    if(user){
+      showDashboard(user);
+      message("homeMsg","Account information refreshed.","success");
+    }else{
+      message("homeMsg","The server did not return account details.","error");
+    }
+  }catch(error){
+    message("homeMsg","Could not refresh account: "+error.message,"error");
+  }
+}
+
+async function submitDeposit(event){
+  event.preventDefault();
+
+  const amount=Number($("depAmount").value);
+  const method=$("depMethod").value;
+  const reference=$("depReference").value.trim();
+
+  if(!Number.isFinite(amount)||amount<=0){
+    message("depMsg","Enter a valid amount.","error");
+    return;
+  }
+
+  try{
+    const data=await api(API.deposit,{
+      method:"POST",
+      body:{amount,method,reference,transactionId:reference}
+    });
+    message("depMsg",data.message||"Deposit request submitted for review.","success");
+    $("depAmount").value="";
+    $("depReference").value="";
+  }catch(error){
+    message("depMsg","Deposit request failed: "+error.message,"error");
+  }
+}
+
+async function submitWithdrawal(event){
+  event.preventDefault();
+
+  const amount=Number($("wdAmount").value);
+  const method=$("wdMethod").value;
+  const address=$("wdAddress").value.trim();
+
+  if(!Number.isFinite(amount)||amount<=0){
+    message("wdMsg","Enter a valid amount.","error");
+    return;
+  }
+
+  try{
+    const data=await api(API.withdrawal,{
+      method:"POST",
+      body:{amount,method,address,destination:address}
+    });
+    message("wdMsg",data.message||"Withdrawal request submitted for review.","success");
+    $("wdAmount").value="";
+    $("wdAddress").value="";
+  }catch(error){
+    message("wdMsg","Withdrawal failed: "+error.message,"error");
+  }
+}
+
+async function loadTransactions(){
+  const body=$("transactionsBody");
+  body.innerHTML="<tr><td colspan='4'>Loading...</td></tr>";
+
+  try{
+    const data=await api(API.transactions);
+    const rows=Array.isArray(data)?data:(data.transactions||data.items||[]);
+
+    body.replaceChildren();
+
+    if(!rows.length){
+      body.innerHTML="<tr><td colspan='4'>No transactions found.</td></tr>";
+      return;
+    }
+
+    rows.forEach(item=>{
+      const tr=document.createElement("tr");
+      const values=[
+        item.createdAt||item.created_at||item.date||"—",
+        item.type||item.transaction_type||"—",
+        money(item.amount),
+        item.status||"Pending"
+      ];
+
+      values.forEach(value=>{
+        const td=document.createElement("td");
+        td.textContent=String(value);
+        tr.appendChild(td);
+      });
+
+      body.appendChild(tr);
+    });
+  }catch(error){
+    body.innerHTML="<tr><td colspan='4'>Could not load transactions.</td></tr>";
+    message("transactionsMsg","Error: "+error.message,"error");
+  }
+}
+
+async function loadPlans(){
+  const list=$("plansList");
+  list.replaceChildren();
+
+  try{
+    const data=await api(API.plans);
+    const plans=Array.isArray(data)?data:(data.plans||data.items||[]);
+
+    if(!plans.length){
+      list.textContent="No plans returned by the server.";
+      return;
+    }
+
+    plans.forEach(plan=>{
+      const card=document.createElement("div");
+      card.className="stat";
+
+      const title=document.createElement("h3");
+      title.textContent=plan.name||plan.title||"Plan";
+
+      const desc=document.createElement("p");
+      desc.className="muted";
+      desc.textContent=plan.description||"Plan details supplied by server.";
+
+      const amount=document.createElement("p");
+      amount.textContent="Amount: "+money(plan.amount??plan.minimum_amount);
+
+      card.append(title,desc,amount);
+      list.appendChild(card);
+    });
+  }catch(error){
+    list.textContent="Plans could not be loaded. Verify the server route.";
+    message("plansMsg",error.message,"error");
+  }
+}
+
+async function updateProfile(event){
+  event.preventDefault();
+
+  const name=$("profileName").value.trim();
+
+  if(!name){
+    message("profileMsg","Enter your name.","error");
+    return;
+  }
+
+  try{
+    const data=await api(API.profile,{
+      method:"PUT",
+      body:{name}
+    });
+
+    if(currentUser){
+      currentUser.name=name;
+      currentUser.fullName=name;
+    }
+
+    $("userName").textContent=name;
+    message("profileMsg",data.message||"Profile update request completed.","success");
+  }catch(error){
+    message("profileMsg","Profile update failed: "+error.message,"error");
+  }
+}
+
+async function logout(){
+  try{
+    await api(API.logout,{method:"POST",body:{}});
+  }catch(error){}
+
+  currentUser=null;
+  $("dashboard").classList.add("hidden");
+  $("logoutBtn").classList.add("hidden");
+  $("auth").classList.remove("hidden");
+  $("loginForm").reset();
+  showAuth("login");
+  message("authMessage","You have returned to the login screen.");
+}
+
+async function initialize(){
+  showAuth("login");
+
+  try{
+    const data=await api(API.me);
+    const user=data.user||data.account;
+
+    if(user){
+      showDashboard(user);
+    }else{
+      message("authMessage","Server responded. Please log in or register.");
+    }
+  }catch(error){
+    message(
+      "authMessage",
+      "Server connection needs checking: "+error.message,
+      "error"
+    );
+  }
+}
+
+initialize();
+</script>
 </body>
 </html>
