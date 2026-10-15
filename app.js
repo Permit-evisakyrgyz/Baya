@@ -1,20 +1,14 @@
 "use strict";
 
-/* ==========================================
+/* =====================================================
    BAYA ACCOUNT PORTAL
-   Frontend Application
-========================================== */
+   Complete Frontend Application
+   Backend: Replit Express + SQLite
+===================================================== */
 
-/*
-  Replit backend URL.
-  Do not add a trailing slash.
-*/
 const API_BASE =
   "https://3d99bc2a-0e4d-4ed2-a3f3-3addcd0ab3e5-00-26nk7afdzfjn7.sisko.replit.dev";
 
-/*
-  API routes matching the supplied server.js.
-*/
 const API = {
   status: "/api/status",
   config: "/api/config",
@@ -34,42 +28,45 @@ const API = {
 
   deposit: "/api/requests/deposit",
   withdrawal: "/api/requests/withdrawal",
-  investments: "/api/investments"
+  investments: "/api/investments",
+
+  adminOverview: "/api/admin/overview",
+  adminUsers: "/api/admin/users",
+  adminRequests: "/api/admin/requests",
+  adminTransactions: "/api/admin/transactions",
+  adminAudit: "/api/admin/audit",
+  adminPlans: "/api/admin/plans"
 };
 
 const state = {
   user: null,
   csrfToken: "",
   config: {},
-  currentPage: "dashboard",
-  loading: false,
   requests: [],
-  transactions: []
+  transactions: [],
+  currentPage: "dashboard",
+  adminType: "deposit"
 };
 
 const root = document.getElementById("root");
 const toastElement = document.getElementById("toast");
 
-/* ==========================================
-   GENERAL HELPERS
-========================================== */
+/* =====================================================
+   HELPERS
+===================================================== */
 
 function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, function (char) {
-    return {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;"
-    }[char];
-  });
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char]);
 }
 
 function money(value) {
-  const number = Number(value || 0);
-
-  return number.toLocaleString("en-US", {
+  return Number(value || 0).toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
@@ -99,81 +96,110 @@ function notify(message, type = "info") {
   }, 3500);
 }
 
-function setLoading(button, loading, originalText = "") {
+function showError(elementId, message) {
+  const element = document.getElementById(elementId);
+
+  if (!element) {
+    notify(message, "error");
+    return;
+  }
+
+  element.textContent = message;
+  element.classList.remove("hidden");
+}
+
+function hideError(elementId) {
+  const element = document.getElementById(elementId);
+
+  if (element) {
+    element.textContent = "";
+    element.classList.add("hidden");
+  }
+}
+
+function setLoading(button, loading, defaultText) {
   if (!button) return;
 
   if (loading) {
-    button.dataset.originalText =
-      button.textContent || originalText;
+    if (!button.dataset.originalText) {
+      button.dataset.originalText =
+        button.textContent || defaultText || "Submit";
+    }
 
     button.disabled = true;
     button.textContent = "Please wait...";
   } else {
     button.disabled = false;
-
     button.textContent =
-      button.dataset.originalText || originalText || "Submit";
+      button.dataset.originalText || defaultText || "Submit";
+
+    delete button.dataset.originalText;
   }
-}
-
-function getErrorMessage(data, fallback) {
-  if (!data) return fallback;
-
-  return (
-    data.message ||
-    data.error ||
-    data.detail ||
-    fallback
-  );
-}
-
-function getUserName() {
-  if (!state.user) return "User";
-
-  return (
-    state.user.name ||
-    state.user.full_name ||
-    state.user.username ||
-    state.user.email ||
-    "User"
-  );
-}
-
-function getBalance() {
-  if (!state.user) return 0;
-
-  if (state.user.balance !== undefined) {
-    return Number(state.user.balance || 0);
-  }
-
-  if (state.user.balances) {
-    return Number(
-      state.user.balances.balance ||
-      state.user.balances.available ||
-      0
-    );
-  }
-
-  return 0;
-}
-
-function isAdmin() {
-  if (!state.user) return false;
-
-  return (
-    state.user.role === "admin" ||
-    state.user.is_admin === true ||
-    state.user.isAdmin === true
-  );
 }
 
 function apiURL(path) {
   return API_BASE + path;
 }
 
-/* ==========================================
-   API REQUEST HANDLER
-========================================== */
+function getUserName() {
+  return (
+    state.user?.name ||
+    state.user?.full_name ||
+    state.user?.email ||
+    state.user?.username ||
+    "User"
+  );
+}
+
+function getBalance() {
+  return Number(state.user?.balance ?? 0);
+}
+
+function isAdmin() {
+  return state.user?.role === "admin";
+}
+
+function getErrorMessage(data, fallback = "Something went wrong.") {
+  return data?.error || data?.message || fallback;
+}
+
+/* =====================================================
+   API + SESSION + CSRF
+===================================================== */
+
+async function readResponse(response) {
+  const contentType = response.headers.get("content-type") || "";
+
+  if (contentType.includes("application/json")) {
+    return response.json();
+  }
+
+  const text = await response.text();
+
+  return text ? { message: text } : {};
+}
+
+async function loadCsrfToken() {
+  const response = await fetch(apiURL(API.csrf), {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      Accept: "application/json"
+    }
+  });
+
+  const data = await readResponse(response);
+
+  if (!response.ok) {
+    throw new Error(
+      getErrorMessage(data, "Could not obtain security token.")
+    );
+  }
+
+  state.csrfToken = data.csrfToken || "";
+
+  return state.csrfToken;
+}
 
 async function apiRequest(path, options = {}) {
   const method = (options.method || "GET").toUpperCase();
@@ -185,8 +211,8 @@ async function apiRequest(path, options = {}) {
 
   const requestOptions = {
     method,
-    headers,
-    credentials: "include"
+    credentials: "include",
+    headers
   };
 
   if (options.body !== undefined) {
@@ -194,22 +220,12 @@ async function apiRequest(path, options = {}) {
     requestOptions.body = JSON.stringify(options.body);
   }
 
-  /*
-    The supplied backend checks CSRF tokens on unsafe
-    /api requests. Retrieve a token before POST/PATCH/etc.
-  */
-  if (
-    !["GET", "HEAD", "OPTIONS"].includes(method) &&
-    path.startsWith("/api/") &&
-    path !== API.csrf
-  ) {
+  if (!["GET", "HEAD", "OPTIONS"].includes(method)) {
     if (!state.csrfToken) {
       await loadCsrfToken();
     }
 
-    if (state.csrfToken) {
-      headers["x-csrf-token"] = state.csrfToken;
-    }
+    headers["x-csrf-token"] = state.csrfToken;
   }
 
   let response;
@@ -218,154 +234,126 @@ async function apiRequest(path, options = {}) {
     response = await fetch(apiURL(path), requestOptions);
   } catch (error) {
     throw new Error(
-      "Server se connection nahi ho saka. Replit URL, CORS aur server status check karein."
+      "Replit server se connection nahi ho saka. CORS aur server status check karein."
     );
   }
 
-  const contentType =
-    response.headers.get("content-type") || "";
-
-  let data;
-
-  if (contentType.includes("application/json")) {
-    data = await response.json();
-  } else {
-    const text = await response.text();
-    data = text ? { message: text } : {};
-  }
+  const data = await readResponse(response);
 
   if (!response.ok) {
-    if (response.status === 401) {
-      state.user = null;
-    }
-
     throw new Error(
-      getErrorMessage(data, "Request failed: " + response.status)
+      getErrorMessage(data, `Request failed (${response.status}).`)
     );
   }
 
   return data;
 }
 
-/* ==========================================
-   INITIAL SETUP
-========================================== */
-
-async function loadCsrfToken() {
-  try {
-    const data = await apiRequestWithoutCsrf(API.csrf);
-
-    state.csrfToken =
-      data.csrfToken ||
-      data.csrf_token ||
-      data.token ||
-      "";
-  } catch (error) {
-    console.error("CSRF token error:", error);
+/*
+  The backend /api/me endpoint returns:
+  {
+    user: {...},
+    balance: 0,
+    invested: 0,
+    pendingCount: 0,
+    referrals: 0
   }
-}
+*/
 
-async function apiRequestWithoutCsrf(path) {
-  let response;
+async function refreshCurrentUser() {
+  const data = await apiRequest(API.me);
 
-  try {
-    response = await fetch(apiURL(path), {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        Accept: "application/json"
-      }
-    });
-  } catch (error) {
-    throw new Error("Backend server is not reachable.");
-  }
+  state.user = {
+    ...(data.user || {}),
+    balance: Number(data.balance ?? 0),
+    invested: Number(data.invested ?? 0),
+    pendingCount: Number(data.pendingCount ?? 0),
+    referrals: Number(data.referrals ?? 0)
+  };
 
-  const contentType =
-    response.headers.get("content-type") || "";
-
-  const data = contentType.includes("application/json")
-    ? await response.json()
-    : {};
-
-  if (!response.ok) {
-    throw new Error(
-      getErrorMessage(data, "Could not initialize session.")
-    );
-  }
-
-  return data;
+  return state.user;
 }
 
 async function loadConfiguration() {
-  try {
-    state.config = await apiRequest(API.config);
-  } catch (error) {
-    console.warn("Configuration unavailable:", error.message);
-  }
+  state.config = await apiRequest(API.config);
 }
 
-/* ==========================================
-   APPLICATION START
-========================================== */
+/* =====================================================
+   START APPLICATION
+===================================================== */
 
 async function startApp() {
-  if (!root) {
-    console.error("Application root element not found.");
-    return;
-  }
+  if (!root) return;
+
+  renderLoading();
 
   try {
     await loadCsrfToken();
-    await loadConfiguration();
 
-    /*
-      Check whether the user already has a session.
-    */
+    let sessionData;
+
     try {
-      const sessionData = await apiRequest(API.session);
-
-      if (sessionData.user) {
-        state.user = sessionData.user;
-      }
+      sessionData = await apiRequest(API.session);
     } catch (error) {
-      console.info("No existing session.");
+      sessionData = { authenticated: false };
     }
 
-    /*
-      Load the current user if session did not provide one.
-    */
-    if (!state.user) {
-      try {
-        const meData = await apiRequest(API.me);
+    if (
+      sessionData.authenticated &&
+      sessionData.role === "admin"
+    ) {
+      state.user = {
+        role: "admin",
+        username: sessionData.name,
+        name: sessionData.name
+      };
 
-        state.user =
-          meData.user ||
-          meData.profile ||
-          null;
-      } catch (error) {
-        state.user = null;
-      }
-    }
-
-    if (state.user) {
+      await loadConfiguration();
       renderDashboard();
-    } else {
-      renderLogin();
+      return;
     }
+
+    if (
+      sessionData.authenticated &&
+      sessionData.role === "user"
+    ) {
+      await refreshCurrentUser();
+      await loadConfiguration();
+
+      renderDashboard();
+      return;
+    }
+
+    state.user = null;
+
+    try {
+      await loadConfiguration();
+    } catch (error) {
+      console.warn("Configuration unavailable:", error.message);
+    }
+
+    renderLogin();
   } catch (error) {
     renderConnectionError(error.message);
   }
 }
 
-/* ==========================================
-   CONNECTION ERROR
-========================================== */
+function renderLoading() {
+  root.innerHTML = `
+    <section class="loading-screen">
+      <div class="loading-brand">BAYA</div>
+      <div class="loading-spinner"></div>
+      <p>Loading your account...</p>
+    </section>
+  `;
+}
 
 function renderConnectionError(message) {
   root.innerHTML = `
     <section class="auth-page">
       <div class="auth-container">
         <div class="auth-card text-center">
+
           <div class="auth-brand">
             <div class="brand-mark">B</div>
             <h1>BAYA</h1>
@@ -374,29 +362,29 @@ function renderConnectionError(message) {
           <h2 class="auth-heading">Connection Problem</h2>
 
           <p class="auth-description">
-            The application could not connect to the server.
+            Unable to connect to the application server.
           </p>
 
           <div class="alert alert-error">
             ${escapeHTML(message)}
           </div>
 
-          <button class="btn btn-primary btn-block"
-                  id="retryConnection">
+          <button class="btn btn-primary btn-block" id="retryButton">
             Try Again
           </button>
+
         </div>
       </div>
     </section>
   `;
 
-  document.getElementById("retryConnection")
+  document.getElementById("retryButton")
     .addEventListener("click", startApp);
 }
 
-/* ==========================================
-   LOGIN PAGE
-========================================== */
+/* =====================================================
+   LOGIN
+===================================================== */
 
 function renderLogin() {
   root.innerHTML = `
@@ -422,11 +410,11 @@ function renderLogin() {
 
               <input
                 class="form-control"
-                type="email"
                 id="loginEmail"
                 name="email"
-                autocomplete="username"
+                type="email"
                 required
+                autocomplete="username"
                 placeholder="Enter your email"
               >
             </div>
@@ -436,11 +424,11 @@ function renderLogin() {
 
               <input
                 class="form-control"
-                type="password"
                 id="loginPassword"
                 name="password"
-                autocomplete="current-password"
+                type="password"
                 required
+                autocomplete="current-password"
                 placeholder="Enter your password"
               >
             </div>
@@ -448,9 +436,9 @@ function renderLogin() {
             <div id="loginError" class="alert alert-error hidden"></div>
 
             <button
-              type="submit"
-              id="loginButton"
               class="btn btn-primary btn-block"
+              id="loginButton"
+              type="submit"
             >
               Sign In
             </button>
@@ -459,11 +447,11 @@ function renderLogin() {
 
           <div class="auth-switch">
             Don't have an account?
-            <a href="#" id="showRegister">Create Account</a>
+            <a href="#" id="registerLink">Create Account</a>
           </div>
 
           <div class="auth-switch">
-            <a href="#" id="showAdminLogin">Administrator Login</a>
+            <a href="#" id="adminLink">Administrator Login</a>
           </div>
 
         </div>
@@ -474,22 +462,57 @@ function renderLogin() {
   document.getElementById("loginForm")
     .addEventListener("submit", handleLogin);
 
-  document.getElementById("showRegister")
-    .addEventListener("click", function (event) {
+  document.getElementById("registerLink")
+    .addEventListener("click", event => {
       event.preventDefault();
       renderRegister();
     });
 
-  document.getElementById("showAdminLogin")
-    .addEventListener("click", function (event) {
+  document.getElementById("adminLink")
+    .addEventListener("click", event => {
       event.preventDefault();
       renderAdminLogin();
     });
 }
 
-/* ==========================================
-   REGISTER PAGE
-========================================== */
+async function handleLogin(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const button = document.getElementById("loginButton");
+
+  hideError("loginError");
+  setLoading(button, true, "Sign In");
+
+  try {
+    await apiRequest(API.login, {
+      method: "POST",
+      body: {
+        email: form.email.value.trim(),
+        password: form.password.value
+      }
+    });
+
+    /*
+      The backend login response does not include the user object.
+      Fetch the actual profile and balance after login.
+    */
+    await loadCsrfToken();
+    await refreshCurrentUser();
+    await loadConfiguration();
+
+    notify("Login successful.", "success");
+    renderDashboard();
+  } catch (error) {
+    showError("loginError", error.message);
+  } finally {
+    setLoading(button, false, "Sign In");
+  }
+}
+
+/* =====================================================
+   REGISTRATION
+===================================================== */
 
 function renderRegister() {
   root.innerHTML = `
@@ -518,10 +541,10 @@ function renderRegister() {
                 id="registerName"
                 name="name"
                 type="text"
+                minlength="2"
+                maxlength="70"
                 required
-                maxlength="100"
                 autocomplete="name"
-                placeholder="Enter your full name"
               >
             </div>
 
@@ -533,9 +556,22 @@ function renderRegister() {
                 id="registerEmail"
                 name="email"
                 type="email"
+                maxlength="254"
                 required
                 autocomplete="email"
-                placeholder="Enter your email"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="registerReferral">Referral Code (Optional)</label>
+
+              <input
+                class="form-control"
+                id="registerReferral"
+                name="referralCode"
+                type="text"
+                maxlength="30"
+                value="${escapeHTML(new URLSearchParams(location.search).get("ref") || "")}"
               >
             </div>
 
@@ -548,39 +584,37 @@ function renderRegister() {
                 name="password"
                 type="password"
                 minlength="10"
+                maxlength="72"
                 required
                 autocomplete="new-password"
-                placeholder="At least 10 characters"
               >
 
               <span class="form-help">
-                Use a strong password with at least 10 characters.
+                Use at least 10 characters.
               </span>
             </div>
 
             <div class="form-group">
-              <label for="registerConfirmPassword">
-                Confirm Password
-              </label>
+              <label for="registerConfirm">Confirm Password</label>
 
               <input
                 class="form-control"
-                id="registerConfirmPassword"
+                id="registerConfirm"
                 name="confirmPassword"
                 type="password"
                 minlength="10"
+                maxlength="72"
                 required
                 autocomplete="new-password"
-                placeholder="Re-enter your password"
               >
             </div>
 
             <div id="registerError" class="alert alert-error hidden"></div>
 
             <button
-              type="submit"
-              id="registerButton"
               class="btn btn-primary btn-block"
+              id="registerButton"
+              type="submit"
             >
               Create Account
             </button>
@@ -589,7 +623,7 @@ function renderRegister() {
 
           <div class="auth-switch">
             Already registered?
-            <a href="#" id="showLogin">Sign In</a>
+            <a href="#" id="loginLink">Sign In</a>
           </div>
 
         </div>
@@ -600,16 +634,73 @@ function renderRegister() {
   document.getElementById("registerForm")
     .addEventListener("submit", handleRegister);
 
-  document.getElementById("showLogin")
-    .addEventListener("click", function (event) {
+  document.getElementById("loginLink")
+    .addEventListener("click", event => {
       event.preventDefault();
       renderLogin();
     });
 }
 
-/* ==========================================
-   ADMIN LOGIN PAGE
-========================================== */
+async function handleRegister(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const button = document.getElementById("registerButton");
+
+  hideError("registerError");
+
+  const name = form.name.value.trim();
+  const email = form.email.value.trim();
+  const password = form.password.value;
+  const confirmPassword = form.confirmPassword.value;
+  const referralCode = form.referralCode.value.trim();
+
+  if (password.length < 10) {
+    showError(
+      "registerError",
+      "Password must be at least 10 characters."
+    );
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    showError("registerError", "Passwords do not match.");
+    return;
+  }
+
+  setLoading(button, true, "Create Account");
+
+  try {
+    await apiRequest(API.register, {
+      method: "POST",
+      body: {
+        name,
+        email,
+        password,
+        referralCode
+      }
+    });
+
+    /*
+      Registration automatically creates a user session.
+      Refresh CSRF and profile data for the new session.
+    */
+    await loadCsrfToken();
+    await refreshCurrentUser();
+    await loadConfiguration();
+
+    notify("Account created successfully.", "success");
+    renderDashboard();
+  } catch (error) {
+    showError("registerError", error.message);
+  } finally {
+    setLoading(button, false, "Create Account");
+  }
+}
+
+/* =====================================================
+   ADMIN LOGIN
+===================================================== */
 
 function renderAdminLogin() {
   root.innerHTML = `
@@ -625,19 +716,19 @@ function renderAdminLogin() {
           <h2 class="auth-heading">Administrator Login</h2>
 
           <p class="auth-description">
-            Sign in using your authorized administrator account.
+            Sign in with your configured administrator credentials.
           </p>
 
           <form id="adminLoginForm" class="form">
 
             <div class="form-group">
-              <label for="adminEmail">Administrator Email</label>
+              <label for="adminUsername">Administrator Username</label>
 
               <input
                 class="form-control"
-                id="adminEmail"
-                type="email"
-                name="email"
+                id="adminUsername"
+                name="username"
+                type="text"
                 required
                 autocomplete="username"
               >
@@ -649,8 +740,8 @@ function renderAdminLogin() {
               <input
                 class="form-control"
                 id="adminPassword"
-                type="password"
                 name="password"
+                type="password"
                 required
                 autocomplete="current-password"
               >
@@ -659,9 +750,9 @@ function renderAdminLogin() {
             <div id="adminLoginError" class="alert alert-error hidden"></div>
 
             <button
-              type="submit"
-              id="adminLoginButton"
               class="btn btn-primary btn-block"
+              id="adminLoginButton"
+              type="submit"
             >
               Administrator Sign In
             </button>
@@ -681,119 +772,10 @@ function renderAdminLogin() {
     .addEventListener("submit", handleAdminLogin);
 
   document.getElementById("backToLogin")
-    .addEventListener("click", function (event) {
+    .addEventListener("click", event => {
       event.preventDefault();
       renderLogin();
     });
-}
-
-/* ==========================================
-   AUTHENTICATION ACTIONS
-========================================== */
-
-async function handleLogin(event) {
-  event.preventDefault();
-
-  const form = event.currentTarget;
-  const button = document.getElementById("loginButton");
-  const errorBox = document.getElementById("loginError");
-
-  errorBox.classList.add("hidden");
-
-  const email = form.email.value.trim();
-  const password = form.password.value;
-
-  setLoading(button, true);
-
-  try {
-    const data = await apiRequest(API.login, {
-      method: "POST",
-      body: { email, password }
-    });
-
-    state.user = data.user || data.profile || null;
-
-    if (!state.user) {
-      const meData = await apiRequest(API.me);
-      state.user = meData.user || meData.profile || null;
-    }
-
-    if (!state.user) {
-      throw new Error(
-        "Login response did not contain a user. Please try again."
-      );
-    }
-
-    await loadCsrfToken();
-
-    notify("Login successful.", "success");
-    renderDashboard();
-  } catch (error) {
-    errorBox.textContent = error.message;
-    errorBox.classList.remove("hidden");
-  } finally {
-    setLoading(button, false, "Sign In");
-  }
-}
-
-async function handleRegister(event) {
-  event.preventDefault();
-
-  const form = event.currentTarget;
-  const button = document.getElementById("registerButton");
-  const errorBox = document.getElementById("registerError");
-
-  errorBox.classList.add("hidden");
-
-  const name = form.name.value.trim();
-  const email = form.email.value.trim();
-  const password = form.password.value;
-  const confirmPassword = form.confirmPassword.value;
-
-  if (password.length < 10) {
-    errorBox.textContent =
-      "Password must contain at least 10 characters.";
-
-    errorBox.classList.remove("hidden");
-    return;
-  }
-
-  if (password !== confirmPassword) {
-    errorBox.textContent = "Passwords do not match.";
-    errorBox.classList.remove("hidden");
-    return;
-  }
-
-  setLoading(button, true);
-
-  try {
-    await apiRequest(API.register, {
-      method: "POST",
-      body: {
-        name,
-        email,
-        password
-      }
-    });
-
-    notify(
-      "Registration successful. Please sign in.",
-      "success"
-    );
-
-    renderLogin();
-
-    const emailInput = document.getElementById("loginEmail");
-
-    if (emailInput) {
-      emailInput.value = email;
-    }
-  } catch (error) {
-    errorBox.textContent = error.message;
-    errorBox.classList.remove("hidden");
-  } finally {
-    setLoading(button, false, "Create Account");
-  }
 }
 
 async function handleAdminLogin(event) {
@@ -801,51 +783,52 @@ async function handleAdminLogin(event) {
 
   const form = event.currentTarget;
   const button = document.getElementById("adminLoginButton");
-  const errorBox = document.getElementById("adminLoginError");
 
-  errorBox.classList.add("hidden");
-
-  const email = form.email.value.trim();
-  const password = form.password.value;
-
-  setLoading(button, true);
+  hideError("adminLoginError");
+  setLoading(button, true, "Administrator Sign In");
 
   try {
-    const data = await apiRequest(API.adminLogin, {
+    await apiRequest(API.adminLogin, {
       method: "POST",
-      body: { email, password }
+      body: {
+        username: form.username.value.trim(),
+        password: form.password.value
+      }
     });
 
-    state.user = data.user || data.admin || null;
+    await loadCsrfToken();
 
-    if (!state.user) {
-      const meData = await apiRequest(API.me);
-      state.user = meData.user || meData.profile || null;
-    }
+    const sessionData = await apiRequest(API.session);
 
-    if (!state.user || !isAdmin()) {
-      state.user = null;
-
+    if (
+      !sessionData.authenticated ||
+      sessionData.role !== "admin"
+    ) {
       throw new Error(
-        "Server did not confirm administrator access."
+        "The server did not confirm administrator access."
       );
     }
 
-    await loadCsrfToken();
+    state.user = {
+      role: "admin",
+      username: sessionData.name,
+      name: sessionData.name
+    };
+
+    await loadConfiguration();
 
     notify("Administrator login successful.", "success");
     renderDashboard();
   } catch (error) {
-    errorBox.textContent = error.message;
-    errorBox.classList.remove("hidden");
+    showError("adminLoginError", error.message);
   } finally {
     setLoading(button, false, "Administrator Sign In");
   }
 }
 
-/* ==========================================
-   DASHBOARD LAYOUT
-========================================== */
+/* =====================================================
+   MAIN DASHBOARD LAYOUT
+===================================================== */
 
 function renderDashboard() {
   if (!state.user) {
@@ -867,42 +850,58 @@ function renderDashboard() {
 
         <nav class="sidebar-nav" id="sidebarNav">
 
-          <button type="button" data-page="dashboard" class="active">
-            <span>▦</span> Dashboard
-          </button>
-
-          <button type="button" data-page="deposit">
-            <span>↓</span> Deposit Request
-          </button>
-
-          <button type="button" data-page="withdrawal">
-            <span>↑</span> Withdrawal
-          </button>
-
-          <button type="button" data-page="investments">
-            <span>◈</span> Investment Plans
-          </button>
-
-          <button type="button" data-page="transactions">
-            <span>⇄</span> Transactions
-          </button>
-
-          <button type="button" data-page="profile">
-            <span>♙</span> My Profile
+          <button type="button" data-page="dashboard">
+            ▦ &nbsp; Dashboard
           </button>
 
           ${
-            isAdmin()
+            !isAdmin()
               ? `
-                <button type="button" data-page="admin">
-                  <span>⚙</span> Admin Panel
+                <button type="button" data-page="deposit">
+                  ↓ &nbsp; Deposit Request
+                </button>
+
+                <button type="button" data-page="withdrawal">
+                  ↑ &nbsp; Withdrawal
+                </button>
+
+                <button type="button" data-page="investments">
+                  ◈ &nbsp; Investment Plans
+                </button>
+
+                <button type="button" data-page="transactions">
+                  ⇄ &nbsp; Transactions
+                </button>
+
+                <button type="button" data-page="profile">
+                  ♙ &nbsp; My Profile
                 </button>
               `
-              : ""
+              : `
+                <button type="button" data-page="admin">
+                  ⚙ &nbsp; Admin Panel
+                </button>
+
+                <button type="button" data-page="adminUsers">
+                  ♙ &nbsp; Users
+                </button>
+
+                <button type="button" data-page="adminTransactions">
+                  ⇄ &nbsp; All Transactions
+                </button>
+
+                <button type="button" data-page="adminPlans">
+                  ◈ &nbsp; Manage Plans
+                </button>
+
+                <button type="button" data-page="adminAudit">
+                  ▤ &nbsp; Audit Log
+                </button>
+              `
           }
 
           <button type="button" id="logoutButton">
-            <span>↪</span> Logout
+            ↪ &nbsp; Logout
           </button>
 
         </nav>
@@ -923,16 +922,11 @@ function renderDashboard() {
               class="mobile-menu-button"
               id="mobileMenuButton"
               type="button"
-              aria-label="Open navigation"
-            >
-              ☰
-            </button>
+              aria-label="Open menu"
+            >☰</button>
 
             <div>
-              <h1 class="page-title" id="pageTitle">
-                Dashboard
-              </h1>
-
+              <h1 class="page-title" id="pageTitle">Dashboard</h1>
               <p class="page-subtitle">
                 Welcome to your BAYA account.
               </p>
@@ -948,6 +942,7 @@ function renderDashboard() {
 
             <div class="user-name">
               <strong>${escapeHTML(getUserName())}</strong>
+
               <div class="text-muted">
                 ${isAdmin() ? "Administrator" : "Account User"}
               </div>
@@ -958,7 +953,7 @@ function renderDashboard() {
         </header>
 
         <div id="pageContent">
-          <div class="card">Loading dashboard...</div>
+          <div class="card">Loading...</div>
         </div>
 
       </section>
@@ -967,8 +962,8 @@ function renderDashboard() {
   `;
 
   document.querySelectorAll("[data-page]").forEach(button => {
-    button.addEventListener("click", function () {
-      openPage(this.dataset.page);
+    button.addEventListener("click", () => {
+      openPage(button.dataset.page);
     });
   });
 
@@ -976,7 +971,7 @@ function renderDashboard() {
     .addEventListener("click", handleLogout);
 
   document.getElementById("mobileMenuButton")
-    .addEventListener("click", function () {
+    .addEventListener("click", () => {
       document.getElementById("sidebar").classList.add("open");
       document.getElementById("sidebarOverlay").classList.add("show");
     });
@@ -992,26 +987,27 @@ function closeSidebar() {
   document.getElementById("sidebarOverlay")?.classList.remove("show");
 }
 
-function openPage(page) {
+async function openPage(page) {
   if (!state.user) {
     renderLogin();
     return;
   }
 
-  if (page === "admin" && !isAdmin()) {
-    notify("Administrator access is required.", "error");
+  const adminPages = [
+    "admin",
+    "adminUsers",
+    "adminTransactions",
+    "adminPlans",
+    "adminAudit"
+  ];
+
+  if (adminPages.includes(page) && !isAdmin()) {
+    notify("Administrator access required.", "error");
     return;
   }
 
   state.currentPage = page;
   closeSidebar();
-
-  document.querySelectorAll("[data-page]").forEach(button => {
-    button.classList.toggle(
-      "active",
-      button.dataset.page === page
-    );
-  });
 
   const titles = {
     dashboard: "Dashboard",
@@ -1020,116 +1016,155 @@ function openPage(page) {
     investments: "Investment Plans",
     transactions: "Transactions",
     profile: "My Profile",
-    admin: "Admin Panel"
+    admin: "Admin Panel",
+    adminUsers: "Users",
+    adminTransactions: "All Transactions",
+    adminPlans: "Manage Plans",
+    adminAudit: "Audit Log"
   };
 
   document.getElementById("pageTitle").textContent =
     titles[page] || "Dashboard";
 
+  document.querySelectorAll("[data-page]").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === page);
+  });
+
   const content = document.getElementById("pageContent");
+  content.innerHTML = `<div class="card">Loading...</div>`;
 
-  content.innerHTML =
-    '<div class="card">Loading...</div>';
-
-  const renderers = {
+  const pages = {
     dashboard: renderDashboardHome,
     deposit: renderDepositPage,
     withdrawal: renderWithdrawalPage,
     investments: renderInvestmentsPage,
     transactions: renderTransactionsPage,
     profile: renderProfilePage,
-    admin: renderAdminPage
+    admin: renderAdminPage,
+    adminUsers: renderAdminUsersPage,
+    adminTransactions: renderAdminTransactionsPage,
+    adminPlans: renderAdminPlansPage,
+    adminAudit: renderAdminAuditPage
   };
 
-  Promise.resolve(renderers[page]())
-    .catch(error => {
-      content.innerHTML = `
-        <div class="card">
-          <div class="alert alert-error">
-            ${escapeHTML(error.message)}
-          </div>
-          <button class="btn btn-primary" id="retryPage">
-            Try Again
-          </button>
+  try {
+    await pages[page]();
+  } catch (error) {
+    content.innerHTML = `
+      <div class="card">
+        <div class="alert alert-error">
+          ${escapeHTML(error.message)}
         </div>
-      `;
 
-      document.getElementById("retryPage")
-        ?.addEventListener("click", () => openPage(page));
-    });
+        <button class="btn btn-primary" id="retryPage">
+          Try Again
+        </button>
+      </div>
+    `;
+
+    document.getElementById("retryPage")
+      ?.addEventListener("click", () => openPage(page));
+  }
 }
 
-/* ==========================================
-   DASHBOARD HOME
-========================================== */
+/* =====================================================
+   USER DASHBOARD
+===================================================== */
 
 async function renderDashboardHome() {
   const content = document.getElementById("pageContent");
 
-  let requestCount = 0;
-  let transactionCount = 0;
+  let requests = [];
+  let transactions = [];
 
-  try {
-    const requestsData = await apiRequest(API.requests);
+  if (!isAdmin()) {
+    const results = await Promise.allSettled([
+      apiRequest(API.requests),
+      apiRequest(API.transactions)
+    ]);
 
-    state.requests = Array.isArray(requestsData)
-      ? requestsData
-      : requestsData.requests || [];
+    if (results[0].status === "fulfilled") {
+      requests = results[0].value.requests || [];
+    }
 
-    requestCount = state.requests.length;
-  } catch (error) {
-    console.warn("Could not load requests:", error.message);
+    if (results[1].status === "fulfilled") {
+      transactions = results[1].value.transactions || [];
+    }
+  } else {
+    const overview = await apiRequest(API.adminOverview);
+
+    content.innerHTML = `
+      <div class="grid">
+
+        <div class="card">
+          <div class="stat-label">Registered Users</div>
+          <div class="stat-value">${Number(overview.users || 0)}</div>
+        </div>
+
+        <div class="card">
+          <div class="stat-label">Pending Deposits</div>
+          <div class="stat-value">${Number(overview.pendingDeposits || 0)}</div>
+        </div>
+
+        <div class="card">
+          <div class="stat-label">Pending Withdrawals</div>
+          <div class="stat-value">${Number(overview.pendingWithdrawals || 0)}</div>
+        </div>
+
+        <div class="card">
+          <div class="stat-label">Pending Investments</div>
+          <div class="stat-value">${Number(overview.pendingInvestments || 0)}</div>
+        </div>
+
+      </div>
+
+      <div class="card mt-3">
+        <h2 class="card-title">Administration</h2>
+
+        <p class="text-muted">
+          Review requests and account records using the admin menu.
+        </p>
+
+        <button class="btn btn-primary" id="openAdmin">
+          Open Admin Panel
+        </button>
+      </div>
+    `;
+
+    document.getElementById("openAdmin")
+      .addEventListener("click", () => openPage("admin"));
+
+    return;
   }
 
-  try {
-    const transactionData = await apiRequest(API.transactions);
-
-    state.transactions = Array.isArray(transactionData)
-      ? transactionData
-      : transactionData.transactions || [];
-
-    transactionCount = state.transactions.length;
-  } catch (error) {
-    console.warn("Could not load transactions:", error.message);
-  }
+  state.requests = requests;
+  state.transactions = transactions;
 
   content.innerHTML = `
     <div class="grid">
 
       <div class="card">
         <div class="stat-label">Account Balance</div>
-
-        <div class="stat-value">
-          ${money(getBalance())}
-        </div>
-
-        <div class="stat-note">
-          Balance reported by the server
-        </div>
+        <div class="stat-value">${money(getBalance())} USDT</div>
+        <div class="stat-note">Balance reported by the server</div>
       </div>
 
       <div class="card">
-        <div class="stat-label">My Requests</div>
-
-        <div class="stat-value">
-          ${requestCount}
-        </div>
-
-        <div class="stat-note">
-          Deposit and withdrawal requests
-        </div>
+        <div class="stat-label">Pending Requests</div>
+        <div class="stat-value">${Number(state.user.pendingCount || 0)}</div>
+        <div class="stat-note">Requests awaiting review</div>
       </div>
 
       <div class="card">
-        <div class="stat-label">Transactions</div>
+        <div class="stat-label">Approved Allocations</div>
+        <div class="stat-value">${money(state.user.invested)} USDT</div>
+        <div class="stat-note">Server-reported allocations</div>
+      </div>
 
-        <div class="stat-value">
-          ${transactionCount}
-        </div>
-
-        <div class="stat-note">
-          Recorded account transactions
-        </div>
+      <div class="card">
+        <div class="stat-label">Referrals</div>
+        <div class="stat-value">${Number(state.user.referrals || 0)}</div>
+        <div class="stat-note">Registered referrals</div>
       </div>
 
     </div>
@@ -1140,12 +1175,11 @@ async function renderDashboardHome() {
         <h2 class="card-title">Deposit</h2>
 
         <p class="text-muted">
-          Submit a deposit request for administrator review.
+          Submit your transaction ID for manual review.
         </p>
 
-        <button class="btn btn-primary"
-                id="goDeposit">
-          Create Deposit Request
+        <button class="btn btn-primary" id="goDeposit">
+          Deposit Request
         </button>
       </div>
 
@@ -1156,9 +1190,8 @@ async function renderDashboardHome() {
           Submit a withdrawal request for review.
         </p>
 
-        <button class="btn btn-secondary"
-                id="goWithdrawal">
-          Create Withdrawal Request
+        <button class="btn btn-secondary" id="goWithdrawal">
+          Withdrawal Request
         </button>
       </div>
 
@@ -1166,7 +1199,11 @@ async function renderDashboardHome() {
 
     <div class="card mt-3">
       <h2 class="card-title">Recent Transactions</h2>
-      ${renderTransactionTable(state.transactions.slice(0, 5))}
+      ${renderTransactionTable(transactions.slice(0, 5))}
+    </div>
+
+    <div class="alert alert-info mt-3">
+      Financial requests require review. Investment returns are not guaranteed.
     </div>
   `;
 
@@ -1177,68 +1214,63 @@ async function renderDashboardHome() {
     .addEventListener("click", () => openPage("withdrawal"));
 }
 
-/* ==========================================
-   DEPOSIT PAGE
-========================================== */
+/* =====================================================
+   DEPOSIT
+===================================================== */
 
 function renderDepositPage() {
   const content = document.getElementById("pageContent");
 
-  const depositAddress =
+  const address =
     state.config.depositAddress ||
-    state.config.deposit_address ||
     "";
 
   content.innerHTML = `
     <div class="grid-2">
 
       <div class="card">
-        <h2 class="card-title">Submit Deposit Request</h2>
+        <h2 class="card-title">Deposit Request</h2>
 
         <div class="alert alert-info">
-          Submit your transaction details for review.
-          A request does not mean the payment has been confirmed.
+          Submit the exact transaction hash for administrator review.
+          Your balance will not change until the deposit is approved.
         </div>
 
         <form id="depositForm" class="form">
 
           <div class="form-group">
-            <label for="depositAmount">Amount</label>
+            <label for="depositAmount">Amount (USDT)</label>
 
             <input
               class="form-control"
               id="depositAmount"
               name="amount"
               type="number"
-              min="0.01"
-              step="0.01"
+              min="0.000001"
+              max="1000000000"
+              step="0.000001"
               required
-              placeholder="Enter amount"
             >
           </div>
 
           <div class="form-group">
-            <label for="depositNetwork">Network</label>
-
-            <select id="depositNetwork"
-                    name="network"
-                    class="form-control"
-                    required>
-              <option value="TRC20">TRON (TRC20)</option>
-            </select>
+            <label>Network</label>
+            <input class="form-control" value="TRON (TRC20)" readonly>
           </div>
 
           <div class="form-group">
-            <label for="depositTx">Transaction ID / Hash</label>
+            <label for="depositTxid">Transaction ID (TXID)</label>
 
             <input
               class="form-control"
-              id="depositTx"
-              name="transactionHash"
+              id="depositTxid"
+              name="txid"
               type="text"
+              minlength="64"
+              maxlength="64"
+              pattern="[a-fA-F0-9]{64}"
               required
-              maxlength="200"
-              placeholder="Enter transaction hash"
+              placeholder="64-character transaction hash"
             >
           </div>
 
@@ -1252,30 +1284,25 @@ function renderDepositPage() {
       </div>
 
       <div class="card">
-        <h2 class="card-title">Payment Information</h2>
-
-        <p class="text-muted">
-          Only send funds to an address confirmed by the
-          authorized service administrator.
-        </p>
+        <h2 class="card-title">Deposit Address</h2>
 
         ${
-          depositAddress
+          address
             ? `
               <div class="form-group">
-                <label>Configured Deposit Address</label>
-                <textarea readonly id="depositAddress">${escapeHTML(depositAddress)}</textarea>
-                <button class="btn btn-secondary"
-                        type="button"
-                        id="copyDepositAddress">
+                <label>Configured TRC20 Address</label>
+
+                <textarea id="depositAddress" readonly>${escapeHTML(address)}</textarea>
+
+                <button class="btn btn-secondary" id="copyAddress" type="button">
                   Copy Address
                 </button>
               </div>
             `
             : `
-              <div class="alert alert-info">
-                No deposit address has been supplied by the server.
-                Do not send funds until the address is verified.
+              <div class="alert alert-error">
+                Deposit address is not configured on the server.
+                Do not send funds until the administrator confirms it.
               </div>
             `
         }
@@ -1287,13 +1314,13 @@ function renderDepositPage() {
   document.getElementById("depositForm")
     .addEventListener("submit", handleDeposit);
 
-  document.getElementById("copyDepositAddress")
-    ?.addEventListener("click", async function () {
+  document.getElementById("copyAddress")
+    ?.addEventListener("click", async () => {
       try {
-        await navigator.clipboard.writeText(depositAddress);
+        await navigator.clipboard.writeText(address);
         notify("Address copied.", "success");
       } catch (error) {
-        notify("Copy failed. Please copy the address manually.", "error");
+        notify("Please copy the address manually.", "error");
       }
     });
 }
@@ -1305,33 +1332,31 @@ async function handleDeposit(event) {
   const button = document.getElementById("depositButton");
 
   const amount = Number(form.amount.value);
-  const network = form.network.value;
-  const transactionHash = form.transactionHash.value.trim();
+  const txid = form.txid.value.trim();
 
   if (!Number.isFinite(amount) || amount <= 0) {
     notify("Enter a valid amount.", "error");
     return;
   }
 
-  if (!transactionHash) {
-    notify("Enter the transaction hash.", "error");
+  if (!/^[a-fA-F0-9]{64}$/.test(txid)) {
+    notify("Enter a valid 64-character transaction ID.", "error");
     return;
   }
 
-  setLoading(button, true);
+  setLoading(button, true, "Submit Deposit Request");
 
   try {
     await apiRequest(API.deposit, {
       method: "POST",
       body: {
         amount,
-        network,
-        transactionHash
+        txid: txid.toLowerCase()
       }
     });
 
     notify("Deposit request submitted for review.", "success");
-    openPage("dashboard");
+    await openPage("dashboard");
   } catch (error) {
     notify(error.message, "error");
   } finally {
@@ -1339,9 +1364,9 @@ async function handleDeposit(event) {
   }
 }
 
-/* ==========================================
-   WITHDRAWAL PAGE
-========================================== */
+/* =====================================================
+   WITHDRAWAL
+===================================================== */
 
 function renderWithdrawalPage() {
   const content = document.getElementById("pageContent");
@@ -1351,60 +1376,50 @@ function renderWithdrawalPage() {
 
       <h2 class="card-title">Withdrawal Request</h2>
 
-      <div class="alert alert-info">
-        Enter your amount and receiving wallet address.
-        Your request will need server-side validation and approval.
-      </div>
+      <p class="text-muted">
+        Available balance: ${money(getBalance())} USDT
+      </p>
 
       <form id="withdrawalForm" class="form">
 
         <div class="form-group">
-          <label for="withdrawalAmount">Amount</label>
+          <label for="withdrawalAmount">Amount (USDT)</label>
 
           <input
             class="form-control"
             id="withdrawalAmount"
             name="amount"
             type="number"
-            min="0.01"
-            step="0.01"
+            min="0.000001"
+            max="1000000000"
+            step="0.000001"
             required
-            placeholder="Enter withdrawal amount"
           >
         </div>
 
         <div class="form-group">
-          <label for="withdrawalNetwork">Network</label>
-
-          <select
-            class="form-control"
-            id="withdrawalNetwork"
-            name="network"
-            required
-          >
-            <option value="TRC20">TRON (TRC20)</option>
-          </select>
+          <label>Network</label>
+          <input class="form-control" value="TRON (TRC20)" readonly>
         </div>
 
         <div class="form-group">
-          <label for="withdrawalAddress">Receiving Wallet Address</label>
+          <label for="withdrawalWallet">Receiving TRC20 Wallet</label>
 
           <input
             class="form-control"
-            id="withdrawalAddress"
-            name="walletAddress"
+            id="withdrawalWallet"
+            name="wallet"
             type="text"
+            minlength="26"
+            maxlength="41"
             required
-            maxlength="200"
-            placeholder="Enter your wallet address"
+            placeholder="Enter your TRON wallet address"
           >
         </div>
 
-        <button
-          class="btn btn-primary"
-          id="withdrawalButton"
-          type="submit"
-        >
+        <button class="btn btn-primary"
+                id="withdrawalButton"
+                type="submit">
           Submit Withdrawal Request
         </button>
 
@@ -1424,33 +1439,31 @@ async function handleWithdrawal(event) {
   const button = document.getElementById("withdrawalButton");
 
   const amount = Number(form.amount.value);
-  const network = form.network.value;
-  const walletAddress = form.walletAddress.value.trim();
+  const wallet = form.wallet.value.trim();
 
   if (!Number.isFinite(amount) || amount <= 0) {
     notify("Enter a valid amount.", "error");
     return;
   }
 
-  if (!walletAddress) {
-    notify("Enter your receiving wallet address.", "error");
+  if (!/^T[1-9A-HJ-NP-Za-km-z]{25,40}$/.test(wallet)) {
+    notify("Enter a valid TRON wallet address.", "error");
     return;
   }
 
-  setLoading(button, true);
+  setLoading(button, true, "Submit Withdrawal Request");
 
   try {
     await apiRequest(API.withdrawal, {
       method: "POST",
       body: {
         amount,
-        network,
-        walletAddress
+        wallet
       }
     });
 
     notify("Withdrawal request submitted for review.", "success");
-    openPage("dashboard");
+    await openPage("dashboard");
   } catch (error) {
     notify(error.message, "error");
   } finally {
@@ -1458,39 +1471,14 @@ async function handleWithdrawal(event) {
   }
 }
 
-/* ==========================================
+/* =====================================================
    INVESTMENT PLANS
-========================================== */
+===================================================== */
 
 async function renderInvestmentsPage() {
   const content = document.getElementById("pageContent");
 
-  let plans = [];
-
-  try {
-    const data = await apiRequest("/api/plans");
-
-    plans = Array.isArray(data)
-      ? data
-      : data.plans || [];
-  } catch (error) {
-    content.innerHTML = `
-      <div class="card">
-        <h2 class="card-title">Investment Plans</h2>
-
-        <div class="alert alert-error">
-          ${escapeHTML(error.message)}
-        </div>
-
-        <p class="text-muted">
-          The supplied server may not provide a public plans endpoint.
-          Please confirm the server routes before enabling plan requests.
-        </p>
-      </div>
-    `;
-
-    return;
-  }
+  const plans = state.config.plans || [];
 
   if (!plans.length) {
     content.innerHTML = `
@@ -1499,11 +1487,10 @@ async function renderInvestmentsPage() {
 
         <div class="empty-state">
           <h3>No plans available</h3>
-          <p>No plans were returned by the server.</p>
+          <p>The server has not returned any active plans.</p>
         </div>
       </div>
     `;
-
     return;
   }
 
@@ -1514,137 +1501,131 @@ async function renderInvestmentsPage() {
         <div class="card">
 
           <h2 class="card-title">
-            ${escapeHTML(plan.name || plan.title || "Plan")}
+            ${escapeHTML(plan.title)}
           </h2>
 
           <p class="text-muted">
-            ${escapeHTML(plan.description || "Plan details supplied by server.")}
+            ${escapeHTML(plan.description)}
           </p>
 
           <div class="stat-label">Minimum Amount</div>
 
           <div class="stat-value">
-            ${money(plan.minimum_amount ?? plan.min_amount ?? 0)}
+            ${money(plan.minimumAmount)} USDT
           </div>
 
-          <div class="mt-2">
-            <button
-              class="btn btn-primary btn-block"
-              data-plan-id="${escapeHTML(plan.id)}"
-            >
-              Submit Plan Request
-            </button>
+          <div class="stat-label mt-2">Maximum Amount</div>
+
+          <div>
+            ${
+              plan.maximumAmount === null
+                ? "No configured maximum"
+                : money(plan.maximumAmount) + " USDT"
+            }
           </div>
+
+          <div class="form-group mt-2">
+            <label for="amount-${escapeHTML(plan.key)}">Request Amount</label>
+
+            <input
+              class="form-control"
+              type="number"
+              min="${Number(plan.minimumAmount)}"
+              ${
+                plan.maximumAmount === null
+                  ? ""
+                  : `max="${Number(plan.maximumAmount)}"`
+              }
+              step="0.000001"
+              id="amount-${escapeHTML(plan.key)}"
+            >
+          </div>
+
+          <div class="form-group mt-2">
+            <label for="duration-${escapeHTML(plan.key)}">Duration</label>
+
+            <select class="form-control"
+                    id="duration-${escapeHTML(plan.key)}">
+              ${(plan.durations || []).map(day => `
+                <option value="${Number(day)}">
+                  ${Number(day)} days
+                </option>
+              `).join("")}
+            </select>
+          </div>
+
+          <button
+            class="btn btn-primary btn-block mt-2"
+            data-invest-plan="${escapeHTML(plan.key)}"
+            type="button"
+          >
+            Submit Plan Request
+          </button>
 
         </div>
       `).join("")}
 
     </div>
 
-    <p class="text-muted mt-3">
-      Review all terms, risks, fees and applicable legal requirements
-      before submitting any financial request.
-    </p>
+    <div class="alert alert-info mt-3">
+      Requests are subject to review. Returns are not guaranteed.
+    </div>
   `;
 
-  content.querySelectorAll("[data-plan-id]").forEach(button => {
-    button.addEventListener("click", async function () {
-      const planId = this.dataset.planId;
-
-      const amountInput = prompt(
-        "Enter the amount for this plan:"
+  content.querySelectorAll("[data-invest-plan]").forEach(button => {
+    button.addEventListener("click", async () => {
+      const key = button.dataset.investPlan;
+      const amount = Number(
+        document.getElementById(`amount-${key}`).value
+      );
+      const durationDays = Number(
+        document.getElementById(`duration-${key}`).value
       );
 
-      if (amountInput === null) return;
+      const plan = plans.find(item => item.key === key);
 
-      const amount = Number(amountInput);
-
-      if (!Number.isFinite(amount) || amount <= 0) {
-        notify("Enter a valid amount.", "error");
+      if (!plan || !Number.isFinite(amount) || amount <= 0) {
+        notify("Enter a valid plan amount.", "error");
         return;
       }
 
-      setLoading(this, true);
+      if (
+        amount < Number(plan.minimumAmount) ||
+        (
+          plan.maximumAmount !== null &&
+          amount > Number(plan.maximumAmount)
+        )
+      ) {
+        notify("Amount is outside this plan's range.", "error");
+        return;
+      }
+
+      setLoading(button, true, "Submit Plan Request");
 
       try {
         await apiRequest(API.investments, {
           method: "POST",
           body: {
-            planId,
-            amount
+            planKey: key,
+            amount,
+            durationDays
           }
         });
 
         notify("Plan request submitted for review.", "success");
-        openPage("dashboard");
+        await openPage("dashboard");
       } catch (error) {
         notify(error.message, "error");
       } finally {
-        setLoading(this, false, "Submit Plan Request");
+        setLoading(button, false, "Submit Plan Request");
       }
     });
   });
 }
 
-/* ==========================================
-   TRANSACTIONS
-========================================== */
-
-function renderTransactionTable(transactions) {
-  if (!transactions || transactions.length === 0) {
-    return `
-      <div class="empty-state">
-        <h3>No transactions found</h3>
-        <p>Your server-reported transactions will appear here.</p>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          ${transactions.map(transaction => `
-            <tr>
-              <td>${escapeHTML(transaction.id ?? "-")}</td>
-
-              <td>
-                ${escapeHTML(transaction.type || transaction.kind || "-")}
-              </td>
-
-              <td>
-                ${money(transaction.amount)}
-              </td>
-
-              <td>
-                ${renderStatusBadge(transaction.status)}
-              </td>
-
-              <td>
-                ${escapeHTML(
-                  transaction.created_at ||
-                  transaction.createdAt ||
-                  transaction.date ||
-                  "-"
-                )}
-              </td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
+/* =====================================================
+   TRANSACTION TABLE
+===================================================== */
 
 function renderStatusBadge(status) {
   const value = String(status || "pending").toLowerCase();
@@ -1652,15 +1633,11 @@ function renderStatusBadge(status) {
   let badgeClass = "badge-pending";
 
   if (
-    value === "approved" ||
-    value === "completed" ||
-    value === "success"
+    ["approved", "completed", "paid", "success"].includes(value)
   ) {
     badgeClass = "badge-success";
   } else if (
-    value === "rejected" ||
-    value === "failed" ||
-    value === "cancelled"
+    ["rejected", "failed", "cancelled"].includes(value)
   ) {
     badgeClass = "badge-danger";
   } else if (value === "processing") {
@@ -1674,14 +1651,51 @@ function renderStatusBadge(status) {
   `;
 }
 
+function renderTransactionTable(transactions) {
+  if (!transactions || transactions.length === 0) {
+    return `
+      <div class="empty-state">
+        <h3>No transactions found</h3>
+        <p>Transactions will appear here when available.</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${transactions.map(item => `
+            <tr>
+              <td>${escapeHTML(item.id)}</td>
+              <td>${escapeHTML(item.type)}</td>
+              <td>${money(item.amount)} USDT</td>
+              <td>${escapeHTML(item.description || "-")}</td>
+              <td>${escapeHTML(item.createdAt || "-")}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
 async function renderTransactionsPage() {
   const content = document.getElementById("pageContent");
 
   const data = await apiRequest(API.transactions);
 
-  state.transactions = Array.isArray(data)
-    ? data
-    : data.transactions || [];
+  state.transactions = data.transactions || [];
 
   content.innerHTML = `
     <div class="card">
@@ -1691,14 +1705,12 @@ async function renderTransactionsPage() {
   `;
 }
 
-/* ==========================================
+/* =====================================================
    PROFILE
-========================================== */
+===================================================== */
 
 function renderProfilePage() {
   const content = document.getElementById("pageContent");
-
-  const user = state.user || {};
 
   content.innerHTML = `
     <div class="card">
@@ -1715,9 +1727,10 @@ function renderProfilePage() {
             id="profileName"
             name="name"
             type="text"
-            maxlength="100"
+            minlength="2"
+            maxlength="70"
             required
-            value="${escapeHTML(user.name || user.full_name || "")}"
+            value="${escapeHTML(state.user.name || "")}"
           >
         </div>
 
@@ -1729,19 +1742,23 @@ function renderProfilePage() {
             id="profileEmail"
             type="email"
             readonly
-            value="${escapeHTML(user.email || "")}"
+            value="${escapeHTML(state.user.email || "")}"
           >
-
-          <span class="form-help">
-            Email address cannot be changed here.
-          </span>
         </div>
 
-        <button
-          class="btn btn-primary"
-          id="profileButton"
-          type="submit"
-        >
+        <div class="form-group">
+          <label>Referral Code</label>
+
+          <input
+            class="form-control"
+            readonly
+            value="${escapeHTML(state.user.referral_code || "")}"
+          >
+        </div>
+
+        <button class="btn btn-primary"
+                id="profileButton"
+                type="submit">
           Save Profile
         </button>
 
@@ -1760,30 +1777,19 @@ async function handleProfileUpdate(event) {
   const form = event.currentTarget;
   const button = document.getElementById("profileButton");
 
-  const name = form.name.value.trim();
-
-  if (!name) {
-    notify("Enter your name.", "error");
-    return;
-  }
-
-  setLoading(button, true);
+  setLoading(button, true, "Save Profile");
 
   try {
-    const data = await apiRequest(API.profile, {
+    await apiRequest(API.profile, {
       method: "PATCH",
-      body: { name }
+      body: {
+        name: form.name.value.trim()
+      }
     });
 
-    if (data.user) {
-      state.user = data.user;
-    } else if (data.profile) {
-      state.user = data.profile;
-    } else {
-      state.user.name = name;
-    }
+    await refreshCurrentUser();
 
-    notify("Profile updated.", "success");
+    notify("Profile updated successfully.", "success");
     renderDashboard();
   } catch (error) {
     notify(error.message, "error");
@@ -1792,102 +1798,275 @@ async function handleProfileUpdate(event) {
   }
 }
 
-/* ==========================================
-   ADMIN PANEL
-========================================== */
+/* =====================================================
+   ADMIN: OVERVIEW + REQUEST MANAGEMENT
+===================================================== */
 
 async function renderAdminPage() {
   const content = document.getElementById("pageContent");
 
-  if (!isAdmin()) {
-    content.innerHTML = `
+  const overview = await apiRequest(API.adminOverview);
+
+  content.innerHTML = `
+    <div class="grid">
+
       <div class="card">
-        <div class="alert alert-error">
-          Administrator access is required.
-        </div>
+        <div class="stat-label">Users</div>
+        <div class="stat-value">${Number(overview.users || 0)}</div>
       </div>
-    `;
 
-    return;
-  }
+      <div class="card">
+        <div class="stat-label">Pending Deposits</div>
+        <div class="stat-value">${Number(overview.pendingDeposits || 0)}</div>
+      </div>
 
-  let requests = [];
+      <div class="card">
+        <div class="stat-label">Pending Withdrawals</div>
+        <div class="stat-value">${Number(overview.pendingWithdrawals || 0)}</div>
+      </div>
+
+      <div class="card">
+        <div class="stat-label">Pending Investments</div>
+        <div class="stat-value">${Number(overview.pendingInvestments || 0)}</div>
+      </div>
+
+    </div>
+
+    <div class="card mt-3">
+
+      <h2 class="card-title">Review Requests</h2>
+
+      <div class="form-group">
+        <label for="adminRequestType">Request Type</label>
+
+        <select id="adminRequestType" class="form-control">
+          <option value="deposit">Deposits</option>
+          <option value="withdrawal">Withdrawals</option>
+          <option value="investment">Investments</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary mt-2" id="loadAdminRequests">
+        Load Requests
+      </button>
+
+      <div id="adminRequestsTable" class="mt-3">
+        Select a request type to load records.
+      </div>
+
+    </div>
+  `;
+
+  const typeSelect = document.getElementById("adminRequestType");
+
+  document.getElementById("loadAdminRequests")
+    .addEventListener("click", () => {
+      loadAdminRequests(typeSelect.value);
+    });
+
+  await loadAdminRequests("deposit");
+}
+
+async function loadAdminRequests(type) {
+  const container = document.getElementById("adminRequestsTable");
+
+  if (!container) return;
+
+  container.innerHTML = `<p class="text-muted">Loading requests...</p>`;
 
   try {
-    const data = await apiRequest(API.requests);
+    const data = await apiRequest(
+      `${API.adminRequests}?type=${encodeURIComponent(type)}`
+    );
 
-    requests = Array.isArray(data)
-      ? data
-      : data.requests || [];
-  } catch (error) {
-    content.innerHTML = `
-      <div class="card">
-        <h2 class="card-title">Admin Panel</h2>
+    const requests = data.requests || [];
 
-        <div class="alert alert-error">
-          Could not load requests: ${escapeHTML(error.message)}
+    if (!requests.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <h3>No requests found</h3>
         </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>User</th>
+              <th>Amount</th>
+              ${type === "investment" ? "<th>Plan</th><th>Duration</th>" : ""}
+              ${type === "deposit" ? "<th>TXID</th>" : ""}
+              ${type === "withdrawal" ? "<th>Wallet</th>" : ""}
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${requests.map(request => `
+              <tr>
+                <td>${escapeHTML(request.id)}</td>
+
+                <td>
+                  ${escapeHTML(request.userName || "")}<br>
+                  <small>${escapeHTML(request.email || "")}</small>
+                </td>
+
+                <td>${money(request.amount)} USDT</td>
+
+                ${
+                  type === "investment"
+                    ? `
+                      <td>${escapeHTML(request.planTitle || "")}</td>
+                      <td>${Number(request.durationDays || 0)} days</td>
+                    `
+                    : ""
+                }
+
+                ${
+                  type === "deposit"
+                    ? `<td>${escapeHTML(request.txid || "")}</td>`
+                    : ""
+                }
+
+                ${
+                  type === "withdrawal"
+                    ? `<td>${escapeHTML(request.wallet || "")}</td>`
+                    : ""
+                }
+
+                <td>${renderStatusBadge(request.status)}</td>
+
+                <td>
+                  ${
+                    request.status === "pending"
+                      ? `
+                        <button class="btn btn-success btn-small"
+                          data-action="approve"
+                          data-id="${Number(request.id)}"
+                          data-type="${type}">
+                          Approve
+                        </button>
+
+                        <button class="btn btn-danger btn-small"
+                          data-action="reject"
+                          data-id="${Number(request.id)}"
+                          data-type="${type}">
+                          Reject
+                        </button>
+                      `
+                      : type === "withdrawal" && request.status === "approved"
+                        ? `
+                          <button class="btn btn-primary btn-small"
+                            data-action="paid"
+                            data-id="${Number(request.id)}"
+                            data-type="${type}">
+                            Mark Paid
+                          </button>
+                        `
+                        : "-"
+                  }
+                </td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
       </div>
     `;
 
-    return;
+    container.querySelectorAll("[data-action]").forEach(button => {
+      button.addEventListener("click", async () => {
+        const action = button.dataset.action;
+        const id = Number(button.dataset.id);
+        const requestType = button.dataset.type;
+
+        const promptText = action === "approve"
+          ? "Approve this request?"
+          : action === "reject"
+            ? "Reject this request?"
+            : "Confirm that this withdrawal has actually been paid?";
+
+        if (!confirm(promptText)) return;
+
+        let note = "";
+
+        if (action === "reject") {
+          note = prompt("Optional rejection note:") || "";
+        }
+
+        setLoading(button, true, action);
+
+        try {
+          await apiRequest(`/api/admin/requests/${id}/action`, {
+            method: "POST",
+            body: {
+              action,
+              type: requestType,
+              note
+            }
+          });
+
+          notify("Request updated.", "success");
+          await loadAdminRequests(requestType);
+        } catch (error) {
+          notify(error.message, "error");
+          setLoading(button, false, action);
+        }
+      });
+    });
+  } catch (error) {
+    container.innerHTML = `
+      <div class="alert alert-error">
+        ${escapeHTML(error.message)}
+      </div>
+    `;
   }
+}
+
+/* =====================================================
+   ADMIN: USERS
+===================================================== */
+
+async function renderAdminUsersPage() {
+  const content = document.getElementById("pageContent");
+
+  const data = await apiRequest(API.adminUsers);
+  const users = data.users || [];
 
   content.innerHTML = `
     <div class="card">
 
-      <h2 class="card-title">Requests Management</h2>
-
-      <div class="alert alert-info">
-        This screen displays requests returned by the server.
-        Approval actions must use the server's authenticated admin routes.
-      </div>
+      <h2 class="card-title">Registered Users</h2>
 
       ${
-        requests.length
+        users.length
           ? `
             <div class="table-wrap">
               <table>
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>User</th>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Balance</th>
+                    <th>Referrals</th>
+                    <th>Joined</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  ${requests.map(request => `
+                  ${users.map(user => `
                     <tr>
-                      <td>${escapeHTML(request.id ?? "-")}</td>
-
-                      <td>
-                        ${escapeHTML(
-                          request.user_email ||
-                          request.email ||
-                          request.user_id ||
-                          "-"
-                        )}
-                      </td>
-
-                      <td>
-                        ${escapeHTML(request.type || "-")}
-                      </td>
-
-                      <td>${money(request.amount)}</td>
-
-                      <td>${renderStatusBadge(request.status)}</td>
-
-                      <td>
-                        ${escapeHTML(
-                          request.created_at ||
-                          request.createdAt ||
-                          "-"
-                        )}
-                      </td>
+                      <td>${Number(user.id)}</td>
+                      <td>${escapeHTML(user.name)}</td>
+                      <td>${escapeHTML(user.email)}</td>
+                      <td>${money(user.balance)} USDT</td>
+                      <td>${Number(user.referrals || 0)}</td>
+                      <td>${escapeHTML(user.createdAt || "-")}</td>
                     </tr>
                   `).join("")}
                 </tbody>
@@ -1896,7 +2075,7 @@ async function renderAdminPage() {
           `
           : `
             <div class="empty-state">
-              <h3>No requests found</h3>
+              <h3>No users found</h3>
             </div>
           `
       }
@@ -1905,14 +2084,274 @@ async function renderAdminPage() {
   `;
 }
 
-/* ==========================================
+/* =====================================================
+   ADMIN: TRANSACTIONS
+===================================================== */
+
+async function renderAdminTransactionsPage() {
+  const content = document.getElementById("pageContent");
+
+  const data = await apiRequest(API.adminTransactions);
+
+  content.innerHTML = `
+    <div class="card">
+      <h2 class="card-title">All Transactions</h2>
+
+      ${
+        (data.transactions || []).length
+          ? `
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  ${data.transactions.map(item => `
+                    <tr>
+                      <td>${Number(item.id)}</td>
+                      <td>${escapeHTML(item.userName)}</td>
+                      <td>${escapeHTML(item.email)}</td>
+                      <td>${escapeHTML(item.type)}</td>
+                      <td>${money(item.amount)} USDT</td>
+                      <td>${escapeHTML(item.description)}</td>
+                      <td>${escapeHTML(item.createdAt)}</td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          `
+          : `<div class="empty-state">No transactions found.</div>`
+      }
+    </div>
+  `;
+}
+
+/* =====================================================
+   ADMIN: PLANS
+===================================================== */
+
+async function renderAdminPlansPage() {
+  const content = document.getElementById("pageContent");
+
+  const data = await apiRequest(API.adminPlans);
+  const plans = data.plans || [];
+
+  content.innerHTML = `
+    <div class="card">
+
+      <h2 class="card-title">Investment Plans</h2>
+
+      <div class="alert alert-info">
+        Update the existing plan terms carefully. Changes are saved on the server.
+      </div>
+
+      ${
+        plans.map(plan => `
+          <form class="form card mt-2"
+                data-plan-form="${escapeHTML(plan.key)}">
+
+            <h3>${escapeHTML(plan.title)}</h3>
+
+            <div class="form-row">
+
+              <div class="form-group">
+                <label>Title</label>
+
+                <input
+                  class="form-control"
+                  name="title"
+                  maxlength="50"
+                  required
+                  value="${escapeHTML(plan.title)}"
+                >
+              </div>
+
+              <div class="form-group">
+                <label>Minimum Amount</label>
+
+                <input
+                  class="form-control"
+                  name="minimumAmount"
+                  type="number"
+                  min="0.000001"
+                  step="0.000001"
+                  required
+                  value="${Number(plan.minimumAmount)}"
+                >
+              </div>
+
+            </div>
+
+            <div class="form-row">
+
+              <div class="form-group">
+                <label>Maximum Amount (blank for no maximum)</label>
+
+                <input
+                  class="form-control"
+                  name="maximumAmount"
+                  type="number"
+                  min="0.000001"
+                  step="0.000001"
+                  value="${plan.maximumAmount === null ? "" : Number(plan.maximumAmount)}"
+                >
+              </div>
+
+              <div class="form-group">
+                <label>Durations in Days (comma separated)</label>
+
+                <input
+                  class="form-control"
+                  name="durations"
+                  required
+                  value="${escapeHTML((plan.durations || []).join(","))}"
+                >
+              </div>
+
+            </div>
+
+            <div class="form-group">
+              <label>Description</label>
+
+              <input
+                class="form-control"
+                name="description"
+                maxlength="150"
+                required
+                value="${escapeHTML(plan.description)}"
+              >
+            </div>
+
+            <button class="btn btn-primary" type="submit">
+              Save ${escapeHTML(plan.title)}
+            </button>
+
+          </form>
+        `).join("")
+      }
+
+    </div>
+  `;
+
+  content.querySelectorAll("[data-plan-form]").forEach(form => {
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+
+      const key = form.dataset.planForm;
+      const button = form.querySelector("button");
+
+      const minimumAmount = Number(form.minimumAmount.value);
+      const maximumRaw = form.maximumAmount.value.trim();
+
+      const durations = form.durations.value
+        .split(",")
+        .map(value => Number(value.trim()))
+        .filter(value => Number.isInteger(value));
+
+      if (!Number.isFinite(minimumAmount) || minimumAmount <= 0) {
+        notify("Enter a valid minimum amount.", "error");
+        return;
+      }
+
+      setLoading(button, true, "Save Plan");
+
+      try {
+        await apiRequest(`/api/admin/plans/${encodeURIComponent(key)}`, {
+          method: "PATCH",
+          body: {
+            title: form.title.value.trim(),
+            minimumAmount,
+            maximumAmount: maximumRaw === "" ? null : Number(maximumRaw),
+            durations,
+            description: form.description.value.trim()
+          }
+        });
+
+        await loadConfiguration();
+
+        notify("Plan updated successfully.", "success");
+      } catch (error) {
+        notify(error.message, "error");
+      } finally {
+        setLoading(button, false, "Save Plan");
+      }
+    });
+  });
+}
+
+/* =====================================================
+   ADMIN: AUDIT LOG
+===================================================== */
+
+async function renderAdminAuditPage() {
+  const content = document.getElementById("pageContent");
+
+  const data = await apiRequest(API.adminAudit);
+  const events = data.events || [];
+
+  content.innerHTML = `
+    <div class="card">
+
+      <h2 class="card-title">Audit Log</h2>
+
+      ${
+        events.length
+          ? `
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Actor</th>
+                    <th>Action</th>
+                    <th>Entity</th>
+                    <th>Entity ID</th>
+                    <th>Previous Status</th>
+                    <th>New Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  ${events.map(item => `
+                    <tr>
+                      <td>${Number(item.id)}</td>
+                      <td>${escapeHTML(item.actor)}</td>
+                      <td>${escapeHTML(item.action)}</td>
+                      <td>${escapeHTML(item.entityType)}</td>
+                      <td>${escapeHTML(item.entityId ?? "-")}</td>
+                      <td>${escapeHTML(item.previousStatus || "-")}</td>
+                      <td>${escapeHTML(item.newStatus || "-")}</td>
+                      <td>${escapeHTML(item.createdAt)}</td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          `
+          : `<div class="empty-state">No audit events found.</div>`
+      }
+
+    </div>
+  `;
+}
+
+/* =====================================================
    LOGOUT
-========================================== */
+===================================================== */
 
 async function handleLogout() {
-  const confirmed = confirm("Are you sure you want to log out?");
-
-  if (!confirmed) return;
+  if (!confirm("Are you sure you want to log out?")) return;
 
   try {
     await apiRequest(API.logout, {
@@ -1931,8 +2370,12 @@ async function handleLogout() {
   renderLogin();
 }
 
-/* ==========================================
-   START APP
-========================================== */
+/* =====================================================
+   INITIALIZE
+===================================================== */
 
-document.addEventListener("DOMContentLoaded", startApp);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", startApp);
+} else {
+  startApp();
+}
