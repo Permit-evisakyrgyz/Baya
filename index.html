@@ -39,122 +39,48 @@ button {
   padding: 12px 16px;
   cursor: pointer;
   font-weight: 700;
-  transition: transform .22s ease, box-shadow .22s ease, filter .22s ease;
 }
 
 button:hover {
   filter: brightness(1.08);
-  transform: translateY(-2px);
 }
-
-button:focus-visible {
-  outline: 2px solid white;
-  outline-offset: 3px;
-}
-
-/* HEADER */
 
 header {
-  padding: 22px;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 15px;
   flex-wrap: wrap;
   background: linear-gradient(120deg, #101c31, #173b65, #101c31);
-  background-size: 200% 200%;
   border-bottom: 1px solid var(--border);
-  box-shadow: 0 8px 25px #0003;
-  animation: headerBackground 12s ease infinite;
-}
-
-@keyframes headerBackground {
-  0%,100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  perspective: 800px;
 }
-
-/* ROTATING STAR */
 
 .logo-symbol {
-  display: inline-grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  flex-shrink: 0;
-  color: #ffd778;
-  font-size: 31px;
-  transform-style: preserve-3d;
-  animation: starRotate 3s linear infinite;
-  filter: drop-shadow(0 0 10px #ffbf5188);
+  color: var(--gold);
+  font-size: 32px;
+  animation: rotateStar 4s linear infinite;
 }
 
-@keyframes starRotate {
-  from {
-    transform: rotateY(0deg) rotateZ(0deg);
-  }
-  to {
-    transform: rotateY(360deg) rotateZ(360deg);
-  }
+@keyframes rotateStar {
+  to { transform: rotate(360deg); }
 }
-
-/* FULL BAYA.COM LOGO MOVEMENT */
 
 .logo-text {
-  display: inline-block;
-  white-space: nowrap;
   font-size: 29px;
   font-weight: 900;
-  letter-spacing: 1px;
   color: #ffbf51;
-  transform-origin: center;
-  transform-style: preserve-3d;
-  backface-visibility: visible;
-  animation:
-    bayaLogoMove 4s ease-in-out infinite,
-    logoGlow 3s ease-in-out infinite;
+  animation: glow 3s ease-in-out infinite;
 }
 
-@keyframes bayaLogoMove {
-  0% {
-    transform: perspective(500px) rotateY(0deg) scale(1);
-  }
-
-  25% {
-    transform: perspective(500px) rotateY(20deg) scale(1.04);
-  }
-
-  50% {
-    transform: perspective(500px) rotateY(0deg) scale(1.06);
-  }
-
-  75% {
-    transform: perspective(500px) rotateY(-20deg) scale(1.04);
-  }
-
-  100% {
-    transform: perspective(500px) rotateY(0deg) scale(1);
-  }
-}
-
-@keyframes logoGlow {
-  0%,100% {
-    text-shadow:
-      0 0 8px #ffbf5144,
-      0 0 15px #ffbf5122;
-  }
-
-  50% {
-    text-shadow:
-      0 0 15px #ffd778cc,
-      0 0 30px #ff912866;
-  }
+@keyframes glow {
+  50% { text-shadow: 0 0 20px #ffd778; }
 }
 
 .subtitle {
@@ -163,411 +89,72 @@ header {
   margin-top: 5px;
 }
 
-/* DASHBOARD BUTTON */
-
-.header-dashboard {
-  position: relative;
-  overflow: hidden;
-  padding: 14px 24px;
-  border-radius: 15px;
-  color: #172238;
-  background: linear-gradient(135deg, #fff0b8, #f5c451, #d99a29);
-  border: 1px solid #ffe7a6cc;
-  box-shadow: 0 7px 20px #f5c45140;
-  font-weight: 800;
-}
-
-.header-dashboard::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 70%;
-  height: 100%;
-  background: linear-gradient(100deg, transparent, #ffffffaa, transparent);
-  transform: skewX(-20deg);
-  animation: dashboardShine 4s ease-in-out infinite;
-}
-
-@keyframes dashboardShine {
-  0%,60% { left: -120%; }
-  100% { left: 160%; }
-}
-
-.header-dashboard:hover {
-  transform: translateY(-4px) scale(1.04);
-  box-shadow: 0 13px 28px #f5c45166;
-}
-
-/* MAIN */
-
 .container {
-  width: min(1280px, 100%);
+  width: min(1200px, 100%);
   margin: auto;
   padding: 20px;
 }
 
 .notice {
   margin-bottom: 20px;
-  padding: 15px 18px;
-  border-radius: 15px;
-  background: linear-gradient(110deg, #382b18, #202a42);
+  padding: 14px;
+  border-radius: 14px;
+  background: #30291e;
   border: 1px solid #8c7545;
   color: #ffe7ae;
   font-size: 13px;
   line-height: 1.7;
-  box-shadow: 0 8px 20px #0002;
 }
 
-/* NAVIGATION */
-
-.nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 12px;
-  margin-bottom: 22px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #142d4b, #091527);
-  border: 1px solid var(--border);
-  box-shadow: 0 12px 28px #0004;
-}
-
-.nav button {
-  color: white;
-  background: linear-gradient(135deg, #234c7a, #142b49);
-  border: 1px solid #42638a;
-  box-shadow: 0 5px 12px #0003;
-}
-
-.nav button:hover {
-  background: linear-gradient(135deg, #168cff, #3159bc);
-  border-color: #83c5ff;
-  box-shadow: 0 10px 22px #168cff44;
-  transform: translateY(-4px);
-}
-
-.nav button.active {
-  color: #172238;
-  background: linear-gradient(135deg, #ffe8a6, #e8ad3e);
-  border-color: #fff0bd;
-  box-shadow: 0 7px 20px #ffc85b4d;
-}
-
-/* PAGES */
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-  animation: pageIn .25s ease;
-}
-
-@keyframes pageIn {
-  from { opacity: .6; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.s12 { grid-column: span 12; }
-.s8 { grid-column: span 8; }
-.s6 { grid-column: span 6; }
-.s4 { grid-column: span 4; }
-
-.card {
-  min-width: 0;
+.card, .auth-card {
   padding: 22px;
   border: 1px solid var(--border);
-  border-radius: 22px;
+  border-radius: 20px;
   background: linear-gradient(145deg, #1b304a, #0e1d30);
   box-shadow: 0 12px 28px #0004;
 }
 
-h2 {
-  font-size: 21px;
-  margin: 0 0 15px;
+.auth-wrap {
+  min-height: 65vh;
+  display: grid;
+  place-items: center;
+  padding: 15px;
 }
 
-h3 { margin: 12px 0; }
-
-.muted {
-  color: var(--muted);
-  line-height: 1.7;
+.auth-card {
+  width: min(450px, 100%);
+  padding: 28px;
 }
 
-.primary {
-  background: linear-gradient(135deg, #ffe5a0, #e9b84c);
-  color: #172238;
-  box-shadow: 0 6px 16px #e9b84c26;
+.auth-card h1 {
+  margin-top: 0;
 }
 
-.secondary {
+.auth-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.auth-tabs button {
+  flex: 1;
   color: white;
-  background: linear-gradient(135deg, #24486f, #172c48);
+  background: #173452;
   border: 1px solid #49678a;
 }
 
-/* WELCOME CARD */
-
-.welcome-card {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  min-height: 285px;
-  padding: 28px;
-  border-radius: 25px;
-  border: 1px solid #85c6ff77;
-  background: linear-gradient(125deg, #1168c9, #168fe9 48%, #173d81);
-  box-shadow: 0 18px 38px #0005, inset 0 1px 0 #ffffff38;
-  transition: transform .28s ease, box-shadow .28s ease;
-}
-
-.welcome-card::after {
-  content: "✦";
-  position: absolute;
-  z-index: -1;
-  right: 20px;
-  top: -15px;
-  font-size: 190px;
-  color: #ffffff18;
-  pointer-events: none;
-}
-
-.welcome-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 25px 45px #0006;
-}
-
-.welcome-card h2 {
-  font-size: 25px;
-  text-shadow: 0 2px 10px #0003;
-}
-
-.welcome-card .muted { color: #e4f2ff; }
-
-.balance {
-  display: inline-block;
-  padding: 8px 0;
-  color: #ffe49a;
-  font-size: clamp(35px, 4vw, 48px);
-  font-weight: 900;
-  text-shadow: 0 4px 15px #0004;
-}
-
-.welcome-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
-  margin-top: 18px;
-}
-
-/* ACCOUNT OVERVIEW */
-
-.overview-card {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  min-height: 285px;
-  padding: 25px;
-  border-radius: 25px;
-  border: 1px solid #c1abff66;
-  background: linear-gradient(145deg, #5136a2, #293c83 55%, #172c55);
-  box-shadow: 0 18px 38px #0005, inset 0 1px 0 #ffffff26;
-  transition: transform .28s ease, box-shadow .28s ease;
-}
-
-.overview-card::after {
-  content: "◈";
-  position: absolute;
-  z-index: -1;
-  right: 5px;
-  bottom: -48px;
-  font-size: 170px;
-  color: #ffffff15;
-  pointer-events: none;
-}
-
-.overview-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 25px 45px #0006;
-}
-
-.overview-card p { line-height: 1.8; }
-.overview-card strong { color: #ffe49a; }
-
-/* SUMMARY CARDS */
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.summary-card {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  min-width: 0;
-  min-height: 155px;
-  padding: 19px;
-  border-radius: 19px;
-  border: 1px solid #ffffff35;
-  box-shadow: 0 10px 23px #0003;
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-
-.summary-card::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  right: -40px;
-  bottom: -55px;
-  background: #ffffff20;
-}
-
-.summary-card:hover {
-  transform: translateY(-7px);
-  box-shadow: 0 17px 30px #0005;
-}
-
-.summary-icon {
-  display: grid;
-  place-items: center;
-  width: 47px;
-  height: 47px;
-  border-radius: 14px;
-  background: #ffffff2b;
-  border: 1px solid #ffffff40;
-  font-size: 26px;
-  box-shadow: 0 5px 13px #0002;
-}
-
-.summary-card span {
-  display: block;
-  color: white;
-  font-size: 13px;
-  font-weight: 700;
-  margin-top: 13px;
-}
-
-.summary-card strong {
-  display: block;
-  color: white;
-  font-size: 25px;
-  margin-top: 8px;
-  overflow-wrap: anywhere;
-}
-
-.deposit-card { background: linear-gradient(135deg, #087f8c, #20c9b5); }
-.withdraw-card { background: linear-gradient(135deg, #2455a4, #438df5); }
-.referral-card { background: linear-gradient(135deg, #7638b8, #bd68f5); }
-.profit-card { background: linear-gradient(135deg, #b77812, #f5c451); }
-
-/* PLAN CARDS */
-
-.plan-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.plan {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  min-width: 0;
-  min-height: 235px;
-  padding: 17px;
-  border-radius: 21px;
-  border: 1px solid #ffffff40;
-  background: #172a42;
-  box-shadow: 0 10px 22px #0004, inset 0 1px 0 #ffffff22;
-  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
-}
-
-.plan::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  background: linear-gradient(135deg, #294c71, #102038);
-}
-
-.plan::after {
-  content: attr(data-symbol);
-  position: absolute;
-  z-index: -1;
-  right: -7px;
-  bottom: -25px;
-  font-size: clamp(100px, 12vw, 155px);
-  line-height: 1;
-  opacity: .20;
-  filter: drop-shadow(0 8px 12px #0006);
-  transform: rotate(-12deg);
-  pointer-events: none;
-}
-
-.plan:hover {
-  transform: translateY(-9px) scale(1.025);
-  box-shadow: 0 23px 38px #0007, 0 0 24px #f4c96b22;
-  border-color: var(--gold);
-}
-
-.plan .icon {
-  width: 49px;
-  height: 49px;
-  display: grid;
-  place-items: center;
-  border-radius: 15px;
-  font-size: 29px;
-  background: #ffffff25;
-  border: 1px solid #ffffff45;
-  box-shadow: 0 5px 14px #0003;
-}
-
-.plan h3 { font-size: 18px; }
-
-.plan .price {
-  color: #ffe49a;
-  font-size: 28px;
-  font-weight: 900;
-  margin: 12px 0;
-  text-shadow: 0 2px 10px #0005;
-}
-
-.plan .rate {
-  color: #edf4ff;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.plan button {
-  width: 100%;
-  margin-top: 13px;
-  background: linear-gradient(135deg, #ffe8ae, #edbd57);
+.auth-tabs button.active {
   color: #172238;
+  background: linear-gradient(135deg, #ffe8a6, #e8ad3e);
 }
 
-.plan-starter::before { background: linear-gradient(135deg, #35714c, #102c25 85%); }
-.plan-basic::before { background: linear-gradient(135deg, #2877bd, #102746 85%); }
-.plan-silver::before { background: linear-gradient(135deg, #8296a9, #29394c 85%); }
-.plan-gold::before { background: linear-gradient(135deg, #b68a32, #473016 85%); }
-.plan-platinum::before { background: linear-gradient(135deg, #657dc0, #24294b 85%); }
-.plan-bright::before { background: linear-gradient(135deg, #9b60c1, #34204d 85%); }
-.plan-shining::before { background: linear-gradient(135deg, #c6a52c, #4a3713 85%); }
-.plan-sun-rising::before { background: linear-gradient(135deg, #ed7a39, #632b19 85%); }
+.form-view {
+  display: none;
+}
 
-/* FORMS */
+.form-view.active {
+  display: block;
+}
 
 label {
   display: block;
@@ -578,60 +165,223 @@ label {
 
 input, select {
   width: 100%;
-  min-width: 0;
   padding: 12px;
-  border-radius: 11px;
+  border-radius: 10px;
   border: 1px solid #435b78;
   background: #091727;
   color: white;
-  font-size: 15px;
 }
 
-input:focus, select:focus {
-  outline: 2px solid #69b8ff;
-  outline-offset: 1px;
+.primary {
+  color: #172238;
+  background: linear-gradient(135deg, #ffe5a0, #e9b84c);
 }
 
-.full { width: 100%; margin-top: 14px; }
+.secondary {
+  color: white;
+  background: linear-gradient(135deg, #24486f, #172c48);
+  border: 1px solid #49678a;
+}
 
-.copyrow {
+.full {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.small-link {
+  display: block;
+  margin-top: 16px;
+  text-align: center;
+  color: #a8d6ff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.message {
+  display: none;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #422d25;
+  color: #ffe7ae;
+  overflow-wrap: anywhere;
+}
+
+.message.show {
+  display: block;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.nav {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 16px;
+  background: #10233b;
+  border: 1px solid var(--border);
 }
 
-.copyrow input { flex: 1; min-width: 0; }
+.nav button {
+  flex: 1 1 120px;
+  color: white;
+  background: #23466e;
+  border: 1px solid #42638a;
+}
 
-.copyrow button {
-  background: var(--gold);
+.nav button.active {
+  color: #172238;
+  background: linear-gradient(135deg, #ffe8a6, #e8ad3e);
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.s12 { grid-column: span 12; }
+.s8  { grid-column: span 8; }
+.s6  { grid-column: span 6; }
+.s4  { grid-column: span 4; }
+
+.welcome-card, .overview-card {
+  min-height: 240px;
+  padding: 25px;
+  border-radius: 22px;
+  background: linear-gradient(125deg, #1168c9, #168fe9, #173d81);
+  border: 1px solid #85c6ff77;
+}
+
+.overview-card {
+  background: linear-gradient(145deg, #5136a2, #293c83, #172c55);
+}
+
+h2 {
+  font-size: 21px;
+  margin-top: 0;
+}
+
+.muted {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.balance {
+  display: block;
+  margin: 12px 0;
+  color: #ffe49a;
+  font-size: clamp(32px, 5vw, 46px);
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.stats, .plan-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.summary-card {
+  min-width: 0;
+  padding: 17px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #087f8c, #20c9b5);
+  overflow-wrap: anywhere;
+}
+
+.summary-card span {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.summary-card strong {
+  font-size: 21px;
+}
+
+.withdraw-card {
+  background: linear-gradient(135deg, #2455a4, #438df5);
+}
+
+.referral-card {
+  background: linear-gradient(135deg, #7638b8, #bd68f5);
+}
+
+.profit-card {
+  background: linear-gradient(135deg, #b77812, #f5c451);
+}
+
+.plan {
+  padding: 16px;
+  border-radius: 17px;
+  border: 1px solid #ffffff40;
+  background: linear-gradient(135deg, #294c71, #102038);
+  min-width: 0;
+}
+
+.plan h3 {
+  margin-bottom: 8px;
+}
+
+.plan .price {
+  color: #ffe49a;
+  font-size: 25px;
+  font-weight: 900;
+}
+
+.plan button {
+  width: 100%;
+  margin-top: 12px;
+  background: linear-gradient(135deg, #ffe8ae, #edbd57);
   color: #172238;
 }
 
-.address { overflow-wrap: anywhere; }
-
-/* TABLES */
-
-.table-wrap { overflow-x: auto; }
+.table-wrap {
+  overflow-x: auto;
+}
 
 table {
   width: 100%;
-  min-width: 520px;
+  min-width: 500px;
   border-collapse: collapse;
 }
 
 th, td {
   text-align: left;
-  padding: 13px 9px;
+  padding: 12px 8px;
   border-bottom: 1px solid var(--border);
   font-size: 13px;
 }
 
-th { color: var(--gold); }
+th {
+  color: var(--gold);
+}
 
 footer {
   text-align: center;
-  padding: 28px 10px;
-  font-size: 12px;
+  padding: 25px 10px;
   color: var(--muted);
+  font-size: 12px;
 }
 
 #toast {
@@ -640,91 +390,44 @@ footer {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 13px 19px;
+  padding: 13px 18px;
   background: var(--gold);
   color: #172238;
   border-radius: 12px;
   font-weight: 700;
   z-index: 100;
   max-width: 90%;
-  box-shadow: 0 8px 25px #0005;
 }
 
-/* RESPONSIVE */
-
-@media(max-width: 950px) {
+@media(max-width: 850px) {
   .stats, .plan-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .s8, .s6, .s4 { grid-column: span 6; }
+  .s8, .s6, .s4 {
+    grid-column: span 6;
+  }
 }
 
 @media(max-width: 600px) {
-  .container { padding: 11px; }
+  .container { padding: 10px; }
   header { padding: 15px; }
   .logo-text { font-size: 24px; }
-  .logo-symbol { font-size: 26px; width: 34px; height: 34px; }
-  .header-dashboard { padding: 11px 17px; }
 
-  .nav {
-    padding: 9px;
-    gap: 8px;
-    border-radius: 15px;
+  .s8, .s6, .s4 {
+    grid-column: span 12;
   }
 
-  .nav button {
-    flex: 1 1 40%;
-    padding: 11px 8px;
-    font-size: 12px;
+  .stats, .plan-grid {
+    gap: 9px;
   }
-
-  .s8, .s6, .s4 { grid-column: span 12; }
-
-  .welcome-card, .overview-card {
-    min-height: auto;
-    padding: 21px;
-    border-radius: 21px;
-  }
-
-  .welcome-card h2 { font-size: 21px; }
-  .balance { font-size: 35px; }
-
-  .stats, .plan-grid { gap: 10px; }
 
   .summary-card {
-    padding: 13px;
-    min-height: 137px;
-    border-radius: 16px;
-  }
-
-  .summary-card strong { font-size: 21px; }
-  .summary-card span { font-size: 12px; }
-
-  .plan {
     padding: 12px;
-    min-height: 220px;
-    border-radius: 17px;
   }
 
-  .plan .price { font-size: 23px; }
-  .plan h3 { font-size: 16px; }
-
-  .copyrow { flex-wrap: wrap; }
-  .copyrow button { width: 100%; }
-}
-
-@media(prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation: none !important;
-    transition: none !important;
-  }
-
-  .plan:hover,
-  .summary-card:hover,
-  .welcome-card:hover,
-  .overview-card:hover {
-    transform: none;
+  .summary-card strong {
+    font-size: 18px;
   }
 }
 </style>
@@ -735,316 +438,498 @@ footer {
 <header>
   <div>
     <div class="brand">
-      <span class="logo-symbol" aria-hidden="true">✦</span>
+      <span class="logo-symbol">✦</span>
       <span class="logo-text">BAYA.COM</span>
     </div>
-    <div class="subtitle">Account Dashboard</div>
+    <div class="subtitle">Secure Account Dashboard</div>
   </div>
 
-  <button class="header-dashboard" onclick="openPage('dashboard')">
-    Dashboard
+  <button id="logoutButton"
+          class="secondary hidden"
+          type="button"
+          onclick="logout()">
+    Logout
   </button>
 </header>
 
-<div class="container">
+<main class="container">
 
-<div class="notice">
-  Review applicable terms, fees, eligibility rules and transaction status
-  before making financial decisions. Returns are not guaranteed.
-</div>
-
-<nav class="nav">
-  <button class="active" data-page="dashboard" onclick="openPage('dashboard')">Dashboard</button>
-  <button data-page="deposit" onclick="openPage('deposit')">Deposit</button>
-  <button data-page="withdraw" onclick="openPage('withdraw')">Withdrawal</button>
-  <button data-page="plans" onclick="openPage('plans')">Investment Plans</button>
-  <button data-page="referral" onclick="openPage('referral')">Referral Bonus</button>
-  <button data-page="history" onclick="openPage('history')">Transactions</button>
-  <button data-page="profile" onclick="openPage('profile')">Profile</button>
-  <button data-page="admin" onclick="openPage('admin')">Admin Interface</button>
-</nav>
-
-<!-- DASHBOARD -->
-<section id="dashboard" class="page active">
-<div class="grid">
-
-  <div class="welcome-card s8">
-    <h2>Welcome to BAYA.COM</h2>
-    <div class="muted">Account Balance</div>
-    <div class="balance" id="balance">$1,000.00</div>
-    <p class="muted">Account summary and available actions.</p>
-
-    <div class="welcome-actions">
-      <button class="primary" onclick="openPage('deposit')">Deposit</button>
-      <button class="secondary" onclick="openPage('withdraw')">Withdrawal</button>
-      <button class="secondary" onclick="openPage('plans')">View Plans</button>
-    </div>
+  <div class="notice">
+    This interface requires a verified backend connection.
+    Displayed plans are examples, not guaranteed returns.
+    Do not send funds until the service and payment details
+    have been independently verified.
   </div>
 
-  <div class="overview-card s4">
-    <h2>Account Overview</h2>
-    <p class="muted">Account interface</p>
-    <p>Selected Plan: <strong id="selectedPlan">None</strong></p>
-    <p>Daily Estimate: <strong id="dailyEstimate">$0.00</strong></p>
-    <button class="secondary" onclick="openPage('profile')">Profile Settings</button>
-  </div>
+  <!-- LOGIN AND REGISTRATION -->
 
-  <div class="card s12">
-    <h2>Quick Summary</h2>
+  <section id="authScreen" class="auth-wrap">
+    <div class="auth-card">
 
-    <div class="stats">
-      <div class="summary-card deposit-card">
-        <div class="summary-icon">💰</div>
-        <span>Deposit Requests</span>
-        <strong id="depositTotal">$0.00</strong>
+      <h1>Welcome to BAYA.COM</h1>
+
+      <p class="muted">
+        Login to your account or register as a new user.
+      </p>
+
+      <div class="auth-tabs">
+        <button id="loginTab"
+                class="active"
+                type="button"
+                onclick="showAuth('login')">
+          Login
+        </button>
+
+        <button id="registerTab"
+                type="button"
+                onclick="showAuth('register')">
+          Register
+        </button>
       </div>
 
-      <div class="summary-card withdraw-card">
-        <div class="summary-icon">💸</div>
-        <span>Withdrawal Requests</span>
-        <strong id="withdrawTotal">$0.00</strong>
+      <form id="loginForm" class="form-view active">
+
+        <label for="loginEmail">Email Address</label>
+        <input id="loginEmail"
+               type="email"
+               autocomplete="username"
+               required>
+
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword"
+               type="password"
+               autocomplete="current-password"
+               required>
+
+        <button class="primary full" type="submit">
+          Login to Account
+        </button>
+
+        <span class="small-link"
+              onclick="showAuth('register')">
+          Create a new account
+        </span>
+
+      </form>
+
+      <form id="registerForm" class="form-view">
+
+        <label for="registerName">Full Name</label>
+        <input id="registerName"
+               type="text"
+               maxlength="100"
+               autocomplete="name"
+               required>
+
+        <label for="registerEmail">Email Address</label>
+        <input id="registerEmail"
+               type="email"
+               autocomplete="email"
+               required>
+
+        <label for="registerPassword">Password</label>
+        <input id="registerPassword"
+               type="password"
+               minlength="8"
+               autocomplete="new-password"
+               required>
+
+        <label for="confirmPassword">Confirm Password</label>
+        <input id="confirmPassword"
+               type="password"
+               minlength="8"
+               autocomplete="new-password"
+               required>
+
+        <button class="primary full" type="submit">
+          Create Account
+        </button>
+
+        <span class="small-link"
+              onclick="showAuth('login')">
+          Already registered? Login
+        </span>
+
+      </form>
+
+      <div id="authMessage"
+           class="message"
+           role="status"
+           aria-live="polite">
       </div>
 
-      <div class="summary-card referral-card">
-        <div class="summary-icon">🎁</div>
-        <span>Referral Bonus</span>
-        <strong>8%</strong>
+    </div>
+  </section>
+
+  <!-- USER APPLICATION -->
+
+  <section id="appScreen" class="hidden">
+
+    <nav class="nav">
+
+      <button class="active"
+              data-page="dashboard"
+              onclick="openPage('dashboard')">
+        Dashboard
+      </button>
+
+      <button data-page="deposit"
+              onclick="openPage('deposit')">
+        Deposit
+      </button>
+
+      <button data-page="withdraw"
+              onclick="openPage('withdraw')">
+        Withdrawal
+      </button>
+
+      <button data-page="plans"
+              onclick="openPage('plans')">
+        Investment Plans
+      </button>
+
+      <button data-page="referral"
+              onclick="openPage('referral')">
+        Referral Bonus
+      </button>
+
+      <button data-page="history"
+              onclick="openPage('history')">
+        Transactions
+      </button>
+
+      <button data-page="profile"
+              onclick="openPage('profile')">
+        Profile
+      </button>
+
+    </nav>
+
+    <!-- DASHBOARD -->
+
+    <section id="dashboard" class="page active">
+
+      <div class="grid">
+
+        <div class="welcome-card s8">
+
+          <h2 id="welcomeTitle">Welcome to BAYA.COM</h2>
+
+          <p class="muted">Account Balance</p>
+
+          <div class="balance" id="balance">
+            Not available
+          </div>
+
+          <p class="muted">
+            Your actual balance must be supplied by the server.
+          </p>
+
+          <div class="welcome-actions">
+
+            <button class="primary"
+                    onclick="openPage('deposit')">
+              Deposit
+            </button>
+
+            <button class="secondary"
+                    onclick="openPage('withdraw')">
+              Withdrawal
+            </button>
+
+            <button class="secondary"
+                    onclick="openPage('plans')">
+              View Plans
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="overview-card s4">
+
+          <h2>Account Overview</h2>
+
+          <p>Name: <strong id="overviewName">—</strong></p>
+
+          <p>Email: <strong id="overviewEmail">—</strong></p>
+
+          <p>
+            Selected Plan:
+            <strong id="selectedPlan">None</strong>
+          </p>
+
+          <button class="secondary"
+                  onclick="openPage('profile')">
+            Profile Settings
+          </button>
+
+        </div>
+
+        <div class="card s12">
+
+          <h2>Quick Summary</h2>
+
+          <div class="stats">
+
+            <div class="summary-card">
+              <span>Deposit Requests</span>
+              <strong id="depositTotal">—</strong>
+            </div>
+
+            <div class="summary-card withdraw-card">
+              <span>Withdrawal Requests</span>
+              <strong id="withdrawTotal">—</strong>
+            </div>
+
+            <div class="summary-card referral-card">
+              <span>Referral Bonus</span>
+              <strong>8% example</strong>
+            </div>
+
+            <div class="summary-card profit-card">
+              <span>Daily Rate</span>
+              <strong>Not configured</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="card s12">
+
+          <h2>Featured Plans</h2>
+
+          <div class="plan-grid" id="featuredPlans"></div>
+
+          <br>
+
+          <button class="primary"
+                  onclick="openPage('plans')">
+            View All Plans
+          </button>
+
+        </div>
+
       </div>
 
-      <div class="summary-card profit-card">
-        <div class="summary-icon">📈</div>
-        <span>Daily Profit</span>
-        <strong id="rateLabel">1%</strong>
+    </section>
+
+    <!-- DEPOSIT -->
+
+    <section id="deposit" class="page">
+
+      <div class="card">
+
+        <h2>Deposit Request</h2>
+
+        <form id="depositForm">
+
+          <label for="depositAmount">Amount (USD)</label>
+
+          <input id="depositAmount"
+                 type="number"
+                 min="1"
+                 step="0.01"
+                 required>
+
+          <label for="depositMethod">Payment Method</label>
+
+          <select id="depositMethod">
+            <option>USDT (TRC20)</option>
+            <option>Bank Transfer</option>
+            <option>Mobile Wallet</option>
+          </select>
+
+          <label for="depositTxid">
+            Transaction Reference
+          </label>
+
+          <input id="depositTxid"
+                 maxlength="200">
+
+          <button class="primary full" type="submit">
+            Submit Deposit Request
+          </button>
+
+        </form>
+
+        <p class="muted">
+          A request must be verified by the server.
+          This form does not confirm receipt of funds.
+        </p>
+
       </div>
-    </div>
-  </div>
 
-  <div class="card s12">
-    <h2>Investment Plans</h2>
-    <div class="plan-grid" id="featuredPlans"></div>
-    <br>
-    <button class="primary" onclick="openPage('plans')">View All Plans</button>
-  </div>
+    </section>
 
-</div>
-</section>
+    <!-- WITHDRAWAL -->
 
-<!-- DEPOSIT -->
-<section id="deposit" class="page">
-<div class="grid">
+    <section id="withdraw" class="page">
 
-  <div class="card s6">
-    <h2>Deposit Request</h2>
+      <div class="card">
 
-    <label for="depositAmount">Amount (USD)</label>
-    <input id="depositAmount" type="number" min="1" step="0.01" placeholder="Enter amount">
+        <h2>Withdrawal Request</h2>
 
-    <label for="depositMethod">Payment Method</label>
-    <select id="depositMethod">
-      <option>USDT (TRC20)</option>
-      <option>Bank Transfer</option>
-      <option>Mobile Wallet</option>
-    </select>
+        <form id="withdrawForm">
 
-    <label for="depositTxid">Transaction ID (TXID)</label>
-    <input id="depositTxid" placeholder="Enter transaction reference">
+          <label for="withdrawAmount">Amount (USD)</label>
 
-    <button class="primary full" onclick="submitDeposit()">Submit Deposit Request</button>
-  </div>
+          <input id="withdrawAmount"
+                 type="number"
+                 min="1"
+                 step="0.01"
+                 required>
 
-  <div class="card s6">
-    <h2>USDT Deposit Address</h2>
-    <p class="muted">Network: TRON (TRC20)</p>
+          <label for="withdrawDestination">
+            Destination Address or Account
+          </label>
 
-    <div class="copyrow">
-      <input id="depositAddress" value="TFEdkrQRfTWnu4RrkHHAugsKRwgNtbhBHT" readonly>
-      <button onclick="copyAddress()">Copy</button>
-    </div>
+          <input id="withdrawDestination"
+                 maxlength="200"
+                 required>
 
-    <p class="muted address">
-      Verify the network and address before sending funds.
-      A transaction reference alone does not prove receipt.
-    </p>
-  </div>
+          <button class="primary full" type="submit">
+            Submit Withdrawal Request
+          </button>
 
-</div>
-</section>
+        </form>
 
-<!-- WITHDRAWAL -->
-<section id="withdraw" class="page">
-<div class="grid">
+        <p class="muted">
+          The server must verify the account, balance,
+          eligibility and approval before processing a request.
+        </p>
 
-  <div class="card s6">
-    <h2>Withdrawal Request</h2>
+      </div>
 
-    <label for="withdrawAmount">Amount (USD)</label>
-    <input id="withdrawAmount" type="number" min="1" step="0.01" placeholder="Enter amount">
+    </section>
 
-    <label for="withdrawDestination">Destination Address / Account</label>
-    <input id="withdrawDestination" placeholder="Enter destination">
+    <!-- INVESTMENT PLANS -->
 
-    <button class="primary full" onclick="submitWithdrawal()">Submit Withdrawal Request</button>
-  </div>
+    <section id="plans" class="page">
 
-  <div class="card s6">
-    <h2>Withdrawal Information</h2>
-    <p class="muted">
-      Requests require verified balances, account eligibility,
-      applicable fees and server-side approval.
-    </p>
-  </div>
+      <div class="card">
 
-</div>
-</section>
+        <h2>Investment Plans</h2>
 
-<!-- INVESTMENT PLANS -->
-<section id="plans" class="page">
-<div class="card">
-  <h2>Investment Plans</h2>
-  <p class="muted">
-    The daily percentage is a calculation setting, not a guaranteed return.
-  </p>
-  <div class="plan-grid" id="allPlans"></div>
-</div>
-</section>
+        <p class="muted">
+          These are display examples. Returns are not guaranteed.
+        </p>
 
-<!-- REFERRAL -->
-<section id="referral" class="page">
-<div class="grid">
+        <div class="plan-grid" id="allPlans"></div>
 
-  <div class="card s6">
-    <h2>Referral Bonus</h2>
-    <p class="muted">One-time referral bonus calculation at 8%.</p>
+      </div>
 
-    <label for="referralAmount">Qualifying Amount (USD)</label>
-    <input id="referralAmount" type="number" min="0" step="0.01" placeholder="Enter amount">
+    </section>
 
-    <label for="referralCode">Referral Code</label>
-    <div class="copyrow">
-      <input id="referralCode" value="BAYA-REF-001" readonly>
-      <button onclick="copyReferral()">Copy</button>
-    </div>
+    <!-- REFERRAL -->
 
-    <button class="primary full" onclick="calculateReferral()">Calculate 8% Bonus</button>
+    <section id="referral" class="page">
 
-    <div class="summary-card referral-card" style="margin-top:18px">
-      <span>Calculated Bonus</span>
-      <strong id="referralResult">$0.00</strong>
-    </div>
-  </div>
+      <div class="card">
 
-  <div class="card s6">
-    <h2>Referral Details</h2>
-    <p>Referral Bonus: <strong>8%</strong></p>
-    <p>Frequency: <strong>One time</strong></p>
-    <p class="muted">Eligibility and actual crediting must be verified by the server.</p>
-  </div>
+        <h2>Referral Calculator</h2>
 
-</div>
-</section>
+        <label for="referralAmount">
+          Qualifying Amount (USD)
+        </label>
 
-<!-- TRANSACTIONS -->
-<section id="history" class="page">
-<div class="card">
-  <h2>Transaction History</h2>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Type</th>
-          <th>Amount</th>
-          <th>Reference</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="historyRows">
-        <tr><td colspan="5">No transactions available.</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-</section>
+        <input id="referralAmount"
+               type="number"
+               min="0"
+               step="0.01">
 
-<!-- PROFILE -->
-<section id="profile" class="page">
-<div class="grid">
+        <button class="primary full"
+                onclick="calculateReferral()">
+          Calculate Example Bonus
+        </button>
 
-  <div class="card s6">
-    <h2>Profile Settings</h2>
+        <p>
+          Example Result:
+          <strong id="referralResult">—</strong>
+        </p>
 
-    <label for="profileName">Full Name</label>
-    <input id="profileName" placeholder="Enter name">
+        <p class="muted">
+          This calculation does not credit a real bonus.
+        </p>
 
-    <label for="profileEmail">Email</label>
-    <input id="profileEmail" type="email" placeholder="Enter email">
+      </div>
 
-    <button class="primary full" onclick="saveProfile()">Save Profile</button>
-    <p id="profileMessage" class="muted"></p>
-  </div>
+    </section>
 
-  <div class="card s6">
-    <h2>Account Security</h2>
-    <p class="muted">
-      Authentication, password management and permissions must be enforced by the backend.
-    </p>
-    <button class="secondary" onclick="openPage('dashboard')">Back to Dashboard</button>
-  </div>
+    <!-- TRANSACTIONS -->
 
-</div>
-</section>
+    <section id="history" class="page">
 
-<!-- ADMIN INTERFACE -->
-<section id="admin" class="page">
-<div class="grid">
+      <div class="card">
 
-  <div class="card s6">
-    <h2>Admin Overview</h2>
-    <p class="muted">
-      Administrative access must be protected by server-side authentication.
-    </p>
-    <div class="summary-card deposit-card">
-      <span>Requests in this interface</span>
-      <strong id="adminCount">0</strong>
-    </div>
-  </div>
+        <h2>Transaction History</h2>
 
-  <div class="card s6">
-    <h2>Display Settings</h2>
+        <div class="table-wrap">
 
-    <label for="dailyRate">Daily Profit (%)</label>
-    <input id="dailyRate" type="number" min="0" max="100" step="0.1" value="1">
+          <table>
 
-    <button class="primary full" onclick="updateRate()">Update Display Rate</button>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Reference</th>
+                <th>Status</th>
+              </tr>
+            </thead>
 
-    <p class="muted">This setting changes the displayed calculation only.</p>
-  </div>
+            <tbody id="historyRows">
+              <tr>
+                <td colspan="5">No transaction data loaded.</td>
+              </tr>
+            </tbody>
 
-  <div class="card s12">
-    <h2>Requests Overview</h2>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Reference</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="adminRows">
-          <tr><td colspan="5">No requests available.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+          </table>
 
-</div>
-</section>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- PROFILE -->
+
+    <section id="profile" class="page">
+
+      <div class="card">
+
+        <h2>Profile Settings</h2>
+
+        <label for="profileName">Full Name</label>
+
+        <input id="profileName" maxlength="100">
+
+        <label for="profileEmail">Email Address</label>
+
+        <input id="profileEmail" type="email" readonly>
+
+        <button class="primary full"
+                onclick="saveProfile()">
+          Save Profile
+        </button>
+
+        <p id="profileMessage" class="muted"></p>
+
+        <button class="secondary full"
+                onclick="logout()">
+          Logout
+        </button>
+
+      </div>
+
+    </section>
+
+  </section>
+
+</main>
 
 <footer>BAYA.COM · Account Dashboard</footer>
-</div>
 
 <div id="toast" role="status" aria-live="polite"></div>
 
@@ -1052,9 +937,29 @@ footer {
 "use strict";
 
 /*
-  Frontend interface only.
-  Connect authenticated backend APIs before using real accounts or money.
+  BACKEND CONNECTION SETTINGS
+
+  IMPORTANT:
+  API_BASE must be the actual Replit backend origin.
+  The example API routes below are NOT verified against your server.js.
+  They must match the routes already implemented in your backend.
+
+  Use secure HttpOnly session cookies on the backend.
+  Do not save passwords or session tokens in localStorage.
 */
+
+const API_BASE = "https://YOUR-REPLIT-BACKEND-URL";
+
+const API = {
+  register: "/api/register",
+  login: "/api/login",
+  me: "/api/me",
+  logout: "/api/logout",
+  profile: "/api/profile",
+  deposit: "/api/deposits",
+  withdrawal: "/api/withdrawals",
+  transactions: "/api/transactions"
+};
 
 const plans = [
   {name:"Starter", amount:10, icon:"🌱"},
@@ -1067,255 +972,2269 @@ const plans = [
   {name:"Sun Rising", amount:2000, icon:"☀️"}
 ];
 
-const state = {
-  balance: 1000,
-  depositTotal: 0,
-  withdrawTotal: 0,
-  rate: 1,
-  selectedPlan: null,
-  transactions: []
-};
+let currentUser = null;
+let selectedPlan = null;
+
+const $ = id => document.getElementById(id);
+
+function showAuth(mode, message = "") {
+
+  $("loginForm").classList.toggle(
+    "active", mode === "login"
+  );
+
+  $("registerForm").classList.toggle(
+    "active", mode === "register"
+  );
+
+  $("loginTab").classList.toggle(
+    "active", mode === "login"
+  );
+
+  $("registerTab").classList.toggle(
+    "active", mode === "register"
+  );
+
+  $("authMessage").textContent = message;
+
+  $("authMessage").classList.toggle(
+    "show", Boolean(message)
+  );
+}
+
+function showMessage(message) {
+  $("authMessage").textContent = message;
+  $("authMessage").classList.add("show");
+}
+
+function toast(message) {
+
+  $("toast").textContent = message;
+  $("toast").style.display = "block";
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer = setTimeout(() => {
+    $("toast").style.display = "none";
+  }, 3000);
+}
 
 function money(value) {
-  return "$" + Number(value).toLocaleString("en-US", {
+
+  const amount = Number(value);
+
+  if (!Number.isFinite(amount)) {
+    return "Not available";
+  }
+
+  return "$" + amount.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
 }
 
-function toast(message) {
-  const element = document.getElementById("toast");
-  element.textContent = message;
-  element.style.display = "block";
+function apiUrl(path) {
 
-  clearTimeout(window.toastTimer);
-  window.toastTimer = setTimeout(() => {
-    element.style.display = "none";
-  }, 2600);
+  if (
+    !API_BASE ||
+    API_BASE.includes("YOUR-REPLIT-BACKEND-URL")
+  ) {
+    throw new Error(
+      "Backend URL is not configured yet."
+    );
+  }
+
+  return API_BASE.replace(/\/$/, "") + path;
 }
 
+async function apiRequest(path, options = {}) {
+
+  const response = await fetch(apiUrl(path), {
+
+    method: options.method || "GET",
+
+    credentials: "include",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: options.body
+      ? JSON.stringify(options.body)
+      : undefined
+
+  });
+
+  let data = {};
+
+  try {
+    data = await response.json();
+  } catch (_) {}
+
+  if (!response.ok) {
+    throw new Error(
+      data.message ||
+      data.error ||
+      "Request failed: " + response.status
+    );
+  }
+
+  return data;
+}
+
+function extractUser(data) {
+
+  return (
+    data.user ||
+    data.account ||
+    data.data?.user ||
+    data.data ||
+    data
+  );
+}
+
+/* LOGIN */
+
+$("loginForm").addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  const email = $("loginEmail").value.trim();
+  const password = $("loginPassword").value;
+
+  const button =
+    $("loginForm").querySelector('button[type="submit"]');
+
+  button.disabled = true;
+  button.textContent = "Signing in...";
+
+  try {
+
+    const data = await apiRequest(API.login, {
+      method: "POST",
+      body: { email, password }
+    });
+
+    const user = extractUser(data);
+
+    if (
+      !user ||
+      !(user.id || user.email || user.name || user.username)
+    ) {
+      throw new Error(
+        "Login response format needs to match the backend."
+      );
+    }
+
+    setAuthenticated(user);
+
+    toast("Login successful");
+
+  } catch (error) {
+
+    showMessage(error.message);
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = "Login to Account";
+
+  }
+
+});
+
+/* REGISTRATION */
+
+$("registerForm").addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  const name = $("registerName").value.trim();
+  const email = $("registerEmail").value.trim();
+  const password = $("registerPassword").value;
+  const confirm = $("confirmPassword").value;
+
+  if (password.length < 8) {
+    showMessage("Password must contain at least 8 characters.");
+    return;
+  }
+
+  if (password !== confirm) {
+    showMessage("Passwords do not match.");
+    return;
+  }
+
+  const button =
+    $("registerForm").querySelector('button[type="submit"]');
+
+  button.disabled = true;
+  button.textContent = "Creating account...";
+
+  try {
+
+    const data = await apiRequest(API.register, {
+      method: "POST",
+      body: { name, email, password }
+    });
+
+    const user = extractUser(data);
+
+    if (
+      user &&
+      (user.id || user.email || user.name || user.username)
+    ) {
+
+      setAuthenticated(user);
+
+      toast("Account created successfully");
+
+    } else {
+
+      $("loginEmail").value = email;
+
+      showAuth(
+        "login",
+        "Registration response received. Please log in."
+      );
+
+    }
+
+  } catch (error) {
+
+    showMessage(error.message);
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = "Create Account";
+
+  }
+
+});
+
+/* AUTHENTICATED DASHBOARD */
+
+function setAuthenticated(user) {
+
+  currentUser = user || {};
+
+  $("authScreen").classList.add("hidden");
+  $("appScreen").classList.remove("hidden");
+  $("logoutButton").classList.remove("hidden");
+
+  const name =
+    currentUser.name ||
+    currentUser.fullName ||
+    currentUser.username ||
+    "User";
+
+  const email = currentUser.email || "";
+
+  $("welcomeTitle").textContent = "Welcome, " + name;
+  $("overviewName").textContent = name;
+  $("overviewEmail").textContent = email || "—";
+
+  $("profileName").value =
+    name === "User" ? "" : name;
+
+  $("profileEmail").value = email;
+
+  openPage("dashboard");
+
+  loadAccountData();
+
+}
+
+function showLoggedOut() {
+
+  currentUser = null;
+
+  $("authScreen").classList.remove("hidden");
+  $("appScreen").classList.add("hidden");
+  $("logoutButton").classList.add("hidden");
+
+  showAuth("login");
+
+}
+
+async function logout() {
+
+  try {
+
+    await apiRequest(API.logout, {
+      method: "POST",
+      body: {}
+    });
+
+  } catch (error) {
+
+    console.warn("Logout endpoint:", error.message);
+
+  }
+
+  showLoggedOut();
+
+  toast("Logged out");
+
+}
+
+/* PAGE NAVIGATION */
+
 function openPage(id) {
-  const page = document.getElementById(id);
+
+  const page = $(id);
+
   if (!page) return;
 
   document.querySelectorAll(".page").forEach(item => {
-    item.classList.toggle("active", item.id === id);
+
+    item.classList.toggle(
+      "active",
+      item.id === id
+    );
+
   });
 
   document.querySelectorAll(".nav button").forEach(button => {
-    button.classList.toggle("active", button.dataset.page === id);
+
+    button.classList.toggle(
+      "active",
+      button.dataset.page === id
+    );
+
   });
 
-  window.scrollTo({top: 0, behavior: "smooth"});
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
 }
 
+/* INVESTMENT PLAN DISPLAY */
+
 function planCard(plan) {
-  const slug = plan.name.toLowerCase().replace(/\s+/g, "-");
-  const dailyAmount = plan.amount * state.rate / 100;
 
   return `
-    <div class="plan plan-${slug}" data-symbol="${plan.icon}">
-      <div class="icon">${plan.icon}</div>
+    <div class="plan">
+
+      <div style="font-size:28px">${plan.icon}</div>
+
       <h3>${plan.name}</h3>
-      <div class="price">$${plan.amount.toLocaleString("en-US")}</div>
-      <div class="rate">
-        Daily calculation at ${state.rate}%: ${money(dailyAmount)}
-      </div>
-      <button onclick="selectPlan('${plan.name}')">Select Plan</button>
+
+      <div class="price">${money(plan.amount)}</div>
+
+      <p class="muted">
+        Display example only. Returns are not guaranteed.
+      </p>
+
+      <button
+        type="button"
+        onclick="selectPlan('${plan.name}')">
+        Select Plan
+      </button>
+
     </div>
   `;
+
 }
 
 function renderPlans() {
-  document.getElementById("allPlans").innerHTML =
+
+  $("allPlans").innerHTML =
     plans.map(planCard).join("");
 
-  document.getElementById("featuredPlans").innerHTML =
+  $("featuredPlans").innerHTML =
     plans.slice(0, 4).map(planCard).join("");
+
 }
 
 function selectPlan(name) {
-  const plan = plans.find(item => item.name === name);
-  if (!plan) return;
 
-  state.selectedPlan = plan;
+  selectedPlan =
+    plans.find(plan => plan.name === name) || null;
 
-  document.getElementById("selectedPlan").textContent = plan.name;
-  document.getElementById("dailyEstimate").textContent =
-    money(plan.amount * state.rate / 100);
+  $("selectedPlan").textContent =
+    selectedPlan ? selectedPlan.name : "None";
 
-  toast(plan.name + " selected");
+  toast("Plan selected for display only");
+
   openPage("dashboard");
+
 }
 
-function addTransaction(type, amount, reference) {
-  state.transactions.unshift({
-    date: new Date().toLocaleString(),
-    type,
-    amount,
-    reference,
-    status: "Pending"
-  });
-}
-
-function submitDeposit() {
-  const amount = Number(document.getElementById("depositAmount").value);
-  const method = document.getElementById("depositMethod").value;
-  const txid = document.getElementById("depositTxid").value.trim();
-
-  if (!Number.isFinite(amount) || amount <= 0) {
-    toast("Please enter a valid amount");
-    return;
-  }
-
-  addTransaction("Deposit - " + method, amount, txid || "Not provided");
-  state.depositTotal += amount;
-
-  document.getElementById("depositAmount").value = "";
-  document.getElementById("depositTxid").value = "";
-
-  render();
-  toast("Request recorded in this page");
-}
-
-function submitWithdrawal() {
-  const amount = Number(document.getElementById("withdrawAmount").value);
-  const destination = document.getElementById("withdrawDestination").value.trim();
-
-  if (!Number.isFinite(amount) || amount <= 0) {
-    toast("Please enter a valid amount");
-    return;
-  }
-
-  if (amount > state.balance) {
-    toast("Amount exceeds displayed balance");
-    return;
-  }
-
-  if (!destination) {
-    toast("Please enter destination details");
-    return;
-  }
-
-  addTransaction("Withdrawal", amount, destination);
-  state.withdrawTotal += amount;
-  state.balance -= amount;
-
-  document.getElementById("withdrawAmount").value = "";
-  document.getElementById("withdrawDestination").value = "";
-
-  render();
-  toast("Request recorded in this page");
-}
+/* REFERRAL CALCULATOR */
 
 function calculateReferral() {
-  const amount = Number(document.getElementById("referralAmount").value);
+
+  const amount = Number($("referralAmount").value);
 
   if (!Number.isFinite(amount) || amount < 0) {
-    toast("Please enter a valid amount");
+    toast("Enter a valid amount");
     return;
   }
 
-  document.getElementById("referralResult").textContent = money(amount * 0.08);
+  $("referralResult").textContent =
+    money(amount * 0.08) + " (example only)";
+
 }
 
-async function copyText(text) {
-  try {
-    if (!navigator.clipboard) throw new Error("Clipboard unavailable");
-    await navigator.clipboard.writeText(text);
-    toast("Copied successfully");
-  } catch (error) {
-    const field = document.createElement("textarea");
-    field.value = text;
-    field.style.position = "fixed";
-    field.style.opacity = "0";
-    document.body.appendChild(field);
-    field.select();
+/* PROFILE */
 
-    const copied = document.execCommand("copy");
-    field.remove();
+async function saveProfile() {
 
-    toast(copied ? "Copied successfully" : "Copy failed; please copy manually");
-  }
-}
-
-function copyAddress() {
-  copyText(document.getElementById("depositAddress").value);
-}
-
-function copyReferral() {
-  copyText(document.getElementById("referralCode").value);
-}
-
-function saveProfile() {
-  const name = document.getElementById("profileName").value.trim();
+  const name = $("profileName").value.trim();
 
   if (!name) {
-    toast("Please enter your name");
+    toast("Enter your name");
     return;
   }
 
-  document.getElementById("profileMessage").textContent =
-    "Profile details entered. Connect the backend API to save them permanently.";
+  try {
 
-  toast("Profile details checked");
-}
+    const data = await apiRequest(API.profile, {
+      method: "PATCH",
+      body: { name }
+    });
 
-function updateRate() {
-  const rate = Number(document.getElementById("dailyRate").value);
+    currentUser = {
+      ...currentUser,
+      name: data.user?.name || data.name || name
+    };
 
-  if (!Number.isFinite(rate) || rate < 0 || rate > 100) {
-    toast("Enter a rate from 0 to 100");
-    return;
+    $("welcomeTitle").textContent =
+      "Welcome, " + currentUser.name;
+
+    $("overviewName").textContent =
+      currentUser.name;
+
+    $("profileMessage").textContent =
+      "Profile saved.";
+
+  } catch (error) {
+
+    $("profileMessage").textContent =
+      "Profile could not be saved: " + error.message;
+
   }
 
-  state.rate = rate;
-  document.getElementById("rateLabel").textContent = rate + "%";
-
-  render();
-  toast("Displayed calculation updated");
 }
+
+/* LOAD ACCOUNT AND TRANSACTIONS */
+
+async function loadAccountData() {
+
+  try {
+
+    const data = await apiRequest(API.me);
+
+    const user = extractUser(data);
+
+    if (user && (user.email || user.id || user.name)) {
+
+      currentUser = {
+        ...currentUser,
+        ...user
+      };
+
+      $("overviewName").textContent =
+        currentUser.name ||
+        currentUser.fullName ||
+        "User";
+
+      $("overviewEmail").textContent =
+        currentUser.email || "—";
+
+      $("profileName").value =
+        currentUser.name ||
+        currentUser.fullName ||
+        "";
+
+      $("profileEmail").value =
+        currentUser.email || "";
+
+      if (user.balance !== undefined) {
+        $("balance").textContent =
+          money(user.balance);
+      } else if (data.balance !== undefined) {
+        $("balance").textContent =
+          money(data.balance);
+      } else {
+        $("balance").textContent =
+          "Not provided by server";
+      }
+
+    } else {
+
+      $("balance").textContent =
+        "Not provided by server";
+
+    }
+
+  } catch (error) {
+
+    $("balance").textContent =
+      "Backend not connected";
+
+    console.warn("Account data:", error.message);
+
+  }
+
+  try {
+
+    const data = await apiRequest(API.transactions);
+
+    const items =
+      data.transactions ||
+      data.items ||
+      data.data ||
+      [];
+
+    if (Array.isArray(items)) {
+
+      $("historyRows").innerHTML = items.length
+
+        ? items.map(item => `
+          <tr>
+            <td>${escapeHTML(item.date || item.createdAt || "—")}</td>
+            <td>${escapeHTML(item.type || "—")}</td>
+            <td>${money(item.amount)}</td>
+            <td>${escapeHTML(item.reference || item.txid || "—")}</td>
+            <td>${escapeHTML(item.status || "—")}</td>
+          </tr>
+        `).join("")
+
+        : '<tr><td colspan="5">No transactions available.</td></tr>';
+
+    }
+
+  } catch (error) {
+
+    console.warn("Transactions:", error.message);
+
+  }
+
+}
+
+/* SAFE TEXT DISPLAY */
 
 function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, character => ({
+
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
     '"': "&quot;",
     "'": "&#39;"
+
   })[character]);
+
 }
 
-function render() {
-  document.getElementById("balance").textContent = money(state.balance);
-  document.getElementById("depositTotal").textContent = money(state.depositTotal);
-  document.getElementById("withdrawTotal").textContent = money(state.withdrawTotal);
-  document.getElementById("adminCount").textContent = state.transactions.length;
+/* DEPOSIT REQUEST */
 
-  const rows = state.transactions.map(transaction => `
-    <tr>
-      <td>${escapeHTML(transaction.date)}</td>
-      <td>${escapeHTML(transaction.type)}</td>
-      <td>${money(transaction.amount)}</td>
-      <td>${escapeHTML(transaction.reference)}</td>
-      <td>${escapeHTML(transaction.status)}</td>
-    </tr>
-  `).join("");
+$("depositForm").addEventListener("submit", async event => {
 
-  const emptyRows = '<tr><td colspan="5">No transactions available.</td></tr>';
+  event.preventDefault();
 
-  document.getElementById("historyRows").innerHTML = rows || emptyRows;
-  document.getElementById("adminRows").innerHTML = rows || emptyRows;
+  const amount = Number($("depositAmount").value);
+  const method = $("depositMethod").value;
+  const txid = $("depositTxid").value.trim();
 
-  document.getElementById("dailyEstimate").textContent =
-    state.selectedPlan
-      ? money(state.selectedPlan.amount * state.rate / 100)
-      : money(0);
+  if (!Number.isFinite(amount) || amount <= 0) {
+    toast("Enter a valid amount");
+    return;
+  }
 
-  renderPlans();
+  try {
+
+    await apiRequest(API.deposit, {
+      method: "POST",
+      body: { amount, method, txid }
+    });
+
+    toast("Deposit request submitted");
+
+    $("depositForm").reset();
+
+    await loadAccountData();
+
+  } catch (error) {
+
+    toast("Request not sent: " + error.message);
+
+  }
+
+});
+
+/* WITHDRAWAL REQUEST */
+
+$("withdrawForm").addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  const amount = Number($("withdrawAmount").value);
+
+  const destination =
+    $("withdrawDestination").value.trim();
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    toast("Enter a valid amount");
+    return;
+  }
+
+  if (!destination) {
+    toast("Enter destination details");
+    return;
+  }
+
+  try {
+
+    await apiRequest(API.withdrawal, {
+      method: "POST",
+      body: { amount, destination }
+    });
+
+    toast("Withdrawal request submitted");
+
+    $("withdrawForm").reset();
+
+    await loadAccountData();
+
+  } catch (error) {
+
+    toast("Request not sent: " + error.message);
+
+  }
+
+});
+
+/* START */
+
+renderPlans();
+showLoggedOut();
+
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07111f">
+<title>BAYA.COM | Account Dashboard</title>
+
+<style>
+:root {
+  --gold: #ffd778;
+  --blue: #168cff;
+  --text: #ffffff;
+  --muted: #c0cce0;
+  --border: rgba(255,255,255,.17);
 }
 
-render();
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 10% 5%, #173d69, transparent 35%),
+    radial-gradient(circle at 90% 20%, #202c65, transparent 35%),
+    #07111f;
+}
+
+button, input, select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+button:hover {
+  filter: brightness(1.08);
+}
+
+header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  background: linear-gradient(120deg, #101c31, #173b65, #101c31);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-symbol {
+  color: var(--gold);
+  font-size: 32px;
+  animation: rotateStar 4s linear infinite;
+}
+
+@keyframes rotateStar {
+  to { transform: rotate(360deg); }
+}
+
+.logo-text {
+  font-size: 29px;
+  font-weight: 900;
+  color: #ffbf51;
+  animation: glow 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+  50% { text-shadow: 0 0 20px #ffd778; }
+}
+
+.subtitle {
+  color: #c9d8ed;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.container {
+  width: min(1200px, 100%);
+  margin: auto;
+  padding: 20px;
+}
+
+.notice {
+  margin-bottom: 20px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #30291e;
+  border: 1px solid #8c7545;
+  color: #ffe7ae;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.card, .auth-card {
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: linear-gradient(145deg, #1b304a, #0e1d30);
+  box-shadow: 0 12px 28px #0004;
+}
+
+.auth-wrap {
+  min-height: 65vh;
+  display: grid;
+  place-items: center;
+  padding: 15px;
+}
+
+.auth-card {
+  width: min(450px, 100%);
+  padding: 28px;
+}
+
+.auth-card h1 {
+  margin-top: 0;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.auth-tabs button {
+  flex: 1;
+  color: white;
+  background: #173452;
+  border: 1px solid #49678a;
+}
+
+.auth-tabs button.active {
+  color: #172238;
+  background: linear-gradient(135deg, #ffe8a6, #e8ad3e);
+}
+
+.form-view {
+  display: none;
+}
+
+.form-view.active {
+  display: block;
+}
+
+label {
+  display: block;
+  margin: 12px 0 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #435b78;
+  background: #091727;
+  color: white;
+}
+
+.primary {
+  color: #172238;
+  background: linear-gradient(135deg, #ffe5a0, #e9b84c);
+}
+
+.secondary {
+  color: white;
+  background: linear-gradient(135deg, #24486f, #172c48);
+  border: 1px solid #49678a;
+}
+
+.full {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.small-link {
+  display: block;
+  margin-top: 16px;
+  text-align: center;
+  color: #a8d6ff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.message {
+  display: none;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #422d25;
+  color: #ffe7ae;
+  overflow-wrap: anywhere;
+}
+
+.message.show {
+  display: block;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 16px;
+  background: #10233b;
+  border: 1px solid var(--border);
+}
+
+.nav button {
+  flex: 1 1 120px;
+  color: white;
+  background: #23466e;
+  border: 1px solid #42638a;
+}
+
+.nav button.active {
+  color: #172238;
+  background: linear-gradient(135deg, #ffe8a6, #e8ad3e);
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.s12 { grid-column: span 12; }
+.s8  { grid-column: span 8; }
+.s6  { grid-column: span 6; }
+.s4  { grid-column: span 4; }
+
+.welcome-card, .overview-card {
+  min-height: 240px;
+  padding: 25px;
+  border-radius: 22px;
+  background: linear-gradient(125deg, #1168c9, #168fe9, #173d81);
+  border: 1px solid #85c6ff77;
+}
+
+.overview-card {
+  background: linear-gradient(145deg, #5136a2, #293c83, #172c55);
+}
+
+h2 {
+  font-size: 21px;
+  margin-top: 0;
+}
+
+.muted {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.balance {
+  display: block;
+  margin: 12px 0;
+  color: #ffe49a;
+  font-size: clamp(32px, 5vw, 46px);
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.stats, .plan-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.summary-card {
+  min-width: 0;
+  padding: 17px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #087f8c, #20c9b5);
+  overflow-wrap: anywhere;
+}
+
+.summary-card span {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.summary-card strong {
+  font-size: 21px;
+}
+
+.withdraw-card {
+  background: linear-gradient(135deg, #2455a4, #438df5);
+}
+
+.referral-card {
+  background: linear-gradient(135deg, #7638b8, #bd68f5);
+}
+
+.profit-card {
+  background: linear-gradient(135deg, #b77812, #f5c451);
+}
+
+.plan {
+  padding: 16px;
+  border-radius: 17px;
+  border: 1px solid #ffffff40;
+  background: linear-gradient(135deg, #294c71, #102038);
+  min-width: 0;
+}
+
+.plan h3 {
+  margin-bottom: 8px;
+}
+
+.plan .price {
+  color: #ffe49a;
+  font-size: 25px;
+  font-weight: 900;
+}
+
+.plan button {
+  width: 100%;
+  margin-top: 12px;
+  background: linear-gradient(135deg, #ffe8ae, #edbd57);
+  color: #172238;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 500px;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+th {
+  color: var(--gold);
+}
+
+footer {
+  text-align: center;
+  padding: 25px 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+#toast {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 13px 18px;
+  background: var(--gold);
+  color: #172238;
+  border-radius: 12px;
+  font-weight: 700;
+  z-index: 100;
+  max-width: 90%;
+}
+
+@media(max-width: 850px) {
+  .stats, .plan-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .s8, .s6, .s4 {
+    grid-column: span 6;
+  }
+}
+
+@media(max-width: 600px) {
+  .container { padding: 10px; }
+  header { padding: 15px; }
+  .logo-text { font-size: 24px; }
+
+  .s8, .s6, .s4 {
+    grid-column: span 12;
+  }
+
+  .stats, .plan-grid {
+    gap: 9px;
+  }
+
+  .summary-card {
+    padding: 12px;
+  }
+
+  .summary-card strong {
+    font-size: 18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <div class="brand">
+      <span class="logo-symbol">✦</span>
+      <span class="logo-text">BAYA.COM</span>
+    </div>
+    <div class="subtitle">Secure Account Dashboard</div>
+  </div>
+
+  <button id="logoutButton"
+          class="secondary hidden"
+          type="button"
+          onclick="logout()">
+    Logout
+  </button>
+</header>
+
+<main class="container">
+
+  <div class="notice">
+    This interface requires a verified backend connection.
+    Displayed plans are examples, not guaranteed returns.
+    Do not send funds until the service and payment details
+    have been independently verified.
+  </div>
+
+  <!-- LOGIN AND REGISTRATION -->
+
+  <section id="authScreen" class="auth-wrap">
+    <div class="auth-card">
+
+      <h1>Welcome to BAYA.COM</h1>
+
+      <p class="muted">
+        Login to your account or register as a new user.
+      </p>
+
+      <div class="auth-tabs">
+        <button id="loginTab"
+                class="active"
+                type="button"
+                onclick="showAuth('login')">
+          Login
+        </button>
+
+        <button id="registerTab"
+                type="button"
+                onclick="showAuth('register')">
+          Register
+        </button>
+      </div>
+
+      <form id="loginForm" class="form-view active">
+
+        <label for="loginEmail">Email Address</label>
+        <input id="loginEmail"
+               type="email"
+               autocomplete="username"
+               required>
+
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword"
+               type="password"
+               autocomplete="current-password"
+               required>
+
+        <button class="primary full" type="submit">
+          Login to Account
+        </button>
+
+        <span class="small-link"
+              onclick="showAuth('register')">
+          Create a new account
+        </span>
+
+      </form>
+
+      <form id="registerForm" class="form-view">
+
+        <label for="registerName">Full Name</label>
+        <input id="registerName"
+               type="text"
+               maxlength="100"
+               autocomplete="name"
+               required>
+
+        <label for="registerEmail">Email Address</label>
+        <input id="registerEmail"
+               type="email"
+               autocomplete="email"
+               required>
+
+        <label for="registerPassword">Password</label>
+        <input id="registerPassword"
+               type="password"
+               minlength="8"
+               autocomplete="new-password"
+               required>
+
+        <label for="confirmPassword">Confirm Password</label>
+        <input id="confirmPassword"
+               type="password"
+               minlength="8"
+               autocomplete="new-password"
+               required>
+
+        <button class="primary full" type="submit">
+          Create Account
+        </button>
+
+        <span class="small-link"
+              onclick="showAuth('login')">
+          Already registered? Login
+        </span>
+
+      </form>
+
+      <div id="authMessage"
+           class="message"
+           role="status"
+           aria-live="polite">
+      </div>
+
+    </div>
+  </section>
+
+  <!-- USER APPLICATION -->
+
+  <section id="appScreen" class="hidden">
+
+    <nav class="nav">
+
+      <button class="active"
+              data-page="dashboard"
+              onclick="openPage('dashboard')">
+        Dashboard
+      </button>
+
+      <button data-page="deposit"
+              onclick="openPage('deposit')">
+        Deposit
+      </button>
+
+      <button data-page="withdraw"
+              onclick="openPage('withdraw')">
+        Withdrawal
+      </button>
+
+      <button data-page="plans"
+              onclick="openPage('plans')">
+        Investment Plans
+      </button>
+
+      <button data-page="referral"
+              onclick="openPage('referral')">
+        Referral Bonus
+      </button>
+
+      <button data-page="history"
+              onclick="openPage('history')">
+        Transactions
+      </button>
+
+      <button data-page="profile"
+              onclick="openPage('profile')">
+        Profile
+      </button>
+
+    </nav>
+
+    <!-- DASHBOARD -->
+
+    <section id="dashboard" class="page active">
+
+      <div class="grid">
+
+        <div class="welcome-card s8">
+
+          <h2 id="welcomeTitle">Welcome to BAYA.COM</h2>
+
+          <p class="muted">Account Balance</p>
+
+          <div class="balance" id="balance">
+            Not available
+          </div>
+
+          <p class="muted">
+            Your actual balance must be supplied by the server.
+          </p>
+
+          <div class="welcome-actions">
+
+            <button class="primary"
+                    onclick="openPage('deposit')">
+              Deposit
+            </button>
+
+            <button class="secondary"
+                    onclick="openPage('withdraw')">
+              Withdrawal
+            </button>
+
+            <button class="secondary"
+                    onclick="openPage('plans')">
+              View Plans
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="overview-card s4">
+
+          <h2>Account Overview</h2>
+
+          <p>Name: <strong id="overviewName">—</strong></p>
+
+          <p>Email: <strong id="overviewEmail">—</strong></p>
+
+          <p>
+            Selected Plan:
+            <strong id="selectedPlan">None</strong>
+          </p>
+
+          <button class="secondary"
+                  onclick="openPage('profile')">
+            Profile Settings
+          </button>
+
+        </div>
+
+        <div class="card s12">
+
+          <h2>Quick Summary</h2>
+
+          <div class="stats">
+
+            <div class="summary-card">
+              <span>Deposit Requests</span>
+              <strong id="depositTotal">—</strong>
+            </div>
+
+            <div class="summary-card withdraw-card">
+              <span>Withdrawal Requests</span>
+              <strong id="withdrawTotal">—</strong>
+            </div>
+
+            <div class="summary-card referral-card">
+              <span>Referral Bonus</span>
+              <strong>8% example</strong>
+            </div>
+
+            <div class="summary-card profit-card">
+              <span>Daily Rate</span>
+              <strong>Not configured</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="card s12">
+
+          <h2>Featured Plans</h2>
+
+          <div class="plan-grid" id="featuredPlans"></div>
+
+          <br>
+
+          <button class="primary"
+                  onclick="openPage('plans')">
+            View All Plans
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- DEPOSIT -->
+
+    <section id="deposit" class="page">
+
+      <div class="card">
+
+        <h2>Deposit Request</h2>
+
+        <form id="depositForm">
+
+          <label for="depositAmount">Amount (USD)</label>
+
+          <input id="depositAmount"
+                 type="number"
+                 min="1"
+                 step="0.01"
+                 required>
+
+          <label for="depositMethod">Payment Method</label>
+
+          <select id="depositMethod">
+            <option>USDT (TRC20)</option>
+            <option>Bank Transfer</option>
+            <option>Mobile Wallet</option>
+          </select>
+
+          <label for="depositTxid">
+            Transaction Reference
+          </label>
+
+          <input id="depositTxid"
+                 maxlength="200">
+
+          <button class="primary full" type="submit">
+            Submit Deposit Request
+          </button>
+
+        </form>
+
+        <p class="muted">
+          A request must be verified by the server.
+          This form does not confirm receipt of funds.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- WITHDRAWAL -->
+
+    <section id="withdraw" class="page">
+
+      <div class="card">
+
+        <h2>Withdrawal Request</h2>
+
+        <form id="withdrawForm">
+
+          <label for="withdrawAmount">Amount (USD)</label>
+
+          <input id="withdrawAmount"
+                 type="number"
+                 min="1"
+                 step="0.01"
+                 required>
+
+          <label for="withdrawDestination">
+            Destination Address or Account
+          </label>
+
+          <input id="withdrawDestination"
+                 maxlength="200"
+                 required>
+
+          <button class="primary full" type="submit">
+            Submit Withdrawal Request
+          </button>
+
+        </form>
+
+        <p class="muted">
+          The server must verify the account, balance,
+          eligibility and approval before processing a request.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- INVESTMENT PLANS -->
+
+    <section id="plans" class="page">
+
+      <div class="card">
+
+        <h2>Investment Plans</h2>
+
+        <p class="muted">
+          These are display examples. Returns are not guaranteed.
+        </p>
+
+        <div class="plan-grid" id="allPlans"></div>
+
+      </div>
+
+    </section>
+
+    <!-- REFERRAL -->
+
+    <section id="referral" class="page">
+
+      <div class="card">
+
+        <h2>Referral Calculator</h2>
+
+        <label for="referralAmount">
+          Qualifying Amount (USD)
+        </label>
+
+        <input id="referralAmount"
+               type="number"
+               min="0"
+               step="0.01">
+
+        <button class="primary full"
+                onclick="calculateReferral()">
+          Calculate Example Bonus
+        </button>
+
+        <p>
+          Example Result:
+          <strong id="referralResult">—</strong>
+        </p>
+
+        <p class="muted">
+          This calculation does not credit a real bonus.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- TRANSACTIONS -->
+
+    <section id="history" class="page">
+
+      <div class="card">
+
+        <h2>Transaction History</h2>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Reference</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody id="historyRows">
+              <tr>
+                <td colspan="5">No transaction data loaded.</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- PROFILE -->
+
+    <section id="profile" class="page">
+
+      <div class="card">
+
+        <h2>Profile Settings</h2>
+
+        <label for="profileName">Full Name</label>
+
+        <input id="profileName" maxlength="100">
+
+        <label for="profileEmail">Email Address</label>
+
+        <input id="profileEmail" type="email" readonly>
+
+        <button class="primary full"
+                onclick="saveProfile()">
+          Save Profile
+        </button>
+
+        <p id="profileMessage" class="muted"></p>
+
+        <button class="secondary full"
+                onclick="logout()">
+          Logout
+        </button>
+
+      </div>
+
+    </section>
+
+  </section>
+
+</main>
+
+<footer>BAYA.COM · Account Dashboard</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/*
+  BACKEND CONNECTION SETTINGS
+
+  IMPORTANT:
+  API_BASE must be the actual Replit backend origin.
+  The example API routes below are NOT verified against your server.js.
+  They must match the routes already implemented in your backend.
+
+  Use secure HttpOnly session cookies on the backend.
+  Do not save passwords or session tokens in localStorage.
+*/
+
+const API_BASE = "https://YOUR-REPLIT-BACKEND-URL";
+
+const API = {
+  register: "/api/register",
+  login: "/api/login",
+  me: "/api/me",
+  logout: "/api/logout",
+  profile: "/api/profile",
+  deposit: "/api/deposits",
+  withdrawal: "/api/withdrawals",
+  transactions: "/api/transactions"
+};
+
+const plans = [
+  {name:"Starter", amount:10, icon:"🌱"},
+  {name:"Basic", amount:30, icon:"🔹"},
+  {name:"Silver", amount:50, icon:"🥈"},
+  {name:"Gold", amount:100, icon:"🥇"},
+  {name:"Platinum", amount:200, icon:"💠"},
+  {name:"Bright", amount:500, icon:"✨"},
+  {name:"Shining", amount:1000, icon:"🌟"},
+  {name:"Sun Rising", amount:2000, icon:"☀️"}
+];
+
+let currentUser = null;
+let selectedPlan = null;
+
+const $ = id => document.getElementById(id);
+
+function showAuth(mode, message = "") {
+
+  $("loginForm").classList.toggle(
+    "active", mode === "login"
+  );
+
+  $("registerForm").classList.toggle(
+    "active", mode === "register"
+  );
+
+  $("loginTab").classList.toggle(
+    "active", mode === "login"
+  );
+
+  $("registerTab").classList.toggle(
+    "active", mode === "register"
+  );
+
+  $("authMessage").textContent = message;
+
+  $("authMessage").classList.toggle(
+    "show", Boolean(message)
+  );
+}
+
+function showMessage(message) {
+  $("authMessage").textContent = message;
+  $("authMessage").classList.add("show");
+}
+
+function toast(message) {
+
+  $("toast").textContent = message;
+  $("toast").style.display = "block";
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer = setTimeout(() => {
+    $("toast").style.display = "none";
+  }, 3000);
+}
+
+function money(value) {
+
+  const amount = Number(value);
+
+  if (!Number.isFinite(amount)) {
+    return "Not available";
+  }
+
+  return "$" + amount.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+function apiUrl(path) {
+
+  if (
+    !API_BASE ||
+    API_BASE.includes("YOUR-REPLIT-BACKEND-URL")
+  ) {
+    throw new Error(
+      "Backend URL is not configured yet."
+    );
+  }
+
+  return API_BASE.replace(/\/$/, "") + path;
+}
+
+async function apiRequest(path, options = {}) {
+
+  const response = await fetch(apiUrl(path), {
+
+    method: options.method || "GET",
+
+    credentials: "include",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: options.body
+      ? JSON.stringify(options.body)
+      : undefined
+
+  });
+
+  let data = {};
+
+  try {
+    data = await response.json();
+  } catch (_) {}
+
+  if (!response.ok) {
+    throw new Error(
+      data.message ||
+      data.error ||
+      "Request failed: " + response.status
+    );
+  }
+
+  return data;
+}
+
+function extractUser(data) {
+
+  return (
+    data.user ||
+    data.account ||
+    data.data?.user ||
+    data.data ||
+    data
+  );
+}
+
+/* LOGIN */
+
+$("loginForm").addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  const email = $("loginEmail").value.trim();
+  const password = $("loginPassword").value;
+
+  const button =
+    $("loginForm").querySelector('button[type="submit"]');
+
+  button.disabled = true;
+  button.textContent = "Signing in...";
+
+  try {
+
+    const data = await apiRequest(API.login, {
+      method: "POST",
+      body: { email, password }
+    });
+
+    const user = extractUser(data);
+
+    if (
+      !user ||
+      !(user.id || user.email || user.name || user.username)
+    ) {
+      throw new Error(
+        "Login response format needs to match the backend."
+      );
+    }
+
+    setAuthenticated(user);
+
+    toast("Login successful");
+
+  } catch (error) {
+
+    showMessage(error.message);
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = "Login to Account";
+
+  }
+
+});
+
+/* REGISTRATION */
+
+$("registerForm").addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  const name = $("registerName").value.trim();
+  const email = $("registerEmail").value.trim();
+  const password = $("registerPassword").value;
+  const confirm = $("confirmPassword").value;
+
+  if (password.length < 8) {
+    showMessage("Password must contain at least 8 characters.");
+    return;
+  }
+
+  if (password !== confirm) {
+    showMessage("Passwords do not match.");
+    return;
+  }
+
+  const button =
+    $("registerForm").querySelector('button[type="submit"]');
+
+  button.disabled = true;
+  button.textContent = "Creating account...";
+
+  try {
+
+    const data = await apiRequest(API.register, {
+      method: "POST",
+      body: { name, email, password }
+    });
+
+    const user = extractUser(data);
+
+    if (
+      user &&
+      (user.id || user.email || user.name || user.username)
+    ) {
+
+      setAuthenticated(user);
+
+      toast("Account created successfully");
+
+    } else {
+
+      $("loginEmail").value = email;
+
+      showAuth(
+        "login",
+        "Registration response received. Please log in."
+      );
+
+    }
+
+  } catch (error) {
+
+    showMessage(error.message);
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = "Create Account";
+
+  }
+
+});
+
+/* AUTHENTICATED DASHBOARD */
+
+function setAuthenticated(user) {
+
+  currentUser = user || {};
+
+  $("authScreen").classList.add("hidden");
+  $("appScreen").classList.remove("hidden");
+  $("logoutButton").classList.remove("hidden");
+
+  const name =
+    currentUser.name ||
+    currentUser.fullName ||
+    currentUser.username ||
+    "User";
+
+  const email = currentUser.email || "";
+
+  $("welcomeTitle").textContent = "Welcome, " + name;
+  $("overviewName").textContent = name;
+  $("overviewEmail").textContent = email || "—";
+
+  $("profileName").value =
+    name === "User" ? "" : name;
+
+  $("profileEmail").value = email;
+
+  openPage("dashboard");
+
+  loadAccountData();
+
+}
+
+function showLoggedOut() {
+
+  currentUser = null;
+
+  $("authScreen").classList.remove("hidden");
+  $("appScreen").classList.add("hidden");
+  $("logoutButton").classList.add("hidden");
+
+  showAuth("login");
+
+}
+
+async function logout() {
+
+  try {
+
+    await apiRequest(API.logout, {
+      method: "POST",
+      body: {}
+    });
+
+  } catch (error) {
+
+    console.warn("Logout endpoint:", error.message);
+
+  }
+
+  showLoggedOut();
+
+  toast("Logged out");
+
+}
+
+/* PAGE NAVIGATION */
+
+function openPage(id) {
+
+  const page = $(id);
+
+  if (!page) return;
+
+  document.querySelectorAll(".page").forEach(item => {
+
+    item.classList.toggle(
+      "active",
+      item.id === id
+    );
+
+  });
+
+  document.querySelectorAll(".nav button").forEach(button => {
+
+    button.classList.toggle(
+      "active",
+      button.dataset.page === id
+    );
+
+  });
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+/* INVESTMENT PLAN DISPLAY */
+
+function planCard(plan) {
+
+  return `
+    <div class="plan">
+
+      <div style="font-size:28px">${plan.icon}</div>
+
+      <h3>${plan.name}</h3>
+
+      <div class="price">${money(plan.amount)}</div>
+
+      <p class="muted">
+        Display example only. Returns are not guaranteed.
+      </p>
+
+      <button
+        type="button"
+        onclick="selectPlan('${plan.name}')">
+        Select Plan
+      </button>
+
+    </div>
+  `;
+
+}
+
+function renderPlans() {
+
+  $("allPlans").innerHTML =
+    plans.map(planCard).join("");
+
+  $("featuredPlans").innerHTML =
+    plans.slice(0, 4).map(planCard).join("");
+
+}
+
+function selectPlan(name) {
+
+  selectedPlan =
+    plans.find(plan => plan.name === name) || null;
+
+  $("selectedPlan").textContent =
+    selectedPlan ? selectedPlan.name : "None";
+
+  toast("Plan selected for display only");
+
+  openPage("dashboard");
+
+}
+
+/* REFERRAL CALCULATOR */
+
+function calculateReferral() {
+
+  const amount = Number($("referralAmount").value);
+
+  if (!Number.isFinite(amount) || amount < 0) {
+    toast("Enter a valid amount");
+    return;
+  }
+
+  $("referralResult").textContent =
+    money(amount * 0.08) + " (example only)";
+
+}
+
+/* PROFILE */
+
+async function saveProfile() {
+
+  const name = $("profileName").value.trim();
+
+  if (!name) {
+    toast("Enter your name");
+    return;
+  }
+
+  try {
+
+    const data = await apiRequest(API.profile, {
+      method: "PATCH",
+      body: { name }
+    });
+
+    currentUser = {
+      ...currentUser,
+      name: data.user?.name || data.name || name
+    };
+
+    $("welcomeTitle").textContent =
+      "Welcome, " + currentUser.name;
+
+    $("overviewName").textContent =
+      currentUser.name;
+
+    $("profileMessage").textContent =
+      "Profile saved.";
+
+  } catch (error) {
+
+    $("profileMessage").textContent =
+      "Profile could not be saved: " + error.message;
+
+  }
+
+}
+
+/* LOAD ACCOUNT AND TRANSACTIONS */
+
+async function loadAccountData() {
+
+  try {
+
+    const data = await apiRequest(API.me);
+
+    const user = extractUser(data);
+
+    if (user && (user.email || user.id || user.name)) {
+
+      currentUser = {
+        ...currentUser,
+        ...user
+      };
+
+      $("overviewName").textContent =
+        currentUser.name ||
+        currentUser.fullName ||
+        "User";
+
+      $("overviewEmail").textContent =
+        currentUser.email || "—";
+
+      $("profileName").value =
+        currentUser.name ||
+        currentUser.fullName ||
+        "";
+
+      $("profileEmail").value =
+        currentUser.email || "";
+
+      if (user.balance !== undefined) {
+        $("balance").textContent =
+          money(user.balance);
+      } else if (data.balance !== undefined) {
+        $("balance").textContent =
+          money(data.balance);
+      } else {
+        $("balance").textContent =
+          "Not provided by server";
+      }
+
+    } else {
+
+      $("balance").textContent =
+        "Not provided by server";
+
+    }
+
+  } catch (error) {
+
+    $("balance").textContent =
+      "Backend not connected";
+
+    console.warn("Account data:", error.message);
+
+  }
+
+  try {
+
+    const data = await apiRequest(API.transactions);
+
+    const items =
+      data.transactions ||
+      data.items ||
+      data.data ||
+      [];
+
+    if (Array.isArray(items)) {
+
+      $("historyRows").innerHTML = items.length
+
+        ? items.map(item => `
+          <tr>
+            <td>${escapeHTML(item.date || item.createdAt || "—")}</td>
+            <td>${escapeHTML(item.type || "—")}</td>
+            <td>${money(item.amount)}</td>
+            <td>${escapeHTML(item.reference || item.txid || "—")}</td>
+            <td>${escapeHTML(item.status || "—")}</td>
+          </tr>
+        `).join("")
+
+        : '<tr><td colspan="5">No transactions available.</td></tr>';
+
+    }
+
+  } catch (error) {
+
+    console.warn("Transactions:", error.message);
+
+  }
+
+}
+
+/* SAFE TEXT DISPLAY */
+
+function escapeHTML(value) {
+
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+
+  })[character]);
+
+}
+
+/* DEPOSIT REQUEST */
+
+$("depositForm").addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  const amount = Number($("depositAmount").value);
+  const method = $("depositMethod").value;
+  const txid = $("depositTxid").value.trim();
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    toast("Enter a valid amount");
+    return;
+  }
+
+  try {
+
+    await apiRequest(API.deposit, {
+      method: "POST",
+      body: { amount, method, txid }
+    });
+
+    toast("Deposit request submitted");
+
+    $("depositForm").reset();
+
+    await loadAccountData();
+
+  } catch (error) {
+
+    toast("Request not sent: " + error.message);
+
+  }
+
+});
+
+/* WITHDRAWAL REQUEST */
+
+$("withdrawForm").addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  const amount = Number($("withdrawAmount").value);
+
+  const destination =
+    $("withdrawDestination").value.trim();
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    toast("Enter a valid amount");
+    return;
+  }
+
+  if (!destination) {
+    toast("Enter destination details");
+    return;
+  }
+
+  try {
+
+    await apiRequest(API.withdrawal, {
+      method: "POST",
+      body: { amount, destination }
+    });
+
+    toast("Withdrawal request submitted");
+
+    $("withdrawForm").reset();
+
+    await loadAccountData();
+
+  } catch (error) {
+
+    toast("Request not sent: " + error.message);
+
+  }
+
+});
+
+/* START */
+
+renderPlans();
+showLoggedOut();
+
 </script>
 
 </body>
